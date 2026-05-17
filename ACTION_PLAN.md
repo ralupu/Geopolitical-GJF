@@ -6,7 +6,7 @@
 
 **Created:** 2026-05-17  
 **Last updated:** 2026-05-17  
-**Overall status:** Phase 1 — Data Preparation ✅ Complete
+**Overall status:** Phase 2 — Daily Fragility Indicators ✅ Complete
 
 ---
 
@@ -34,7 +34,7 @@ The paper is built around three conceptual layers:
 |-------|-------|--------|
 | 0 | Repository setup and scaffolding | ✅ Complete |
 | 1 | Data preparation | ✅ Complete |
-| 2 | Daily fragility indicators | ⬜ Pending |
+| 2 | Daily fragility indicators | ✅ Complete |
 | 3 | Volatility connectedness (TCI) | ⬜ Pending |
 | 4 | Composite EMFI | ⬜ Pending |
 | 5 | HMM market-implied stress regimes | ⬜ Pending |
@@ -125,14 +125,16 @@ The paper is built around three conceptual layers:
 
 ## Phase 2 — Daily Fragility Indicators
 
-**Status:** ⬜ Pending  
+**Status:** ✅ Complete  
+**Date completed:** 2026-05-17  
 **Subproject:** `subprojects/02_fragility_indicators/`  
-**Script:** `subprojects/02_fragility_indicators/build_fragility_indicators.py`
+**Script:** `subprojects/02_fragility_indicators/build_fragility_indicators.py`  
+**Tests:** `subprojects/02_fragility_indicators/test_fragility_indicators.py` — 39/39 passed
 
 ### Objectives
 Construct a daily cross-country panel of market-based fragility measures from the 19-country equity return series.
 
-### Indicators to construct (all daily, cross-sectional aggregates)
+### Indicators constructed (all daily, cross-sectional aggregates)
 
 | Variable | Definition |
 |----------|-----------|
@@ -141,18 +143,26 @@ Construct a daily cross-country panel of market-based fragility measures from th
 | `TailVolBreadth_t` | Count of markets with \|r_{i,t}\| > Q_{i,95} (rolling 252-day threshold) |
 | `TailLossBreadth_t` | Count of markets with r_{i,t} < Q_{i,5} (rolling 252-day threshold) |
 | `TailGainBreadth_t` | Count of markets with r_{i,t} > Q_{i,95} (rolling 252-day) |
-| `AvgCorr_t` | Average pairwise return correlation over rolling 60-day window |
+| `AvgCorr60_t` | Average pairwise return correlation over rolling 60-day window (171 pairs) |
 | `AvgCorr30_t` | Same over rolling 30-day window (robustness) |
 
 ### Implementation notes
-- Country-specific Q_{i,95} and Q_{i,5} thresholds: estimated on a rolling 252-day backward window (no look-ahead).
-- Rolling correlation: use pairwise Pearson over a rolling 60-day window; average the N*(N-1)/2 pairs.
-- Output all indicators in a single `results/fragility/fragility_daily.csv` plus a verification plot.
+- Country-specific Q_{i,95} and Q_{i,5} thresholds: rolling 252-day backward window, **shifted by 1 day** (strictly out-of-sample, no look-ahead).
+- Rolling correlation: pairwise Pearson over rolling 60-day window; average the N*(N-1)/2 = 171 pairs.
+- Warm-up NaNs: 60 rows for tail breadth indicators, 29 rows for AvgCorr60, 19 rows for AvgCorr30.
 
 ### Deliverables
-- `results/fragility/fragility_daily.csv` — all indicators, daily
-- `results/fragility/Fig_FragilityTimeline.png` — time-series plot of each indicator with major event overlays
-- `results/fragility/summary_stats.csv` — descriptive statistics
+- [x] `results/fragility/fragility_daily.csv` — all 7 indicators, 2,278 rows
+- [x] `results/fragility/Fig_FragilityTimeline.png` — 4-panel timeline with COVID/Ukraine shading
+- [x] `results/fragility/summary_stats.csv` — descriptive statistics
+- [x] `results/fragility/manifest.json` — parameters and provenance
+
+### Key facts from implementation
+- **VolStress max: 0.119** (2020-03-16, COVID crash) — cross-sectional mean of |r| across 19 markets
+- **TailVolBreadth on 2020-03-16: 18/19** — nearly all markets simultaneously in extreme tail
+- **AvgCorr60 range: 0.207 to 0.871** (mean 0.476) — high baseline cross-market correlation
+- **AvgCorr30 range: 0.145 to 0.885** (mean 0.461) — more volatile, captures short bursts of co-movement
+- Script runtime: ~3 seconds
 
 ---
 
@@ -451,3 +461,4 @@ Phases 6–9 → Phase 10 (writing)
 |------|-------|--------|
 | 2026-05-17 | 0 | Initial action plan created. Repository scaffolded. Git repo initialized (`init_git.sh`). LaTeX skeleton created. |
 | 2026-05-17 | 1 | Data preparation complete. Key discovery: 181/278 shock events fall on weekends (conflict index runs on calendar days); implemented forward-fill to next trading day. Panel: 43,282 rows, 163 shock days, S in [0.07, 2.86]. 43/43 tests pass. |
+| 2026-05-17 | 2 | Fragility indicators complete. VolStress max=0.119 (COVID), TailVolBreadth=18/19 on 2020-03-16, AvgCorr60 mean=0.476. Rolling quantile thresholds shifted by 1 day (strictly out-of-sample). 39/39 tests pass. Note: on sandbox/NTFS, stale .pyc files require force-recompile via `py_compile.compile()` after editing test files. |

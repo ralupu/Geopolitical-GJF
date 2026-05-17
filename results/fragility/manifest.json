@@ -1,0 +1,30 @@
+{
+  "generated_at": "2026-05-17T20:27:36.903368+00:00",
+  "script": "subprojects/02_fragility_indicators/build_fragility_indicators.py",
+  "n_dates": 2278,
+  "date_range": {
+    "start": "2017-01-02",
+    "end": "2025-10-15"
+  },
+  "indicators": [
+    "VolStress",
+    "SqStress",
+    "TailVolBreadth",
+    "TailLossBreadth",
+    "TailGainBreadth",
+    "AvgCorr60",
+    "AvgCorr30"
+  ],
+  "parameters": {
+    "tail_window": 252,
+    "tail_min_periods": 60,
+    "tail_quantile_shift": 1,
+    "corr_window_60": 60,
+    "corr_window_30": 30
+  },
+  "outputs": {
+    "fragility_daily": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/results/fragility/fragility_daily.csv",
+    "summary_stats": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/results/fragility/summary_stats.csv",
+    "figure": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/results/fragility/Fig_FragilityTimeline.png"
+  }
+}
