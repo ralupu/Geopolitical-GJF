@@ -6,7 +6,7 @@
 
 **Created:** 2026-05-17  
 **Last updated:** 2026-05-17  
-**Overall status:** Phase 0 — Repository Setup ✅ In Progress
+**Overall status:** Phase 1 — Data Preparation ✅ Complete
 
 ---
 
@@ -32,8 +32,8 @@ The paper is built around three conceptual layers:
 
 | Phase | Title | Status |
 |-------|-------|--------|
-| 0 | Repository setup and scaffolding | 🔄 In Progress |
-| 1 | Data preparation | ⬜ Pending |
+| 0 | Repository setup and scaffolding | ✅ Complete |
+| 1 | Data preparation | ✅ Complete |
 | 2 | Daily fragility indicators | ⬜ Pending |
 | 3 | Volatility connectedness (TCI) | ⬜ Pending |
 | 4 | Composite EMFI | ⬜ Pending |
@@ -48,8 +48,9 @@ The paper is built around three conceptual layers:
 
 ## Phase 0 — Repository Setup and Scaffolding
 
-**Status:** 🔄 In Progress  
-**Date started:** 2026-05-17
+**Status:** ✅ Complete  
+**Date started:** 2026-05-17  
+**Date completed:** 2026-05-17
 
 ### Objectives
 - Create folder structure following the conventions established in the parent repository.
@@ -80,9 +81,11 @@ The paper is built around three conceptual layers:
 
 ## Phase 1 — Data Preparation
 
-**Status:** ⬜ Pending  
+**Status:** ✅ Complete  
+**Date completed:** 2026-05-17  
 **Subproject:** `subprojects/01_data_preparation/`  
-**Script:** `subprojects/01_data_preparation/prepare_data.py`
+**Script:** `subprojects/01_data_preparation/prepare_data.py`  
+**Tests:** `subprojects/01_data_preparation/test_prepare_data.py` — 43/43 passed
 
 ### Objectives
 - Copy the locked paper-candidate shock series from the parent repository into `data/shocks/`.
@@ -100,13 +103,23 @@ The paper is built around three conceptual layers:
 ### Key design decisions
 - Use the **same locked vintage** as the BIR paper (`20251222_paper_candidate`) to ensure consistency.
 - The shock measure used is `S_{i,t} = -log(q_{i,t})` (continuous, declustered), identical to BIR.
-- Study period: **2017-01-01 to 2025-10-15** (matching the FI paper sample).
+- Study period: **2017-01-02 to 2025-10-15** (first return date to last available date).
+- **Weekend shock alignment:** 181 of 278 raw shock events fall on weekends (the conflict index runs on all calendar days). These are forward-filled to the next trading day. 15 return dates with no conflict index coverage are dropped. Final study period: 2,278 trading days.
 
 ### Deliverables
-- `data/panel_daily.parquet` — unified daily panel (date × country)
-- `data/shocks_long.csv` — shock events with country, date, intensity
-- `data/clusters.csv` — country → cluster mapping
-- `results/data_provenance/summary.md` — coverage report
+- [x] `data/panel_daily.parquet` — unified daily panel: 43,282 rows (2,278 days × 19 countries)
+- [x] `data/shocks_events.csv` — 278 shock events with S, original_date, trading-day-aligned date
+- [x] `data/aggregate_shocks.csv` — daily max_shock, breadth_shock, sum_shock, avg_shock_pos
+- [x] `data/clusters.csv` — country → cluster mapping
+- [x] `results/data_provenance/summary.md` — coverage report
+- [x] `results/data_provenance/manifest.json` — machine-readable provenance
+
+### Key facts from implementation
+- **2,278 trading days** in study period (2017-01-02 to 2025-10-15)
+- **278 shock events** total: 97 on trading days, 181 forward-filled from weekends
+- **163 shock days** (days with max_shock > 0) after forward-fill
+- **S range:** 0.0728 to 2.8598 (mean 0.3183)
+- **15 return dates** dropped (not present in conflict index)
 
 ---
 
@@ -436,4 +449,5 @@ Phases 6–9 → Phase 10 (writing)
 
 | Date | Phase | Change |
 |------|-------|--------|
-| 2026-05-17 | 0 | Initial action plan created. Repository scaffolded. |
+| 2026-05-17 | 0 | Initial action plan created. Repository scaffolded. Git repo initialized (`init_git.sh`). LaTeX skeleton created. |
+| 2026-05-17 | 1 | Data preparation complete. Key discovery: 181/278 shock events fall on weekends (conflict index runs on calendar days); implemented forward-fill to next trading day. Panel: 43,282 rows, 163 shock days, S in [0.07, 2.86]. 43/43 tests pass. |

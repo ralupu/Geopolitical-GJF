@@ -1,0 +1,35 @@
+{
+  "generated_at": "2026-05-17T20:10:58.712315+00:00",
+  "script": "subprojects/01_data_preparation/prepare_data.py",
+  "study_period": {
+    "start": "2017-01-02",
+    "end": "2025-10-15",
+    "n_days": 2278,
+    "n_countries": 19,
+    "n_panel_rows": 43282
+  },
+  "shock_series": {
+    "n_events_raw": 278,
+    "n_events": 278,
+    "n_events_on_trading_day": 97,
+    "n_events_forward_filled": 181,
+    "n_shock_days": 163,
+    "s_min": 0.07276718249966299,
+    "s_max": 2.859828026930176,
+    "s_mean": 0.3183397814350692
+  },
+  "sources": {
+    "prices": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/data/stock_prices.xlsx",
+    "clusters": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/data/clusters_input.csv",
+    "conflict_index": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/data/gdelt_indices/conflict_intensity/20251222_paper_candidate/conflict_intensity_index_wide.csv",
+    "events": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/results/shocks/sp2_conflicts_diff_per_country_evt_fdr_q0.05_u0.95_gap10_eventsbyp0.005_paper_rawcov_v1_events.csv",
+    "shocks_long": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/results/shocks/sp2_conflicts_diff_per_country_evt_fdr_q0.05_u0.95_gap10_eventsbyp0.005_paper_rawcov_v1_shocks_long.csv",
+    "upstream_manifest": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/results/shocks/sp2_conflicts_diff_per_country_evt_fdr_q0.05_u0.95_gap10_eventsbyp0.005_paper_rawcov_v1_manifest.json"
+  },
+  "outputs": {
+    "panel_daily": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/data/panel_daily.parquet",
+    "shocks_events": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/data/shocks_events.csv",
+    "aggregate_shocks": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/data/aggregate_shocks.csv",
+    "clusters": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/data/clusters.csv"
+  }
+}
