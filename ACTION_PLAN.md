@@ -5,7 +5,7 @@
 **Target journal:** Global Finance Journal (GFJ)
 
 **Created:** 2026-05-17  
-**Last updated:** 2026-05-17  
+**Last updated:** 2026-05-18  
 **Overall status:** Phase 4 — Composite EMFI ✅ Complete
 
 ---
@@ -209,6 +209,11 @@ Use the `statsmodels` VAR implementation. For GFEVD: implement the Pesaran-Shin 
 - Script runtime: ~25 seconds for all 4 window specs
 - BIC-selected VAR order: predominantly p=1 across windows
 
+### Analytical observations (for paper)
+- **High baseline TCI level (70.5%)** reflects the deep structural integration of European equity markets rather than acute stress. This means TCI captures two different phenomena: (1) structural co-movement (always high), and (2) crisis amplification (spike above the baseline). This distinction matters for interpretation in the paper: TCI elevation above its own time-series mean is the relevant signal, not the absolute level.
+- **TCI vs. AvgCorr60 overlap concern**: the correlation between TCI and AvgCorr60 is 0.797. Both series measure cross-market integration but via different methods (VAR-FEVD vs. simple correlation). The high overlap raises the question of whether TCI provides incremental information over AvgCorr60 in the LP regressions. This must be checked in Phase 9 robustness — if LP results are unchanged when TCI is replaced by AvgCorr60, the theoretical superiority of TCI does not translate into empirical content here.
+- **Low cross-cluster correlation**: VolStress/TailBreadth correlate at 0.784 with each other; AvgCorr60/TCI correlate at 0.797 with each other; but the cross-cluster correlations are only 0.16–0.38. This reveals two structurally distinct dimensions of market fragility that the EMFI will need to bridge. See Phase 4 observations for implications.
+
 ---
 
 ## Phase 4 — Composite EMFI (European Market Fragility Index)
@@ -245,6 +250,20 @@ Combine the fragility indicators from Phase 2 and the TCI from Phase 3 into a si
 - Sample starts 2017-05-19 (TCI W=100 warm-up + TailBreadth warm-up combined)
 - Note: Sign flip was applied — raw PC1 had all negative loadings; flipped for interpretability
 
+### Analytical observations (for paper)
+
+- **Two-cluster structure limits PC1 dominance:** PC1 explains 58.3%, but PC2 explains ~31.7% — a substantial residual. The reason is the two-cluster covariance structure identified in Phase 3: (VolStress, TailBreadth) correlate at 0.784 with each other but only 0.16–0.38 with (AvgCorr60, TCI), which themselves correlate at 0.797. PC1 loads roughly equally on all four components (0.45–0.53), effectively averaging the two clusters; PC2 captures the contrast between them. The 58.3% variance share is credible but the composite is not overwhelmingly one-dimensional. **Implication for paper:** this must be discussed explicitly in Section 3 — the EMFI is a balanced composite, not a pure first factor. The decision to use PCA rather than equal-weighting is validated by the variance explained, but the second factor's size should be acknowledged.
+
+- **EMFI is an acute-stress indicator, not a pre-crisis fragility buildup detector:** the EMFI peaks sharply during realized crises (COVID=15.2, Ukraine=~3–4) and returns quickly to baseline thereafter. It does not build up gradually before known events, which means it will not function as a leading indicator of fragility accumulation — only as a contemporaneous or lagging stress measure. **Implication:** in the state-dependent LP (Phase 7), the HighFragility conditioning variable (EMFI_{t-1} > 75th pctile) will overwhelmingly classify days *during* crises as "fragile", not days *before* them. The state-dependent effect will therefore capture "shocks hitting already-stressed markets" not "shocks hitting pre-fragile markets". This distinction must be stated clearly in the paper and is already implicit in the EMFI construction choice.
+
+- **COVID dominance in extreme tail:** the top decile of EMFI observations is heavily concentrated in Feb–May 2020. The 75th percentile threshold (EMFI=0.55) is already above baseline, but the extreme tail is almost entirely COVID. **Implication:** in Phase 7, the HighFragility dummy will fire during COVID for approximately 60 consecutive trading days. Any state-dependent LP result must be robust to COVID exclusion (already listed in Phase 9). This is a priority robustness check — if the state-dependent amplification result disappears when 2020-Q1/Q2 is excluded, the finding is identified from a single episode.
+
+- **HighFragility dummy composition must be explicitly reported:** when implementing Phase 7, compute and report: (a) total number of HighFragility days (expected ~570, i.e., 25% of 2,279), (b) breakdown by year/episode, (c) number of shock events landing in HighFragility vs. normal state. If fewer than ~20 shock events fall within HighFragility periods, statistical power for θ_k identification will be low. This number must be verified before interpreting significance.
+
+- **TCI incremental value over AvgCorr60 needs Phase 9 verification:** given the 0.797 TCI–AvgCorr60 correlation, it is possible that substituting AvgCorr60 for TCI in the EMFI (yielding a simpler index using only three indicators, all from SP02) would produce nearly identical LP results. This substitution test is explicitly added to Phase 9 robustness (see below). If results are robust, it strengthens the paper's argument that the underlying market state — not the specific measurement technology — is what matters.
+
+- **Loadings are balanced but not equal:** VolStress (0.532) > AvgCorr60 (0.516) > TCI (0.495) > TailBreadth (0.454). The VolStress cluster loads slightly more than the connectedness cluster. The difference is small but means EMFI tilts marginally toward acute realized volatility vs. co-movement. Equal-weighted robustness in Phase 9 is important to verify results are not driven by this differential loading.
+
 ---
 
 ## Phase 5 — HMM Market-Implied Stress Regimes
@@ -277,6 +296,15 @@ Estimate a Hidden Markov Model on the systemic fragility indicators to classify 
 - `results/stress_regimes/hmm_params.json` — fitted parameters
 - `results/stress_regimes/Fig_HMM_Regimes.png` — regime probability timeline
 - `results/stress_regimes/Fig_HMM_Validation.png` — alignment with known events
+
+### Additional checks to implement (motivated by Phase 4 observations)
+
+- **State observation counts:** after fitting, report the number of trading days assigned to each state (Viterbi path). If the systemic-stress state (State 3) contains fewer than ~100 observations, inference using P_stress_t in the LP regressions will be driven by a narrow slice of the sample. Report this prominently.
+- **COVID concentration check:** determine what fraction of systemic-stress days (regime_t = 3) fall in 2020-Q1/Q2. If >60% of systemic-stress days are from the COVID episode, the HMM has essentially learned a COVID detector rather than a general fragility detector. This is informative for the paper — acknowledge if so.
+- **Leading indicator timing test:** for each known major event (Ukraine, Hamas-Israel, COVID), compute the distribution of P_stress_t values in the 10 trading days *before* the event versus the 10 days *after*. If P_stress_t is already elevated before the event, the HMM is detecting pre-crisis fragility buildup; if it jumps only after, it is a coincident indicator. This characterization belongs in the paper regardless of which pattern obtains.
+- **Transition matrix reporting:** report the full 3×3 transition matrix (or 2×2 for robustness). The diagonal entries (persistence probabilities) tell us how long each regime tends to persist — a key input for the event classification in Phase 8.
+- **4-state robustness:** estimate a 4-state model and verify that the systemic-stress state is not being split arbitrarily. If 4 states are substantially better by BIC, reconsider the 3-state assumption.
+- **Regime–EMFI correlation check:** verify that P_stress_t and EMFI are not collinear (correlation expected ~0.7–0.85). If correlation exceeds 0.9, the HMM adds little beyond the PCA composite, and this limitation must be discussed.
 
 ---
 
@@ -324,6 +352,14 @@ where:
 - `results/panel_lp/Fig_LP_{outcome}.png` — response function plots
 - `results/panel_lp/Fig_LP_Combined.png` — multi-panel summary figure (paper-ready)
 
+### Additional checks to implement (motivated by Phase 4 observations)
+
+- **Pre-trend verification (negative horizons):** plot β_k for k ∈ {-5,...,-1} and verify they are not significantly different from zero. Given that EMFI is an acute-stress indicator (not a leading predictor), we would expect no pre-trends. If negative-horizon coefficients are significantly positive, the shock measure may be anticipating realized market stress, which would require careful framing.
+- **COVID exclusion as priority robustness:** run the LP for all outcomes dropping 2020-03-01 to 2020-12-31. This is the single most important robustness check given the COVID dominance in the upper tail of EMFI. Report this as a primary robustness panel, not a secondary one.
+- **EMFI pre-level check on shock dates:** before running the LP, inspect the distribution of EMFI_{t-1} on shock dates versus non-shock dates. If EMFI is already elevated when shocks arrive (i.e., shocks cluster in already-stressed periods), the LP coefficient β_k is identified from periods when markets are both stressed and shocked simultaneously — a confound. This check informs whether a simultaneous-equation concern needs to be addressed.
+- **AvgCorr60 as LP outcome (added to list):** separate from the main five outcomes, run the LP with AvgCorr60 as the dependent variable. Given the two-cluster structure (AvgCorr60 and TCI are near-substitutes), if TCI responds significantly but AvgCorr60 does not (or vice versa), it tells us something about the mechanism — VAR-based connectedness vs. simple correlation co-movement. This is a mechanism-identification exercise, not just robustness.
+- **Shock intensity bins:** report median, 75th, and 90th percentiles of MaxShock_t on shock days (S > threshold). In the LP, distinguish between moderate and large shocks by interacting S_t with an indicator for S_t > 90th pctile of shock days. This is secondary but useful for the event classification narrative.
+
 ---
 
 ## Phase 7 — State-Dependent Local Projections
@@ -353,6 +389,14 @@ where:
 - `results/state_lp/state_lp_results.csv`
 - `results/state_lp/Fig_StateLPFragility.png` — normal vs. fragile IRF (primary figure)
 - `results/state_lp/Fig_StateLPConnected.png` — normal vs. high-connectedness IRF (robustness)
+
+### Additional checks to implement (motivated by Phase 4 observations)
+
+- **HighFragility dummy composition report (mandatory):** before running the regressions, compute and report in the paper: (a) total HighFragility days and their year-by-year breakdown; (b) number of shock events (S_t > 0) landing in HighFragility vs. normal periods; (c) top 5 calendar episodes driving the HighFragility classification. If COVID 2020 accounts for the large majority of HighFragility shock events, the state-dependent result is essentially a "COVID amplification" finding, which is still valid but must be framed accordingly.
+- **Statistical power check:** if fewer than 20 shock events land in HighFragility periods, the interaction term θ_k will have very wide confidence intervals. In that case, consider using P_stress_t as a continuous conditioning variable (Smooth-Transition LP: Y_{t+k} = α + β_k S_t + θ_k (S_t × P_stress_{t-1}) + ...) rather than a binary dummy. This is more statistically efficient and avoids the threshold choice problem.
+- **P_stress_t as alternative conditioning variable:** implement the smooth-transition version using P_stress_{t-1} as the interaction term. Compare IRFs at P_stress = 0.2 (calm), 0.5 (elevated), 0.8 (systemic). This is both a robustness check and a richer characterization.
+- **COVID exclusion from state-dependent LP (mandatory robustness):** drop 2020-03-01 to 2020-12-31 from the sample when computing both the regression and the HighFragility threshold. Re-estimate and report whether θ_k remains significant. If it collapses, the result is identified from a single episode.
+- **Separate episodes reporting:** in the event that the state-dependent result is statistically significant, report separately: which specific shock events drive the θ_k identification (i.e., which events land in HighFragility and have the largest individual contributions to the interaction term coefficient). This is an informal influence analysis but critical for transparency.
 
 ---
 
@@ -399,21 +443,35 @@ Produce a 4-category taxonomy of geopolitical shock episodes, combining the news
 
 ### Checks to implement
 
-| Check | Description |
-|-------|------------|
-| Alternative connectedness | Correlation-network TCI (network density, avg correlation) instead of VAR-based |
-| Alternative shock aggregation | AvgShock vs MaxShock vs BreadthShock |
-| TVP-VAR connectedness | Time-varying parameter VAR (Antonakakis et al.) as alternative to rolling DY |
-| Alternative EMFI weights | Equal-weight composite (vs PCA) |
-| Alternative fragility threshold | 66th and 90th percentile fragility states (vs 75th) |
-| COVID exclusion | Drop 2020-03 to 2020-12 |
-| Ukraine exclusion | Drop 2022-02 to 2022-06 |
-| Future-shock placebo | Replace S_t with S_{t+30} — must show no significant effects |
-| Bootstrapped inference | Block bootstrap CIs for LP coefficients |
+| Check | Description | Priority |
+|-------|------------|----------|
+| COVID exclusion | Drop 2020-03 to 2020-12 from LP and state-dependent LP | **Critical** |
+| HighFragility COVID share | Verify state-dependent result survives COVID exclusion | **Critical** |
+| TCI → AvgCorr60 substitution in EMFI | Replace TCI with AvgCorr60 in PCA inputs (3-component EMFI); re-run LP and state LP | **High** |
+| "AcuteEMFI" from VolStress + TailBreadth only | PCA on only the two acute-volatility indicators; compare LP results | **High** |
+| Alternative EMFI weights | Equal-weight composite (vs PCA) | **High** |
+| Alternative fragility threshold | 66th and 90th percentile fragility states (vs 75th) | **High** |
+| P_stress continuous interaction | Smooth-transition LP using P_stress_{t-1} as continuous conditioning variable | **High** |
+| Alternative connectedness | Correlation-network TCI (avg pairwise correlation) instead of VAR-based | Medium |
+| Alternative shock aggregation | AvgShock vs MaxShock vs BreadthShock | Medium |
+| TVP-VAR connectedness | Time-varying parameter VAR (Antonakakis et al.) as alternative to rolling DY | Medium |
+| Ukraine exclusion | Drop 2022-02 to 2022-06 | Medium |
+| Future-shock placebo | Replace S_t with S_{t+30} — must show no significant effects | Medium |
+| Alternative TCI window | W=60 and W=150 in EMFI instead of W=100 | Low |
+| Bootstrapped inference | Block bootstrap CIs for LP coefficients | Low |
+
+### Rationale for new priority robustness checks (motivated by Phase 4 analytical observations)
+
+**TCI → AvgCorr60 substitution:** given the 0.797 correlation between TCI and AvgCorr60, TCI may not add empirical content beyond what AvgCorr60 already captures. If LP results are unchanged when using the simpler 3-component EMFI (VolStress, TailBreadth, AvgCorr60), this argues that the two-cluster structure is the robust feature, not the VAR-FEVD measurement technology. Conversely, if TCI-based EMFI gives different LP results, TCI is earning its place in the composite.
+
+**"AcuteEMFI" from VolStress + TailBreadth only:** this tests whether the co-movement cluster (AvgCorr60 + TCI) is necessary for the LP results. The VolStress+TailBreadth cluster captures acute realized stress; the AcuteEMFI would be a pure volatility-breadth index. If LP results with AcuteEMFI match those with the full EMFI, the connectedness dimension does not add explanatory power for the shock→fragility transmission, which is an interesting null result in itself.
+
+**COVID exclusion as critical:** this is not a standard robustness check here — it is a potential falsification. Given that COVID accounts for the dominant mass of the EMFI upper tail and most HighFragility shock days, a statistically significant state-dependent result that disappears upon COVID exclusion would indicate the finding is not generalizable beyond that single episode.
 
 ### Deliverables
 - `results/robustness/robustness_summary.csv` — all checks with β_k at key horizons
 - `results/robustness/Fig_Robustness_LP.png` — overlay of baseline + robustness IRFs
+- `results/robustness/Fig_Robustness_StateLPComparison.png` — state-dependent LP baseline vs TCI-substitution vs AcuteEMFI
 
 ---
 
@@ -446,6 +504,18 @@ Produce a 4-category taxonomy of geopolitical shock episodes, combining the news
 - [ ] Sections 5–6 draft (after Phases 6–7)
 - [ ] Full draft for co-author review
 - [ ] GFJ submission package
+
+### Writing notes from implementation (Phases 2–4 analytical observations)
+
+**Section 3 — Market-Based Financial Stability Measures:**
+- When describing the EMFI, explicitly discuss the **two-cluster structure**: VolStress+TailBreadth (cluster 1, within-corr=0.784) vs. AvgCorr60+TCI (cluster 2, within-corr=0.797), with cross-cluster correlations of only 0.16–0.38. Explain that PCA bridges these two dimensions: PC1 loads equally on all four components (0.45–0.53), while PC2 captures the contrast. Acknowledge that 58.3% explained variance reflects a genuine two-dimensional fragility space, not a near-perfect common factor.
+- **TCI vs. AvgCorr60 discussion**: note that TCI (VAR-FEVD) and AvgCorr60 (simple rolling correlation) correlate at 0.797. The theoretical superiority of TCI (order-invariance, captures indirect spillover paths) is argued, but the empirical overlap is explicitly acknowledged and the TCI-substitution robustness check is referenced.
+- **EMFI nature**: be explicit that EMFI is a contemporaneous/lagging acute-stress indicator. It does not build up gradually before crises — it spikes during them. Contrast with VIX-type implied volatility measures if space allows. This framing matters for interpreting the state-dependent LP: HighFragility captures *ongoing* stress episodes, not *pre-fragility*.
+- **HighFragility composition disclosure**: in a table or footnote, report the breakdown of HighFragility days by year/episode. COVID 2020 will dominate the upper tail; this must be stated, not buried.
+
+**Section 7 — Robustness:**
+- Lead with the COVID exclusion result — this is the robustness check readers will immediately demand. If the main result holds, state this prominently; if it weakens, acknowledge what fraction of the identification is coming from COVID.
+- Report the TCI → AvgCorr60 substitution and AcuteEMFI exercises. These tests also serve as a conceptual decomposition: they tell us whether the VAR-FEVD connectedness dimension or the simpler correlation/volatility dimension is driving the shock-transmission result.
 
 ---
 
