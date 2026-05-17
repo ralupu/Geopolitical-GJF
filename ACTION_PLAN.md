@@ -6,7 +6,7 @@
 
 **Created:** 2026-05-17  
 **Last updated:** 2026-05-17  
-**Overall status:** Phase 3 — Volatility Connectedness ✅ Complete
+**Overall status:** Phase 4 — Composite EMFI ✅ Complete
 
 ---
 
@@ -36,7 +36,7 @@ The paper is built around three conceptual layers:
 | 1 | Data preparation | ✅ Complete |
 | 2 | Daily fragility indicators | ✅ Complete |
 | 3 | Volatility connectedness (TCI) | ✅ Complete |
-| 4 | Composite EMFI | ⬜ Pending |
+| 4 | Composite EMFI | ✅ Complete |
 | 5 | HMM market-implied stress regimes | ⬜ Pending |
 | 6 | Panel local projections | ⬜ Pending |
 | 7 | State-dependent local projections | ⬜ Pending |
@@ -213,25 +213,37 @@ Use the `statsmodels` VAR implementation. For GFEVD: implement the Pesaran-Shin 
 
 ## Phase 4 — Composite EMFI (European Market Fragility Index)
 
-**Status:** ⬜ Pending  
+**Status:** ✅ Complete  
+**Date completed:** 2026-05-18  
 **Subproject:** `subprojects/04_emfi/`  
-**Script:** `subprojects/04_emfi/build_emfi.py`
+**Script:** `subprojects/04_emfi/build_emfi.py`  
+**Tests:** `subprojects/04_emfi/test_emfi.py` — 28/28 passed
 
 ### Objectives
 Combine the fragility indicators from Phase 2 and the TCI from Phase 3 into a single composite daily index using PCA. This index — the European Market Fragility Index (EMFI) — is the paper's **primary outcome variable**.
 
 ### Method
-1. Standardize each component to mean 0, std 1 (using the full-sample mean and std, not rolling — the EMFI is not used for detection, only as an outcome variable).
-2. Apply PCA to [VolStress, TailVolBreadth, AvgCorr, TCI].
-3. Extract the first principal component; orient it so that higher values = more fragility (flip sign if needed).
-4. Report variance explained by PC1 (target: ≥50% for the index to be credible).
-5. Also report loadings to motivate the weighting.
+1. Standardise each component to mean 0, std 1 using the *full-sample* mean and std (not rolling — the EMFI is an outcome variable, not a detector).
+2. Apply PCA to [VolStress, TailVolBreadth, AvgCorr60, TCI_w100].
+3. Extract PC1; orient so that higher values = more fragility (flip sign if VolStress anti-correlated).
+4. Report variance explained (target ≥50%).
 
 ### Deliverables
-- `results/emfi/emfi_daily.csv` — daily EMFI series
-- `results/emfi/pca_loadings.csv` — component loadings
-- `results/emfi/Fig_EMFI_Timeline.png` — EMFI with shaded stress episodes and vertical event lines
-- `results/emfi/Fig_EMFI_Components.png` — all four components alongside EMFI
+- [x] `results/emfi/emfi_daily.csv` — daily EMFI, 2,179 rows (2017-05-19 to 2025-10-15)
+- [x] `results/emfi/pca_loadings.csv` — PC1 loadings per component
+- [x] `results/emfi/Fig_EMFI_Timeline.png` — EMFI with stress-episode shading and event lines
+- [x] `results/emfi/Fig_EMFI_Components.png` — 5-panel: EMFI + all 4 standardised components
+- [x] `results/emfi/summary_stats.csv`
+- [x] `results/emfi/manifest.json`
+
+### Key facts from implementation
+- **PC1 variance explained: 58.3%** — above the 50% credibility threshold
+- **PC1 loadings (all positive):** VolStress=0.532, AvgCorr60=0.516, TCI=0.495, TailVolBreadth=0.454
+- **EMFI max: 15.2** on 2020-03-12 (COVID crash peak)
+- **EMFI range:** [-2.74, 15.22]; mean=0.00, std=1.53
+- **75th pctile threshold: 0.55** (used for HighFragility state in Phase 7)
+- Sample starts 2017-05-19 (TCI W=100 warm-up + TailBreadth warm-up combined)
+- Note: Sign flip was applied — raw PC1 had all negative loadings; flipped for interpretability
 
 ---
 
@@ -474,3 +486,4 @@ Phases 6–9 → Phase 10 (writing)
 | 2026-05-17 | 1 | Data preparation complete. Key discovery: 181/278 shock events fall on weekends (conflict index runs on calendar days); implemented forward-fill to next trading day. Panel: 43,282 rows, 163 shock days, S in [0.07, 2.86]. 43/43 tests pass. |
 | 2026-05-17 | 2 | Fragility indicators complete. VolStress max=0.119 (COVID), TailVolBreadth=18/19 on 2020-03-16, AvgCorr60 mean=0.476. Rolling quantile thresholds shifted by 1 day (strictly out-of-sample). 39/39 tests pass. Note: on sandbox/NTFS, stale .pyc files require force-recompile via `py_compile.compile()` after editing test files. |
 | 2026-05-17 | 3 | Volatility connectedness complete. Pesaran-Shin GFEVD with row-sum normalization. TCI (W=100) mean=70.5%, COVID peak >80%, range=[46.7%, 94.6%]. All 4 window specs (W=60/100/150/200) computed. Runtime ~25s. 32/32 tests pass. |
+| 2026-05-18 | 4 | Composite EMFI complete. PCA on [VolStress, TailVolBreadth, AvgCorr60, TCI_w100]. PC1=58.3% variance, all loadings positive (0.45-0.53). EMFI max=15.2 on 2020-03-12. 75th pctile threshold=0.55. 28/28 tests pass. Also fixed SP02 script truncation (NTFS mount issue) and regenerated fragility_daily.csv with full 2278 rows. |

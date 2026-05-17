@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-17T20:27:36.903368+00:00",
+  "generated_at": "2026-05-17T21:00:47.828915+00:00",
   "script": "subprojects/02_fragility_indicators/build_fragility_indicators.py",
   "n_dates": 2278,
   "date_range": {

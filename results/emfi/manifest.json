@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-05-17T21:02:03.505657+00:00",
+  "script": "subprojects/04_emfi/build_emfi.py",
+  "components": [
+    "VolStress",
+    "TailVolBreadth",
+    "AvgCorr60",
+    "tci_w100"
+  ],
+  "parameters": {
+    "primary_w_tci": 100,
+    "high_frag_pctile": 75,
+    "standardisation": "full-sample mean/std (ddof=1)"
+  },
+  "pca": {
+    "eigenvalues": [
+      2.333963,
+      1.269519,
+      0.207366,
+      0.189152
+    ],
+    "variance_explained": [
+      58.35,
+      31.74,
+      5.18,
+      4.73
+    ],
+    "pc1_variance_pct": 58.35,
+    "sign_flipped": true
+  },
+  "emfi_stats": {
+    "mean": 0.0,
+    "std": 1.527731,
+    "min": -2.742585,
+    "max": 15.217183,
+    "p75_threshold": 0.548293
+  },
+  "date_range": {
+    "start": "2017-05-19",
+    "end": "2025-10-15"
+  },
+  "standardisation": {
+    "VolStress": {
+      "mean": 0.007416620914219318,
+      "std": 0.006251693457710604
+    },
+    "TailVolBreadth": {
+      "mean": 1.0894905920146856,
+      "std": 2.7120407415315273
+    },
+    "AvgCorr60": {
+      "mean": 0.4782935949354171,
+      "std": 0.12570811005663465
+    },
+    "tci_w100": {
+      "mean": 70.5236722267901,
+      "std": 10.24143768957755
+    }
+  },
+  "outputs": {
+    "emfi_daily": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/results/emfi/emfi_daily.csv",
+    "pca_loadings": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/results/emfi/pca_loadings.csv",
+    "summary_stats": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/results/emfi/summary_stats.csv",
+    "fig_timeline": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/results/emfi/Fig_EMFI_Timeline.png",
+    "fig_components": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/results/emfi/Fig_EMFI_Components.png"
+  }
+}
