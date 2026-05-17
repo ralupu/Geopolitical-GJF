@@ -6,7 +6,7 @@
 
 **Created:** 2026-05-17  
 **Last updated:** 2026-05-17  
-**Overall status:** Phase 2 — Daily Fragility Indicators ✅ Complete
+**Overall status:** Phase 3 — Volatility Connectedness ✅ Complete
 
 ---
 
@@ -35,7 +35,7 @@ The paper is built around three conceptual layers:
 | 0 | Repository setup and scaffolding | ✅ Complete |
 | 1 | Data preparation | ✅ Complete |
 | 2 | Daily fragility indicators | ✅ Complete |
-| 3 | Volatility connectedness (TCI) | ⬜ Pending |
+| 3 | Volatility connectedness (TCI) | ✅ Complete |
 | 4 | Composite EMFI | ⬜ Pending |
 | 5 | HMM market-implied stress regimes | ⬜ Pending |
 | 6 | Panel local projections | ⬜ Pending |
@@ -168,9 +168,11 @@ Construct a daily cross-country panel of market-based fragility measures from th
 
 ## Phase 3 — Volatility Connectedness (TCI)
 
-**Status:** ⬜ Pending  
+**Status:** ✅ Complete  
+**Date completed:** 2026-05-17  
 **Subproject:** `subprojects/03_connectedness/`  
-**Script:** `subprojects/03_connectedness/build_connectedness.py`
+**Script:** `subprojects/03_connectedness/build_connectedness.py`  
+**Tests:** `subprojects/03_connectedness/test_connectedness.py` — 32/32 passed
 
 ### Objectives
 Construct a daily Total Connectedness Index (TCI) from the 19 volatility proxies (\|r_{i,t}\|) using a rolling VAR forecast-error variance decomposition (Diebold–Yilmaz methodology).
@@ -192,11 +194,20 @@ For each rolling window of W days (primary: W=100, secondary: W=200):
 Use the `statsmodels` VAR implementation. For GFEVD: implement the Pesaran-Shin (1998) generalized decomposition (order-invariant), not the Cholesky decomposition.
 
 ### Deliverables
-- `results/connectedness/tci_daily.csv` — daily TCI for each window specification
-- `results/connectedness/directional_connectedness.csv` — daily FROM/TO per country
-- `results/connectedness/Fig_TCI_Timeline.png` — TCI over time with event overlays
-- `results/connectedness/Fig_Network_MajorEvents.png` — network topology before/after key shocks
-- `results/connectedness/summary_stats.csv`
+- [x] `results/connectedness/tci_daily.csv` — daily TCI for W=60/100/150/200, 2219 rows
+- [x] `results/connectedness/directional_connectedness.csv` — daily FROM/TO/NET per country (W=100), 41,401 rows
+- [x] `results/connectedness/Fig_TCI_Timeline.png` — 2-panel: primary TCI + all window specs
+- [x] `results/connectedness/Fig_Network_MajorEvents.png` — TO/FROM bar charts for 3 regimes
+- [x] `results/connectedness/summary_stats.csv`
+- [x] `results/connectedness/manifest.json`
+
+### Key facts from implementation
+- **TCI (W=100) mean: 70.5%** — European equity markets are very highly connected
+- **TCI range: 46.7% to 94.6%** — substantial time variation
+- **COVID peak (Mar-Apr 2020): TCI > 80%** — near-total volatility co-movement
+- **FROM spillover (Germany, Mar 2020): ~91%** — market effectively became a single entity
+- Script runtime: ~25 seconds for all 4 window specs
+- BIC-selected VAR order: predominantly p=1 across windows
 
 ---
 
@@ -462,3 +473,4 @@ Phases 6–9 → Phase 10 (writing)
 | 2026-05-17 | 0 | Initial action plan created. Repository scaffolded. Git repo initialized (`init_git.sh`). LaTeX skeleton created. |
 | 2026-05-17 | 1 | Data preparation complete. Key discovery: 181/278 shock events fall on weekends (conflict index runs on calendar days); implemented forward-fill to next trading day. Panel: 43,282 rows, 163 shock days, S in [0.07, 2.86]. 43/43 tests pass. |
 | 2026-05-17 | 2 | Fragility indicators complete. VolStress max=0.119 (COVID), TailVolBreadth=18/19 on 2020-03-16, AvgCorr60 mean=0.476. Rolling quantile thresholds shifted by 1 day (strictly out-of-sample). 39/39 tests pass. Note: on sandbox/NTFS, stale .pyc files require force-recompile via `py_compile.compile()` after editing test files. |
+| 2026-05-17 | 3 | Volatility connectedness complete. Pesaran-Shin GFEVD with row-sum normalization. TCI (W=100) mean=70.5%, COVID peak >80%, range=[46.7%, 94.6%]. All 4 window specs (W=60/100/150/200) computed. Runtime ~25s. 32/32 tests pass. |

@@ -1,0 +1,34 @@
+{
+  "generated_at": "2026-05-17T20:51:33.926143+00:00",
+  "script": "subprojects/03_connectedness/build_connectedness.py",
+  "date_range": {
+    "start": "2017-03-24",
+    "end": "2025-10-15"
+  },
+  "parameters": {
+    "h_horizon": 10,
+    "var_max_p": 3,
+    "primary_w": 100,
+    "windows": [
+      60,
+      100,
+      150,
+      200
+    ]
+  },
+  "tci_primary": {
+    "window": 100,
+    "n_dates": 2179,
+    "mean": 70.5236722267901,
+    "std": 10.24143768957755,
+    "min": 46.73159425605961,
+    "max": 94.56698204996279
+  },
+  "outputs": {
+    "tci_daily": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/results/connectedness/tci_daily.csv",
+    "directional": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/results/connectedness/directional_connectedness.csv",
+    "summary_stats": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/results/connectedness/summary_stats.csv",
+    "fig_tci_timeline": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/results/connectedness/Fig_TCI_Timeline.png",
+    "fig_network_events": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/results/connectedness/Fig_Network_MajorEvents.png"
+  }
+}
