@@ -1,0 +1,211 @@
+% ============================================================
+% Paper_GFJ — When Geopolitical Shocks Become Systemic
+% Target: Global Finance Journal
+% ============================================================
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[margin=1in]{geometry}
+
+\usepackage{graphicx}
+\graphicspath{
+  {figures/}
+  {../results/figures/}
+  {../results/fragility/}
+  {../results/connectedness/}
+  {../results/emfi/}
+  {../results/stress_regimes/}
+  {../results/panel_lp/}
+  {../results/state_lp/}
+  {../results/event_classification/}
+}
+
+\usepackage{booktabs}
+\usepackage{threeparttable}
+\usepackage{array}
+\usepackage{longtable}
+
+\usepackage{amsmath,amssymb}
+
+\usepackage[strings]{underscore}
+
+\usepackage[hidelinks]{hyperref}
+\usepackage[nameinlink,capitalise]{cleveref}
+
+\usepackage[numbers,sort&compress]{natbib}
+
+% ---- Working title; update when finalised ----
+\title{When Geopolitical Shocks Become Systemic:\\
+  Volatility Connectedness and Market-Implied Stress\\
+  in European Equity Markets}
+\author{[Author information omitted for blind review]}
+\date{\today}
+
+% ============================================================
+\begin{document}
+\maketitle
+
+% ---- Abstract -----------------------------------------------
+\begin{abstract}
+% TODO: write after main results are known.
+%
+% Template:
+% This paper studies whether geopolitical shocks become systemic
+% financial stress events in European equity markets.
+% Using daily data for 19 equity markets from 2017--2025, we combine
+% a validated high-frequency geopolitical conflict shock series with
+% market-based measures of financial fragility, volatility
+% connectedness, and market-implied stress regimes.
+% [Main results to be inserted here.]
+% We find that geopolitical shocks increase the European Market
+% Fragility Index primarily when they amplify volatility connectedness
+% or coincide with already-fragile market conditions.
+\end{abstract}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ============================================================
+\section{Introduction}
+\label{sec:introduction}
+
+% TODO: write after empirical results are finalised.
+%
+% Motivate: geopolitical risk -- financial stability link
+% Gap: existing literature studies return/volatility, not systemic
+%   fragility transmission and connectedness
+% This paper: three-layer approach
+%   1. Validated shock trigger (EVT+FDR series from Lupu et al. 2026)
+%   2. Daily systemic fragility metrics + EMFI
+%   3. HMM market-implied stress classification
+% Contributions (three):
+%   (i)   novel EMFI daily index for European equity markets
+%   (ii)  evidence that shocks amplify connectedness, not just volatility
+%   (iii) typology of absorbed vs. systemic geopolitical shocks
+
+% ============================================================
+\section{Related Literature}
+\label{sec:literature}
+
+% TODO
+
+% ============================================================
+\section{Data and Geopolitical Shock Triggers}
+\label{sec:data}
+
+\subsection{Equity return panel}
+% 19 European equity markets, 2017-01-01 to 2025-10-15.
+% Daily log returns from LSEG Workspace.
+% Table~\ref{tab:data_summary}: country coverage, index names, cluster assignment.
+
+\subsection{Geopolitical conflict shock series}
+% Reuse EVT+FDR shock series from companion paper (Lupu et al. 2026, BIR).
+% Briefly describe: GDELT Doc 2.0, 28d WMA, GPD tail, FDR cross-section, declustering.
+% Key statistic: N detected shock events, range of S values.
+% Aggregate shock: MaxShock_t = max_i S_{i,t}.
+
+% ============================================================
+\section{Market-Based Financial Stability Measures}
+\label{sec:fragility}
+
+\subsection{Daily volatility stress and tail co-exceedance}
+% VolStress_t, TailVolBreadth_t, TailLossBreadth_t, AvgCorr_t
+% Rolling threshold construction: no look-ahead, 252-day backward window.
+
+\subsection{Volatility connectedness index}
+% Rolling Diebold-Yilmaz VAR-GFEVD on |r_{i,t}|.
+% Window W=100 days; VAR order by BIC capped at p=3; H=10 step horizon.
+% Report TCI_t, plus directional spillovers.
+
+\subsection{European Market Fragility Index (EMFI)}
+% PCA over [VolStress, TailVolBreadth, AvgCorr, TCI].
+% First PC; orientation: higher = more fragile.
+% Report: loadings, variance explained.
+% Figure~\ref{fig:emfi_timeline}: EMFI over time with event overlays.
+
+% ============================================================
+\section{Market-Implied Systemic Stress Regimes}
+\label{sec:hmm}
+
+% Gaussian HMM, 3 states, estimated on X_t = [VolStress, TailVolBreadth, AvgCorr, TCI].
+% Key: estimated without reference to geopolitical shock dates.
+% P_stress_t = daily probability of systemic-stress state.
+% Validation against known events.
+% Figure~\ref{fig:hmm_regimes}.
+
+% ============================================================
+\section{Dynamic Effects of Geopolitical Shocks on Systemic Fragility}
+\label{sec:lp}
+
+\subsection{Empirical design}
+% Local projections (Jord\`a 2005).
+% Specification:
+%   Y_{t+k} = alpha + beta_k MaxShock_t + gamma Y_{t-1} + delta r^{global}_t + mu_m + eps
+% Horizons k=-5 to +15. Newey-West SEs.
+
+\subsection{Baseline results}
+% Table + Figure for each outcome: EMFI, TCI, TailBreadth, P_stress, AvgCorr.
+% Figure~\ref{fig:lp_combined}.
+
+% ============================================================
+\section{State Dependence and Event Classification}
+\label{sec:state}
+
+\subsection{State-dependent local projections}
+% HighFragility_{t-1} indicator (EMFI > 75th pctile).
+% Interaction specification.
+% Figure~\ref{fig:state_lp}: normal vs. fragile IRF comparison.
+
+\subsection{Geopolitical event taxonomy}
+% Four categories: Absorbed, Localized, Systemic, Market-only.
+% Table with major events classified.
+% Figure~\ref{fig:network_events}: connectedness network around top Systemic events.
+
+% ============================================================
+\section{Robustness}
+\label{sec:robustness}
+
+% Checks: alternative connectedness, alternative shock aggregation,
+% alternative EMFI weights, COVID/Ukraine exclusions, future-shock placebo.
+
+% ============================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+% TODO
+
+% ============================================================
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+% ============================================================
+\appendix
+
+\section{Data Details}
+\label{app:data}
+
+% Table A1: Data summary (countries, date ranges, index names)
+
+\section{EMFI Construction Details}
+\label{app:emfi}
+
+% PCA loadings table, scree plot, robustness (equal-weight alternative)
+
+\section{HMM Parameter Estimates}
+\label{app:hmm}
+
+% Transition matrix, emission parameters per state
+
+\section{Additional LP Results}
+\label{app:lp}
+
+% Individual outcome LP tables (numerical coefficients + SEs)
+
+\section{Robustness Tables}
+\label{app:robustness}
+
+\end{document}

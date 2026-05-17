@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+*.so
+.venv/
+venv/
+env/
+*.ipynb_checkpoints
+
+# Data — large files not committed
+data/*.parquet
+data/*.xlsx
+data/*.csv
+data/shocks/
+results/**/*.nc
+results/**/*.npy
+
+# Results — intermediate outputs (large)
+results/fragility/*.png
+results/connectedness/*.png
+results/emfi/*.png
+results/stress_regimes/*.png
+results/panel_lp/*.png
+results/state_lp/*.png
+results/event_classification/*.png
+results/robustness/*.png
+
+# Paper-ready figures ARE committed (they go in results/figures/ and Paper_LaTeX/figures/)
+!results/figures/*.png
+!Paper_LaTeX/figures/*.png
+
+# LaTeX build artifacts
+Paper_LaTeX/*.aux
+Paper_LaTeX/*.log
+Paper_LaTeX/*.out
+Paper_LaTeX/*.bbl
+Paper_LaTeX/*.blg
+Paper_LaTeX/*.synctex.gz
+Paper_LaTeX/*.toc
+Paper_LaTeX/*.fls
+Paper_LaTeX/*.fdb_latexmk
+Paper_LaTeX/tables/*.aux
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
