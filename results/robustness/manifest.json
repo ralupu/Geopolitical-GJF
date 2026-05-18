@@ -1,0 +1,26 @@
+{
+  "generated_at": "2026-05-18T13:20:24.526269+00:00",
+  "script": "subprojects/09_robustness/run_robustness.py",
+  "n_checks": 11,
+  "n_obs_baseline": 2178,
+  "n_obs_covid_excl": 1960,
+  "baseline_beta_k0": 0.45824105040491986,
+  "covid_beta_k0": 0.3697374991538482,
+  "placebo_beta_k0": -0.08333128498088782,
+  "theta_k0_by_check": {
+    "R03": 1.4319172462922547,
+    "R04": 0.724049557608517,
+    "R05": 0.9389286086684773,
+    "R06": 1.2318336480411134,
+    "R07": -0.11162589398732445,
+    "R11": 1.944303548402787,
+    "R12": 1.55393864316029
+  },
+  "outputs": [
+    "robustness_summary.csv",
+    "state_lp_theta.csv",
+    "Fig_Robustness_LP.png",
+    "Fig_Robustness_StateLPTheta.png",
+    "manifest.json"
+  ]
+}

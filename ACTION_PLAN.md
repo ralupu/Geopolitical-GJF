@@ -5,8 +5,8 @@
 **Target journal:** Global Finance Journal (GFJ)
 
 **Created:** 2026-05-17  
-**Last updated:** 2026-05-18 (Phase 7 complete; paper Section 7 drafted)  
-**Overall status:** Phase 7 — State-Dependent LP ✅ Complete; paper Sections 1–6 drafted
+**Last updated:** 2026-05-18 (Phase 9 complete; paper Section 7 drafted)  
+**Overall status:** Phase 9 — Robustness ✅ Complete; paper Sections 1–7 drafted
 
 ---
 
@@ -40,8 +40,8 @@ The paper is built around three conceptual layers:
 | 5 | HMM market-implied stress regimes | ✅ Complete |
 | 6 | Panel local projections | ✅ Complete |
 | 7 | State-dependent local projections | ✅ Complete |
-| 8 | Event classification | ⬜ Pending |
-| 9 | Robustness | ⬜ Pending |
+| 8 | Event classification | ✅ Complete |
+| 9 | Robustness | ✅ Complete |
 | 10 | Paper writing (LaTeX) | ⬜ Pending (parallel with 6–9) |
 
 ---
@@ -512,53 +512,97 @@ Key: 2022 (Ukraine year) has the second-highest HF concentration (52.4%), confir
 
 ## Phase 8 — Event Classification
 
-**Status:** ⬜ Pending  
+**Status:** ✅ Complete  
 **Subproject:** `subprojects/08_event_classification/`  
-**Script:** `subprojects/08_event_classification/classify_events.py`
+**Script:** `subprojects/08_event_classification/classify_events.py`  
+**Tests:** `subprojects/08_event_classification/test_classify_events.py` — **60/60 pass**
 
-### Objectives
-Produce a 4-category taxonomy of geopolitical shock episodes, combining the news-based shock measure with the market-implied stress classification. This creates a concrete, interpretable typology.
+### Classification thresholds
+- `EMFI_Q75 = 0.548` (75th percentile of EMFI over shock days)
+- `P_stress_threshold = 0.50`
+- Post-window: [t, t+5] trading days for EMFI post max and P_stress peak
 
-### Four categories
+### Category definitions and results
 
-| Category | Definition |
-|----------|-----------|
-| **Absorbed** | Shock detected (S_t > threshold), no EMFI spike, P_stress_t stays low |
-| **Localized** | Shock detected, moderate EMFI rise but P_stress_t < 0.5 within 5 days |
-| **Systemic** | Shock detected, EMFI rises above 75th percentile AND P_stress_t > 0.5 within 5 days |
-| **Market-only stress** | P_stress_t > 0.5, no shock detected within ±3 days |
+| Category | Definition | Count | Share |
+|----------|-----------|-------|-------|
+| **Systemic** | P_stress_peak ≥ 0.5 AND emfi_post_max > 0.548 | 42 | 27.3% |
+| **Localized** | emfi_delta > 0, but not Systemic | 34 | 22.1% |
+| **Absorbed** | All other shock days | 78 | 50.6% |
+| **Market-only stress** | P_stress > 0.5, no shock within ±3 days | 138 | (separate series) |
 
-### Implementation
-- Iterate over all declustered shock event dates (154 events in the HMM sample).
-- For each event: compute EMFI change (mean of t+1 to t+5 minus mean of t-5 to t-1), and max P_stress in window [t, t+5].
-- Assign category using the definitions above.
-- For each category: compute average volatility response, average TCI response, average duration of elevated stress.
+### Key empirical results
 
-### Empirical anchors from Phase 5 (to verify in Phase 8)
-- **COVID peak (2020-03-12):** P_stress=1.00, EMFI=15.2 → expected classification: Systemic
-- **Ukraine invasion (2022-02-24):** P_stress=1.00 → expected: Systemic
-- **Hamas attack (2023-10-09, nearest trading day):** P_stress=0.296 → expected: Localized
-- **Base rate:** 63% of shock events hit calm markets (P_stress≈0) → expected majority of events to be "Absorbed" or "Localized"
-- **Overall distribution expected:** few Systemic events (likely 5–20), majority Absorbed/Localized
+**Anchor event classifications (all verified):**
+- **COVID shock (2020-03-03):** Systemic; emfi_post_max=12.463 (highest of all 154 events), P_stress_peak=1.0
+- **Ukraine invasion (2022-02-24):** Systemic; emfi_post_max=7.324, P_stress_peak=1.0
+- **Hamas attack (2023-10-09):** Systemic; P_stress spiked to 1.0 on 2023-10-10 (next trading day, within post-window), emfi_post_max=2.797
+  - Note: Hamas was expected Localized (P_stress on shock day = 0.296). The spike on day+1 puts it in Systemic. This is an empirical finding worth noting: one-day delayed systemic response.
 
-### Key outputs
-- **Table (paper):** Event listing with category, date, country, shock intensity, EMFI response, TCI response, P_stress peak, classification. This is **Figure 5 / Table** in the idea document.
-- **Figure 4 (paper):** Connectedness network before/after the top 5 "Systemic" events.
+**Top systemic events by emfi_post_max:**
+| Date | emfi_post_max | Countries involved |
+|------|--------------|-------------------|
+| 2020-03-03 | 12.463 | Bulgaria (COVID panic) |
+| 2022-03-02 | 7.538 | Netherlands (Ukraine cluster) |
+| 2022-02-24 | 7.324 | 15-country Ukraine invasion |
+| 2022-02-21 | 7.324 | Portugal (Ukraine prelude) |
+| 2020-02-21 | 6.812 | Romania (early COVID) |
 
-### Deliverables
-- `results/event_classification/event_taxonomy.csv`
-- `results/event_classification/Fig_NetworkMajorEvents.png`
-- `results/event_classification/summary_by_category.csv`
+**Year distribution — Systemic events:**
+- 2022: most Systemic events (Ukraine + European energy crisis cluster)
+- 2020: 8+ Systemic events (COVID cluster)
+- Sample spans ≥ 5 years
+
+**Summary by category (mean characteristics):**
+| Category | mean P_stress_peak | mean emfi_delta | mean TCI_post_max |
+|----------|-------------------|----------------|------------------|
+| Systemic | 0.990 | +0.643 | 77.6 |
+| Localized | 0.162 | +0.213 | 67.4 |
+| Absorbed | 0.046 | −0.347 | 68.6 |
+
+**Market-only stress:** 138 days with P_stress > 0.5 and no shock within ±3 trading days. These represent endogenous systemic stress not triggered by identified geopolitical events.
+
+### Analytical observations for paper writing (Section 6.2)
+
+1. **Majority of shocks are absorbed (50.6%):** consistent with the LP finding that β_k ≈ 0 in calm markets at k=0. Most geopolitical events do not disturb the financial system.
+2. **27% Systemic is higher than the ex ante 5–20 range:** the broader definition of systemic (P_stress ≥ 0.5 in a 5-day window, not just on the shock day) captures the 2022 European energy crisis cluster and multiple COVID-era events. The 42 count is defensible and empirically informative.
+3. **COVID dominates the upper tail:** emfi_post_max = 12.463 for 2020-03-03, roughly 1.7× the Ukraine cluster. This motivates the COVID-exclusion robustness check already done in Phase 7.
+4. **138 market-stress days with no shock:** this is important for the narrative — the financial system enters systemic stress episodes independently of identified geopolitical events. Geopolitical shocks explain only a fraction of systemic stress triggers.
+5. **Hamas delayed response:** P_stress_on_day = 0.296 but P_stress_peak = 1.0 (reached on day+1). Illustrates how stress can crystallize the day after news breaks rather than on the event day itself.
+6. **Localized mean P_stress_peak = 0.162:** well below the 0.5 threshold, confirming clean separation between Localized and Systemic categories.
+
+### Writing notes for Section 6.2 — Geopolitical Event Taxonomy
+
+**Structure:**
+1. Restate the classification rule (3-4 sentences): "We classify each of the 154 shock events according to..."
+2. Table: summary_by_category results (4 columns: category, n, pct, mean P_stress_peak)
+3. Paragraph on Systemic events: 42 events (27.3%), concentrated in 2020 (COVID) and 2022 (Ukraine + energy crisis); COVID peak is the most severe by EMFI; list 2–3 anchor events
+4. Paragraph on Absorbed majority: 78 events (50.6%); consistent with LP baseline β≈0 in calm markets; geopolitical news routinely fails to disturb financial fragility indices
+5. Market-only stress: 138 days; stress arises endogenously; geopolitical shocks explain only part of stress episodes
+6. Figure caption for Fig_EventTimeline: "Geopolitical shock events classified into Absorbed (grey), Localized (blue), and Systemic (red) categories, overlaid with the EMFI time series. Systemic events (N=42) are concentrated in COVID-era 2020 and the Ukraine conflict cluster of 2022."
+7. Network figure: top-5 systemic events by emfi_post_max show strong correlation network densification post-shock; include Fig_NetworkCorr_Systemic
+
+### Output files
+- `results/event_classification/event_taxonomy.csv` — 154 rows, 14 columns
+- `results/event_classification/summary_by_category.csv` — 3 rows
+- `results/event_classification/market_stress_episodes.csv` — 138 rows
+- `results/event_classification/Fig_EventTimeline.png`
+- `results/event_classification/Fig_NetworkCorr_Systemic.png`
+- `results/event_classification/manifest.json`
+
+### Change log
+- 2026-05-18: `classify_events.py` written and run (1.1s); 60/60 tests pass; Section 6.2 placeholder drafted in main.tex
 
 ---
 
 ## Phase 9 — Robustness
 
-**Status:** ⬜ Pending  
+**Status:** ✅ Complete  
 **Subproject:** `subprojects/09_robustness/`  
-**Script:** `subprojects/09_robustness/run_robustness.py`
+**Script:** `subprojects/09_robustness/run_robustness.py`  
+**Tests:** `subprojects/09_robustness/test_robustness.py` — **56/56 pass**
 
-### Checks to implement
+### Checks implemented
 
 | Check | Description | Priority |
 |-------|------------|----------|
@@ -585,54 +629,10 @@ Produce a 4-category taxonomy of geopolitical shock episodes, combining the news
 
 **COVID exclusion as critical:** this is not a standard robustness check here — it is a potential falsification. Given that COVID accounts for the dominant mass of the EMFI upper tail and most HighFragility shock days, a statistically significant state-dependent result that disappears upon COVID exclusion would indicate the finding is not generalizable beyond that single episode.
 
-### Deliverables
-- `results/robustness/robustness_summary.csv` — all checks with β_k at key horizons
-- `results/robustness/Fig_Robustness_LP.png` — overlay of baseline + robustness IRFs
-- `results/robustness/Fig_Robustness_StateLPComparison.png` — state-dependent LP baseline vs TCI-substitution vs AcuteEMFI
+### Results — LP robustness (EMFI β_k0)
 
----
-
-## Phase 10 — Paper Writing
-
-**Status:** ⬜ Pending (begins in parallel with Phase 6)  
-**Location:** `Paper_LaTeX/`
-
-### Manuscript structure
-
-1. Introduction
-2. Data and geopolitical shock triggers
-3. Market-based financial stability measures (Phases 2–4)
-4. Market-implied systemic stress regimes (Phase 5)
-5. Dynamic effects of geopolitical shocks on systemic fragility (Phase 6)
-6. State dependence and event classification (Phases 7–8)
-7. Robustness (Phase 9)
-8. Conclusion
-
-### Key figures (for paper)
-- Figure 1: Timeline — EMFI + HMM shaded regimes + vertical shock lines
-- Figure 2: LP impulse responses (EMFI, TCI, TailBreadth, P_stress)
-- Figure 3: State-dependent LP (normal vs fragile pre-state)
-- Figure 4: Connectedness network — before/after major systemic events
-- Figure 5: Event taxonomy table
-
-### Writing milestones
-- [x] Data section draft (after Phase 1) — drafted 2026-05-18
-- [x] Sections 3–4 draft (after Phases 2–5) — drafted 2026-05-18
-- [x] Section 5 draft (HMM, after Phase 5) — drafted 2026-05-18
-- [x] Section 6 baseline LP prose (after Phase 6) — drafted 2026-05-18
-- [x] Section 6 state-dependent LP prose (after Phase 7) — drafted 2026-05-18
-- [ ] Full draft for co-author review
-- [ ] GFJ submission package
-
-### Writing notes from implementation (Phases 2–4 analytical observations)
-
-**Section 3 — Market-Based Financial Stability Measures:**
-- When describing the EMFI, explicitly discuss the **two-cluster structure**: VolStress+TailBreadth (cluster 1, within-corr=0.784) vs. AvgCorr60+TCI (cluster 2, within-corr=0.797), with cross-cluster correlations of only 0.16–0.38. Explain that PCA bridges these two dimensions: PC1 loads equally on all four components (0.45–0.53), while PC2 captures the contrast. Acknowledge that 58.3% explained variance reflects a genuine two-dimensional fragility space, not a near-perfect common factor.
-- **TCI vs. AvgCorr60 discussion**: note that TCI (VAR-FEVD) and AvgCorr60 (simple rolling correlation) correlate at 0.797. The theoretical superiority of TCI (order-invariance, captures indirect spillover paths) is argued, but the empirical overlap is explicitly acknowledged and the TCI-substitution robustness check is referenced.
-- **EMFI nature**: be explicit that EMFI is a contemporaneous/lagging acute-stress indicator. It does not build up gradually before crises — it spikes during them. Contrast with VIX-type implied volatility measures if space allows. This framing matters for interpreting the state-dependent LP: HighFragility captures *ongoing* stress episodes, not *pre-fragility*.
-- **HighFragility composition disclosure**: in a table or footnote, report the breakdown of HighFragility days by year/episode. COVID 2020 will dominate the upper tail; this must be stated, not buried.
-
-**Section 4 — HMM Market-Implied Stress Regimes:**
-- Explicitly describe the HMM as a spike detector rather than a regime classifier: 143 distinct stress episodes, median duration = 1 calendar day. Contrast with traditional HMM applications where regimes persist for months — this is a fundamentally different use case.
-- Report the episode breakdown of systemic-stress days: COVID=22.9%, Ukraine=13.0%, "Other 2017–2019"=24.2%, "Other 2024–2025"=17.0%. The dominant category is actually non-labeled European stress events, which argues for generalizability beyond any single crisis.
-- Report shock-regime d
+| Check | Name | β_k0 | N_obs | Verdict |
+|-------|------|-------|-------|---------|
+| R00 | Baseline | 0.458 | 2178 | — |
+| R01 | COVID exclusion | 0.370 | 1960 | ✅ Survives (same sign, 81% of baseline) |
+| R02 | Ukraine exclusion | 0.083 | 2070 | ⚠️ Red
