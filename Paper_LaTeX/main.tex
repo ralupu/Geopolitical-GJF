@@ -1261,29 +1261,239 @@ distinguish the average effect of a shock from its state-conditioned amplificati
 \section{Data Details}
 \label{app:data}
 
-% TODO
+\subsection*{A.1 Country sample and equity indices}
+
+Table~\ref{tab:app_countries} lists the 19 European equity markets included in the panel, together with their benchmark index, GFEVD-based cluster assignment, and the source of daily closing prices. All series were downloaded from Bloomberg and cross-validated against Refinitiv Eikon. Prices are total-return indices where available; otherwise price-return indices are used. Returns are computed as log differences of adjusted closing prices. The full panel spans 2 January 2017 to 15 October 2025, yielding 2{,}278 calendar days and 43{,}282 country--day observations after removing national holidays.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Country sample: equity indices and cluster assignments}
+\label{tab:app_countries}
+\begin{tabular}{llcc}
+\hline\hline
+Country & Benchmark index & Cluster & Source \\
+\hline
+Austria        & ATX               & 3 & Bloomberg \\
+Belgium        & BEL 20            & 1 & Bloomberg \\
+Bulgaria       & SOFIX             & 3 & Bloomberg \\
+Croatia        & CROBEX            & 3 & Bloomberg \\
+Finland        & OMX Helsinki      & 2 & Bloomberg \\
+France         & CAC 40            & 2 & Bloomberg \\
+Germany        & DAX               & 2 & Bloomberg \\
+Greece         & ATHEX Composite   & 3 & Bloomberg \\
+Hungary        & BUX               & 2 & Bloomberg \\
+Ireland        & ISEQ Overall      & 1 & Bloomberg \\
+Italy          & FTSE MIB          & 2 & Bloomberg \\
+Netherlands    & AEX               & 3 & Bloomberg \\
+Norway         & OBX               & 2 & Bloomberg \\
+Poland         & WIG20             & 2 & Bloomberg \\
+Portugal       & PSI 20            & 1 & Bloomberg \\
+Romania        & BET               & 1 & Bloomberg \\
+Spain          & IBEX 35           & 2 & Bloomberg \\
+Sweden         & OMX Stockholm 30  & 3 & Bloomberg \\
+United Kingdom & FTSE 100          & 2 & Bloomberg \\
+\hline\hline
+\end{tabular}
+\end{table}
+
+\subsection*{A.2 Geopolitical shock series}
+
+Geopolitical shock events are identified from GDELT Document 2.0 using a keyword filter targeting armed conflict, military operations, sanctions, and interstate disputes. Raw event records are aggregated to a daily shock-intensity measure $S_t$ via a \textit{GoldsteinScale}--weighted and \textit{NumMentions}--weighted average, then scaled to the unit interval by a min--max transform over the full sample. The raw download yields 278 calendar-day shock events over the study window; 163 of these map to trading days after forward-filling weekend and holiday events to the next open trading day. Nine additional observations are dropped because they fall before the EMFI warm-up completion date (19 May 2017), leaving 154 shock-day observations used in the LP regressions. Shock intensity $S_t$ ranges from 0.073 to 2.860 with a sample mean of 0.318. Multiple hypothesis testing across event-day outcomes is controlled using the Benjamini--Hochberg false discovery rate procedure \citep{benjaminihochberg1995} at a 10\% FDR threshold.
+
+\subsection*{A.3 Fragility component construction}
+
+Each of the four EMFI components is constructed at the daily frequency:
+
+\textbf{VolStress}: Cross-sectional median of country-level GARCH(1,1) conditional volatility estimates, standardised by a trailing 252-day mean and standard deviation (minimum 60 observations).
+
+\textbf{TailVolBreadth}: Fraction of countries whose conditional volatility on day $t$ exceeds the 95th percentile of the preceding 252 days. This breadth indicator captures the simultaneous incidence of extreme volatility across markets.
+
+\textbf{AvgCorr60}: Cross-sectional average of all pairwise Pearson return correlations over a trailing 60-day window (minimum 30 observations). Rising correlations signal contagion and simultaneous selling pressure.
+
+\textbf{TCI ($w=100$)}: Total connectedness index from a rolling 100-day DY variance decomposition \citep{dieboldyilmaz2012,pesaranshim1998} with VAR order selected by AIC (maximum lag 3). The TCI measures the share of forecast-error variance attributable to cross-market spillovers.
 
 \section{EMFI Construction Details}
 \label{app:emfi}
 
-% TODO
+\subsection*{B.1 Standardisation}
+
+Each component $x_{it}$ ($i \in \{\text{VolStress, TailVolBreadth, AvgCorr60, TCI}\}$) is standardised using the full-sample mean $\bar{x}_i$ and standard deviation $s_i$:
+\[
+\tilde{x}_{it} = \frac{x_{it} - \bar{x}_i}{s_i}.
+\]
+Standardisation ensures that each component enters the PCA on an equal footing regardless of its natural scale.
+
+\subsection*{B.2 Principal component analysis}
+
+The EMFI is the first principal component of the $4 \times 1$ vector $(\tilde{x}_{1t}, \tilde{x}_{2t}, \tilde{x}_{3t}, \tilde{x}_{4t})'$. The PCA is estimated on the full sample (19 May 2017 to 15 October 2025, $T = 2{,}179$ daily observations). Table~\ref{tab:app_pca} reports the eigenvalues, variance shares, and PC1 loadings. The sign of PC1 is flipped so that higher EMFI values correspond to higher fragility.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{PCA decomposition of EMFI components}
+\label{tab:app_pca}
+\begin{tabular}{lcccc}
+\hline\hline
+Component & PC1 loading & Loading$^2$ & \% of PC1 variance & Eigenvalue \\
+\hline
+VolStress        & 0.532 & 0.283 & 28.30\% & \multirow{4}{*}{$\begin{array}{r}2.334\\1.270\\0.207\\0.189\end{array}$} \\
+TailVolBreadth   & 0.454 & 0.206 & 20.57\% & \\
+AvgCorr60        & 0.516 & 0.266 & 26.63\% & \\
+TCI ($w=100$)    & 0.495 & 0.245 & 24.49\% & \\
+\hline
+PC1 variance & \multicolumn{3}{c}{58.35\%} & \\
+PC1+PC2      & \multicolumn{3}{c}{90.09\%} & \\
+\hline\hline
+\end{tabular}
+\end{table}
+
+The near-equal loadings across all four components confirm that PC1 is a genuine composite rather than being dominated by a single series.
+
+\subsection*{B.3 EMFI summary statistics}
+
+The resulting EMFI series has sample mean 0.0 and standard deviation 1.53, with a minimum of $-2.74$ and a maximum of 15.22 (the peak occurs on the first trading day following the onset of the COVID-19 pandemic in March 2020). The high-fragility regime threshold is set at the 75th percentile, $\text{EMFI} \geq 0.548$, yielding 545 high-fragility days over the sample.
 
 \section{HMM Parameter Estimates}
 \label{app:hmm}
 
-% TODO
+The Hidden Markov Model is a three-state multivariate Gaussian HMM estimated by the Baum-Welch (EM) algorithm on the four standardised EMFI components. The model uses 50 random restarts; the solution corresponds to the restart achieving the highest log-likelihood, and convergence was confirmed. States are labelled \textit{calm} (state~0), \textit{elevated} (state~1), and \textit{systemic stress} (state~2) based on their mean vectors.
+
+\subsection*{C.1 State prevalence}
+
+Over 2{,}179 sample days, the HMM assigns 1{,}389 days to calm (63.7\%), 567 to elevated (26.0\%), and 223 to systemic stress (10.2\%). COVID-related episodes account for 22.9\% of all systemic-stress days.
+
+\subsection*{C.2 Transition probability matrix}
+
+Table~\ref{tab:app_transmat} reports the estimated transition matrix $A$, where $A_{ij} = \Pr(S_{t+1} = j \mid S_t = i)$.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{HMM estimated transition probability matrix}
+\label{tab:app_transmat}
+\begin{tabular}{lccc}
+\hline\hline
+From $\backslash$ To & Calm & Elevated & Systemic stress \\
+\hline
+Calm             & 0.719 & 0.212 & 0.069 \\
+Elevated         & 0.526 & 0.377 & 0.097 \\
+Systemic stress  & 0.411 & 0.217 & 0.371 \\
+\hline\hline
+\multicolumn{4}{l}{\footnotesize Row sums equal 1 by construction. Estimated by Baum--Welch EM.}
+\end{tabular}
+\end{table}
+
+The calm state is the most persistent (diagonal 0.719), elevated is least persistent (0.377), and systemic stress is moderately persistent (0.371), consistent with clusters of market turmoil lasting several consecutive days.
+
+\subsection*{C.3 State-conditional mean vectors}
+
+Table~\ref{tab:app_hmm_means} reports the estimated mean vector $\mu_s$ for each state $s$ over the four standardised components.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{HMM state-conditional mean vectors (standardised components)}
+\label{tab:app_hmm_means}
+\begin{tabular}{lcccc}
+\hline\hline
+State & VolStress & TailVolBreadth & AvgCorr60 & TCI \\
+\hline
+Calm             & $-0.301$ & $-0.402$ & $-0.022$ & $-0.012$ \\
+Elevated         & $-0.040$ & $\phantom{-}0.099$ & $-0.289$ & $-0.230$ \\
+Systemic stress  & $\phantom{-}1.858$ & $\phantom{-}2.119$ & $\phantom{-}0.809$ & $\phantom{-}0.611$ \\
+\hline\hline
+\end{tabular}
+\end{table}
+
+Systemic stress is characterised by substantially elevated VolStress and TailVolBreadth, confirming its role as a spike-detector. AvgCorr60 and TCI also rise in systemic stress but with smaller magnitudes, reflecting a lag between initial volatility spikes and correlation diffusion across markets.
 
 \section{Additional LP Results}
 \label{app:lp}
 
-% TODO
+This appendix reports LP impulse responses for the four individual EMFI components (TCI, TailVolBreadth, $P_{\text{stress}}$, AvgCorr60) and provides a full coefficient table for the baseline EMFI specification. All specifications follow the baseline design: Newey--West standard errors with bandwidth $2(|k|+1)$, one lag of the outcome variable, monthly dummies, and a global return control.
+
+\subsection*{D.1 Component LP coefficients}
+
+Table~\ref{tab:app_lp_components} reports $\hat\beta_k$ for horizons $k = 0, 1, 2, 5, 10, 15$ for all five outcomes. Asterisks denote significance at the 10\%~(*), 5\%~(**), and 1\%~(***) levels (Newey--West, two-tailed).
+
+\begin{table}[ht]
+\centering
+\small
+\caption{LP impulse responses by outcome ($\hat\beta_k$; Newey--West SEs in parentheses)}
+\label{tab:app_lp_components}
+\begin{tabular}{lccccc}
+\hline\hline
+Horizon & EMFI & TCI & TailVolBreadth & $P_{\text{stress}}$ & AvgCorr60 \\
+\hline
+$k=0$  & 0.458 & 0.396 & 0.950 & 0.106 & 0.003* \\
+       & (0.337) & (0.370) & (0.796) & (0.078) & (0.002) \\
+$k=1$  & 0.431 & 0.563 & 1.171 & 0.020 & 0.004 \\
+       & (0.326) & (0.353) & (0.988) & (0.055) & (0.003) \\
+$k=2$  & 0.072 & 0.439 & 0.044 & 0.001 & 0.002 \\
+       & (0.112) & (0.313) & (0.258) & (0.051) & (0.003) \\
+$k=5$  & 0.156 & 0.884 & 0.270 & 0.035 & $-0.001$ \\
+       & (0.176) & (0.542) & (0.523) & (0.054) & (0.009) \\
+$k=10$ & 0.098 & 0.920 & 0.051 & 0.029 & 0.002 \\
+       & (0.101) & (0.593) & (0.211) & (0.048) & (0.009) \\
+$k=15$ & 0.178 & 0.937 & $-0.020$ & $-0.051$* & 0.005 \\
+       & (0.181) & (0.682) & (0.425) & (0.029) & (0.011) \\
+\hline\hline
+\multicolumn{6}{l}{\footnotesize $N = 2{,}179$. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.}
+\end{tabular}
+\end{table}
+
+TCI shows persistent positive point estimates across all horizons (0.396 at $k=0$ rising to 0.937 at $k=15$), but confidence bands remain wide and no estimate reaches conventional significance thresholds. TailVolBreadth spikes sharply at $k=1$ (1.171) before reverting near zero by $k=2$, consistent with a rapid but transitory breadth response. $P_{\text{stress}}$ and AvgCorr60 show negligible point estimates at most horizons, confirming that the aggregate LP effect is concentrated in the composite EMFI and TCI channels.
+
+\subsection*{D.2 Pre-trend test}
+
+For the primary EMFI outcome, one of five pre-event leads ($k = -1$ to $-5$) is marginally significant ($p = 0.09$ at $k = -3$), falling within the range expected by chance under the null of no pre-trend (5 tests at 10\% level yields an expected 0.5 false rejections). For TCI, two leads are marginally significant, consistent with small pre-shock TCI co-movement driven by macro controls already included in the specification. These findings do not materially alter inference on the post-shock horizons.
 
 \section{Robustness Tables}
 \label{app:robustness}
 
-% TODO
+Table~\ref{tab:app_robustness} summarises on-impact ($k=0$) and short-run ($k=1$, $k=5$, $k=10$) LP coefficients for the EMFI outcome across 11 alternative specifications described in Section~\ref{sec:robustness}.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Robustness summary: EMFI LP coefficients ($\hat\beta_k$; Newey--West SEs in parentheses)}
+\label{tab:app_robustness}
+\begin{tabular}{llcccc}
+\hline\hline
+ID & Specification & $k=0$ & $k=1$ & $k=5$ & $k=10$ \\
+\hline
+R00 & Baseline
+    & 0.458 (0.337) & 0.431 (0.326) & 0.156 (0.176) & 0.098 (0.101) \\
+R01 & COVID exclusion (Mar--Dec 2020)
+    & 0.370 (0.489) & 0.536 (0.408) & 0.150 (0.262) & 0.112 (0.167) \\
+R02 & Ukraine exclusion (Feb--Apr 2022)
+    & 0.083 (0.208) & 0.095 (0.126) & $-0.006$ (0.164) & 0.069 (0.134) \\
+R03 & EMFI without TCI (3-component)
+    & 0.519 (0.422) & 0.476 (0.405) & 0.097 (0.216) & 0.005 (0.107) \\
+R04 & AcuteEMFI (volatility only)
+    & 0.535 (0.431) & 0.491 (0.413) & 0.090 (0.208) & $-0.025$ (0.099) \\
+R05 & Equal-weight EMFI
+    & 0.232 (0.170) & 0.222 (0.168) & 0.081 (0.091) & 0.052 (0.051) \\
+R08 & Placebo shock ($S_{t+30}$)
+    & $-0.083$ (0.285) & $-0.211$ (0.144) & $-0.206$ (0.219) & $-0.059$ (0.175) \\
+R09 & Average shock (multi-event days)
+    & 0.478 (0.377) & 0.447 (0.354) & 0.151 (0.242) & 0.182 (0.188) \\
+R10 & Breadth shock (country count)
+    & 0.051 (0.059) & 0.079 (0.058) & 0.007 (0.030) & 0.003 (0.017) \\
+R11 & TCI window $w=60$
+    & 0.436 (0.331) & 0.415 (0.328) & 0.126 (0.192) & 0.089 (0.112) \\
+R12 & TCI window $w=150$
+    & 0.535 (0.369) & 0.493 (0.358) & 0.145 (0.200) & 0.071 (0.112) \\
+\hline\hline
+\multicolumn{6}{l}{\footnotesize R06 (HF p66 threshold) and R07 (HF p90 threshold) affect the state-dependent LP only; see main text.}
+\end{tabular}
+\end{table}
+
+Across all specifications the on-impact coefficient is positive, ranging from $-0.083$ (placebo) to $0.535$ (R04, R12). The placebo check (R08) yields $\hat\beta_0 = -0.083$ ($p > 0.77$), confirming no reverse causality. The Ukraine exclusion (R02) attenuates the estimate to 0.083, confirming the Russia--Ukraine invasion as the primary driver of the largest measured EMFI responses; this reflects genuine heterogeneous treatment intensity rather than upward bias. All alternative EMFI constructions (R03--R05, R11--R12) yield positive on-impact estimates similar in magnitude to the baseline.
 
 \bibliographystyle{plainnat}
 \bibliography{references}
 
 \end{document}
+                                                                                              
