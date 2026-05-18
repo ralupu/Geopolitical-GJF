@@ -5,8 +5,8 @@
 **Target journal:** Global Finance Journal (GFJ)
 
 **Created:** 2026-05-17  
-**Last updated:** 2026-05-18 (Phase 5 complete)  
-**Overall status:** Phase 5 — HMM Stress Regimes ✅ Complete
+**Last updated:** 2026-05-18 (Phase 6 complete; paper writing started)  
+**Overall status:** Phase 6 — Panel LP ✅ Complete; paper Sections 1–5 drafted
 
 ---
 
@@ -38,7 +38,7 @@ The paper is built around three conceptual layers:
 | 3 | Volatility connectedness (TCI) | ✅ Complete |
 | 4 | Composite EMFI | ✅ Complete |
 | 5 | HMM market-implied stress regimes | ✅ Complete |
-| 6 | Panel local projections | ⬜ Pending |
+| 6 | Panel local projections | ✅ Complete |
 | 7 | State-dependent local projections | ⬜ Pending |
 | 8 | Event classification | ⬜ Pending |
 | 9 | Robustness | ⬜ Pending |
@@ -328,9 +328,11 @@ Estimate a Hidden Markov Model on the systemic fragility indicators to classify 
 
 ## Phase 6 — Panel Local Projections
 
-**Status:** ⬜ Pending  
+**Status:** ✅ Complete  
+**Date completed:** 2026-05-18  
 **Subproject:** `subprojects/06_panel_lp/`  
-**Script:** `subprojects/06_panel_lp/run_panel_lp.py`
+**Script:** `subprojects/06_panel_lp/run_panel_lp.py`  
+**Tests:** `subprojects/06_panel_lp/test_panel_lp.py` — 40/40 passed
 
 ### Objectives
 Estimate how geopolitical shocks dynamically affect systemic fragility using Jordà (2005) local projections. This is the paper's **primary empirical design**.
@@ -366,9 +368,22 @@ where:
 - **Figure 2 (paper):** Impulse-response plots for each outcome variable, β_k ± 90% and 95% CI bands, pre-period shown to verify no pre-trends.
 
 ### Deliverables
-- `results/panel_lp/lp_results_{outcome}.csv` — coefficients and SEs for each outcome
-- `results/panel_lp/Fig_LP_{outcome}.png` — response function plots
-- `results/panel_lp/Fig_LP_Combined.png` — multi-panel summary figure (paper-ready)
+- [x] `results/panel_lp/lp_results_{outcome}.csv` — coefficients and SEs for each of 5 outcomes × 21 horizons
+- [x] `results/panel_lp/Fig_LP_{outcome}.png` — individual IRF figures (5 files)
+- [x] `results/panel_lp/Fig_LP_Combined.png` — 5-panel paper-ready combined figure
+- [x] `results/panel_lp/lp_summary.csv` — peak β, peak horizon, pre-trend count per outcome
+- [x] `results/panel_lp/manifest.json` — provenance
+
+### Key facts from implementation
+- **Sample:** 2,179 dates, 154 shock days (MaxShock > 0)
+- **All five outcomes show positive β_k0** (correct direction): EMFI=0.458, TCI=0.396, TailBreadth=0.950, P_stress=0.106, AvgCorr60=0.003
+- **No result reaches 5% significance at k=0;** AvgCorr60 marginally significant (p=0.067)
+- **Peak TCI response: β_k6=1.064 (p=0.049)** — only 5%-significant result in the baseline LP
+- **TailVolBreadth decays cleanly:** peak at k=1 (1.17), near-zero by k=10 (0.05)
+- **EMFI and TCI show persistent positive responses** through k=15 (~0.94 pp for TCI), though not significant
+- **Pre-trends: clean for P_stress (0/5) and AvgCorr60 (0/5);** TCI has 2/5 significant (rolling-window smoothness artifact — explained in paper)
+- **k=-1 degeneracy fixed:** use Y_{t-2} as lag control when k=-1
+- Script runtime: ~1.8 seconds
 
 ### Additional checks to implement (motivated by Phase 4 observations)
 
@@ -535,9 +550,12 @@ Produce a 4-category taxonomy of geopolitical shock episodes, combining the news
 - Figure 5: Event taxonomy table
 
 ### Writing milestones
-- [ ] Data section draft (after Phase 1)
-- [ ] Sections 3–4 draft (after Phases 2–5)
-- [ ] Sections 5–6 draft (after Phases 6–7)
+- [x] Data section draft (after Phase 1) — drafted 2026-05-18
+- [x] Sections 3–4 draft (after Phases 2–5) — drafted 2026-05-18
+- [x] Section 5 draft (HMM, after Phase 5) — drafted 2026-05-18
+- [x] Section 6 baseline LP prose (after Phase 6) — drafted 2026-05-18
+- [ ] Sections 5–6 state-dependent LP (after Phase 7)
+- [ ] Full draft for co-author review
 - [ ] Full draft for co-author review
 - [ ] GFJ submission package
 
@@ -603,4 +621,6 @@ Phases 6–9 → Phase 10 (writing)
 | 2026-05-17 | 2 | Fragility indicators complete. VolStress max=0.119 (COVID), TailVolBreadth=18/19 on 2020-03-16, AvgCorr60 mean=0.476. Rolling quantile thresholds shifted by 1 day (strictly out-of-sample). 39/39 tests pass. Note: on sandbox/NTFS, stale .pyc files require force-recompile via `py_compile.compile()` after editing test files. |
 | 2026-05-17 | 3 | Volatility connectedness complete. Pesaran-Shin GFEVD with row-sum normalization. TCI (W=100) mean=70.5%, COVID peak >80%, range=[46.7%, 94.6%]. All 4 window specs (W=60/100/150/200) computed. Runtime ~25s. 32/32 tests pass. |
 | 2026-05-18 | 4 | Composite EMFI complete. PCA on [VolStress, TailVolBreadth, AvgCorr60, TCI_w100]. PC1=58.3% variance, all loadings positive (0.45-0.53). EMFI max=15.2 on 2020-03-12. 75th pctile threshold=0.55. 28/28 tests pass. Also fixed SP02 script truncation (NTFS mount issue) and regenerated fragility_daily.csv with full 2278 rows. |
+| 2026-05-18 | 10 | Paper writing started. Sections 1 (Introduction), 2 (Literature), 3 (Data), 4 (Fragility measures), 5 (HMM), and 6 baseline LP results drafted in Paper_LaTeX/main.tex (740 lines). All analytical findings from Phases 1–6 incorporated. Sections 7–9 (state-dependent LP, robustness, conclusion) remain as TODO pending Phase 7+ implementation. |
+| 2026-05-18 | 6 | Panel LP complete. 5 outcomes × 21 horizons. All β_k0 > 0 (correct direction); peak TCI significant at 5% (k=6, β=1.064, p=0.049). Pre-trends clean for P_stress and AvgCorr60. TCI pre-trend at k=-5,-4 attributed to rolling-window smoothness. k=-1 degeneracy fixed. 40/40 tests pass. |
 | 2026-05-18 | 5 | HMM stress regimes complete. 3-state Gaussian HMM (50 restarts). State counts: Calm=1389 (63.7%), Elevated=567 (26.0%), Systemic=223 (10.2%). COVID share of stress days=22.9% (multi-episode detector, not COVID dummy). P_stress=1.0 on COVID peak and Ukraine. Calm persistence=0.719; stressed states transient (~1.6-day avg). Hamas (Sunday) → P_stress=0.296 on nearest trading day. 45/45 tests pass. |

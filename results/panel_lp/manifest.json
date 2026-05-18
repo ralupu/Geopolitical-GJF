@@ -1,0 +1,98 @@
+{
+  "generated_at": "2026-05-18T06:47:13.396879+00:00",
+  "script": "subprojects/06_panel_lp/run_panel_lp.py",
+  "n_obs": 2179,
+  "date_range": {
+    "start": "2017-05-19",
+    "end": "2025-10-15"
+  },
+  "outcomes": [
+    "EMFI",
+    "tci_w100",
+    "TailVolBreadth",
+    "P_stress",
+    "AvgCorr60"
+  ],
+  "shock_primary": "max_shock",
+  "horizons": [
+    -5,
+    -4,
+    -3,
+    -2,
+    -1,
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "nw_bandwidth": "2*(|k|+1)",
+  "controls": [
+    "y_lag",
+    "global_ret",
+    "month_dummies"
+  ],
+  "summary": [
+    {
+      "outcome": "EMFI",
+      "beta_k0": 0.45824105040491986,
+      "beta_k1": 0.4309212156408282,
+      "beta_k5": 0.1557342779936189,
+      "peak_horizon": 9,
+      "peak_beta": 0.6109627916611783,
+      "peak_pval": 0.08689321599608145,
+      "n_sig_pre": 1
+    },
+    {
+      "outcome": "tci_w100",
+      "beta_k0": 0.39631793712954533,
+      "beta_k1": 0.5625852617292838,
+      "beta_k5": 0.8844457545661208,
+      "peak_horizon": 6,
+      "peak_beta": 1.0640609447362968,
+      "peak_pval": 0.04886935850796107,
+      "n_sig_pre": 2
+    },
+    {
+      "outcome": "TailVolBreadth",
+      "beta_k0": 0.9501216245556094,
+      "beta_k1": 1.1708882289198286,
+      "beta_k5": 0.2696899177641459,
+      "peak_horizon": 6,
+      "peak_beta": 1.2851388895836722,
+      "peak_pval": 0.14292196869916976,
+      "n_sig_pre": 1
+    },
+    {
+      "outcome": "P_stress",
+      "beta_k0": 0.10602210319472119,
+      "beta_k1": 0.020286175104710345,
+      "beta_k5": 0.03455173500599093,
+      "peak_horizon": 4,
+      "peak_beta": 0.11412976828535056,
+      "peak_pval": 0.13302536506884047,
+      "n_sig_pre": 0
+    },
+    {
+      "outcome": "AvgCorr60",
+      "beta_k0": 0.002879527704566828,
+      "beta_k1": 0.003548772277817479,
+      "beta_k5": -0.0009778424092205195,
+      "peak_horizon": 15,
+      "peak_beta": 0.004508156864267003,
+      "peak_pval": 0.687600493542488,
+      "n_sig_pre": 0
+    }
+  ]
+}

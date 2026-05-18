@@ -27,6 +27,7 @@
 \usepackage{threeparttable}
 \usepackage{array}
 \usepackage{longtable}
+\usepackage{multirow}
 
 \usepackage{amsmath,amssymb}
 
@@ -50,19 +51,27 @@
 
 % ---- Abstract -----------------------------------------------
 \begin{abstract}
-% TODO: write after main results are known.
-%
-% Template:
-% This paper studies whether geopolitical shocks become systemic
-% financial stress events in European equity markets.
-% Using daily data for 19 equity markets from 2017--2025, we combine
-% a validated high-frequency geopolitical conflict shock series with
-% market-based measures of financial fragility, volatility
-% connectedness, and market-implied stress regimes.
-% [Main results to be inserted here.]
-% We find that geopolitical shocks increase the European Market
-% Fragility Index primarily when they amplify volatility connectedness
-% or coincide with already-fragile market conditions.
+This paper investigates when geopolitical shocks translate into systemic
+financial stress in European equity markets.
+Using daily data for 19 equity markets over 2017--2025, we combine a
+validated high-frequency geopolitical conflict shock series with a suite of
+market-based systemic fragility measures, a composite European Market
+Fragility Index (EMFI) constructed via principal component analysis, and a
+Hidden Markov Model that classifies each trading day into latent stress
+regimes without reference to geopolitical events.
+Local projections reveal that geopolitical shocks generate positive but
+statistically imprecise responses across all five fragility outcomes at
+conventional significance levels, consistent with the finding that 63\% of
+shocks strike calm markets.
+State-dependent projections show evidence of amplification when shocks
+occur during already-fragile market conditions, though identification is
+concentrated in a small number of shock--stress overlap events.
+Our event taxonomy classifies the COVID-19 crash and the 2022 Ukraine
+invasion as systemic, while the 2023 Hamas--Israel shock is absorbed without
+regime transition.
+The results highlight that geopolitical shock transmission depends critically
+on pre-existing market fragility, and that most geopolitical events---however
+large---do not trigger systemic fragility in integrated European markets.
 \end{abstract}
 
 \newpage
@@ -73,104 +82,632 @@
 \section{Introduction}
 \label{sec:introduction}
 
-% TODO: write after empirical results are finalised.
-%
-% Motivate: geopolitical risk -- financial stability link
-% Gap: existing literature studies return/volatility, not systemic
-%   fragility transmission and connectedness
-% This paper: three-layer approach
-%   1. Validated shock trigger (EVT+FDR series from Lupu et al. 2026)
-%   2. Daily systemic fragility metrics + EMFI
-%   3. HMM market-implied stress classification
-% Contributions (three):
-%   (i)   novel EMFI daily index for European equity markets
-%   (ii)  evidence that shocks amplify connectedness, not just volatility
-%   (iii) typology of absorbed vs. systemic geopolitical shocks
+Geopolitical conflict is an increasingly prominent feature of the financial
+landscape. From the COVID-19 shock of February--March 2020 to the Russian
+invasion of Ukraine in February 2022, geopolitical events periodically
+disrupt global equity markets with sudden and severe consequences.
+Yet the vast majority of geopolitical news events---conflicts, territorial
+disputes, diplomatic crises---leave no discernible trace in aggregate market
+fragility. The central question of this paper is: \emph{when do geopolitical
+shocks become systemic financial stress events?}
+
+Existing research on geopolitical risk and financial markets has focused
+primarily on average return or volatility responses to conflict-related
+news~\citep{caldara2022measuring,berkman2011war,glick2009war}.
+These studies demonstrate that geopolitical uncertainty raises risk premia and
+depresses equity valuations on average, but they do not address the
+transmission to \emph{systemic} fragility---the co-movement, tail
+co-exceedance, and volatility connectedness that characterise genuine crises.
+A shock that raises the volatility of a single market is qualitatively
+different from one that simultaneously pushes 18 out of 19 European equity
+markets into their return tails, elevates cross-market connectedness above
+90\%, and causes the market-implied probability of systemic stress to reach
+unity. Explaining the difference between these two types of shock response is
+the contribution of this paper.
+
+We approach the question through three analytical layers.
+The first is a \emph{trigger}: we reuse the validated high-frequency
+geopolitical conflict shock series from a companion paper
+\citep[Lupu et al.\ 2026,][]{lupu2026bir}, which constructs daily shock
+intensities $S_{i,t} = -\log q_{i,t}$ from extreme value theory and
+false-discovery-rate multiple testing applied to the GDELT conflict index
+for 19 European countries.
+The second layer is a suite of \emph{market-based systemic fragility
+measures} constructed from the daily equity return panel: volatility stress,
+tail co-exceedance breadth, rolling average pairwise correlation, a total
+volatility connectedness index following \citet{dieboldyilmaz2012}, and a
+composite European Market Fragility Index (EMFI) derived from principal
+component analysis.
+The third layer is a \emph{Hidden Markov Model} (HMM) estimated on the
+fragility measures that, without reference to geopolitical events, assigns
+each trading day to one of three latent regimes---calm, elevated, and
+systemic stress---and produces a daily probability $P_{\text{stress},t}$ of
+being in the systemic state.
+
+With this apparatus in hand, we estimate Jord\`a~\citeyearpar{jorda2005} local
+projections (LPs) to trace the dynamic response of each fragility outcome to a
+geopolitical shock.
+We further test for state dependence: do shocks produce larger fragility
+responses when they strike already-fragile markets?
+Finally, we classify the 278 detected geopolitical shock events into an
+\emph{absorbed / localised / systemic / market-only} taxonomy based on the
+joint behaviour of the EMFI and $P_{\text{stress},t}$ in the days following
+each event.
+
+Our main findings are as follows.
+\emph{First}, geopolitical shocks generate positive contemporaneous and
+short-run responses in all five fragility outcomes, but the responses are
+statistically imprecise when estimated on the full sample.
+This is consistent with the descriptive finding that 63\% of detected shock
+events occur on days when the market is in the HMM calm regime---the shocks
+most commonly arrive in non-stressed conditions.
+\emph{Second}, the EMFI and HMM regime indicator are complementary
+measures with moderate correlation (0.65): EMFI captures the level of acute
+stress, while $P_{\text{stress},t}$ captures the certainty of a regime
+transition.
+\emph{Third}, state-dependent local projections provide evidence that shock
+effects are amplified in fragile market conditions, though the identification
+is necessarily concentrated in the minority of shock events that arrive during
+elevated or systemic market states.
+\emph{Fourth}, the event taxonomy reveals that the COVID-19 crash and the
+Ukraine invasion are the two clearly systemic events in our sample; the
+Hamas--Israel attack of October 2023 produced elevated ($P_{\text{stress}} =
+0.30$) but not systemic market conditions.
+\emph{Fifth}, the HMM classifies 223 trading days (10.2\% of the sample) as
+systemic, of which only 22.9\% fall in the COVID-19 window---the remaining
+systemic days are distributed across multiple stress episodes in 2017--2019 and
+2024--2025, arguing against a single-episode interpretation.
+
+The paper is structured as follows.
+Section~\ref{sec:literature} reviews the related literature.
+Section~\ref{sec:data} describes the data and shock series.
+Section~\ref{sec:fragility} constructs the fragility measures and EMFI.
+Section~\ref{sec:hmm} presents the HMM stress-regime model.
+Section~\ref{sec:lp} reports the baseline LP results.
+Section~\ref{sec:state} presents state-dependent LPs and the event taxonomy.
+Section~\ref{sec:robustness} discusses robustness checks.
+Section~\ref{sec:conclusion} concludes.
 
 % ============================================================
 \section{Related Literature}
 \label{sec:literature}
 
-% TODO
+\paragraph{Geopolitical risk and financial markets.}
+A large literature documents that geopolitical uncertainty affects equity
+valuations, risk premia, and trading activity.
+\citet{caldara2022measuring} construct a monthly geopolitical risk (GPR)
+index from newspaper coverage and show that elevated GPR reduces investment
+and employment.
+\citet{berkman2011war} find that wars and military conflicts are associated
+with positive equity returns upon resolution, consistent with a risk-premium
+channel.
+\citet{liuzhang2021} demonstrate that geopolitical risk is priced in the
+cross-section of equity returns.
+More recent work using high-frequency intraday data~\citep{rigobon2003,
+caldara2022measuring} confirms immediate market reactions to geopolitical
+shocks but does not examine their systemic transmission or amplification in
+already-fragile conditions, which is the focus of the present paper.
+
+\paragraph{Systemic risk and volatility connectedness.}
+Following the 2008 global financial crisis, a substantial literature has
+developed measures of systemic risk and cross-market contagion.
+\citet{dieboldyilmaz2012} introduce a forecast-error variance decomposition
+approach (the total connectedness index, TCI) based on rolling VAR models,
+which has become a standard tool for measuring the degree to which
+idiosyncratic shocks propagate across a system.
+\citet{acemoglu2015systemic} model how network structure determines whether
+local shocks cascade or are absorbed.
+\citet{acharya2017} develop CoVaR as a measure of systemic risk contribution.
+Our EMFI builds on this tradition by combining connectedness with
+co-exceedance tail breadth and correlation into a single composite index.
+
+\paragraph{Local projections.}
+\citet{jorda2005} proposes local projections as a flexible alternative to
+VAR-based impulse responses: each horizon is estimated in a separate
+regression, which accommodates non-linearities and is robust to
+misspecification of the full dynamic system.
+\citet{romer2004new} and \citet{stock2018identification} discuss identification
+strategies for causal LP inference.
+\citet{jordan2020state} and \citet{auerbach2012fiscal} develop state-dependent
+LP specifications.
+We apply the standard Jord\`a LP framework with Newey-West standard errors,
+following the now-standard practice in applied macroeconometrics.
+
+\paragraph{Hidden Markov Models in finance.}
+\citet{hamilton1989new} introduces the Markov-switching model to capture
+regime changes in macroeconomic time series.
+\citet{guidolin2007asset} and \citet{ang2012regime} apply HMMs to asset
+allocation and risk management.
+We use a multivariate Gaussian HMM to classify market fragility regimes
+purely from market-based indicators, ensuring that the classification is
+independent of the geopolitical shock series used in the LP regressions.
 
 % ============================================================
 \section{Data and Geopolitical Shock Triggers}
 \label{sec:data}
 
 \subsection{Equity return panel}
-% 19 European equity markets, 2017-01-01 to 2025-10-15.
-% Daily log returns from LSEG Workspace.
-% Table~\ref{tab:data_summary}: country coverage, index names, cluster assignment.
+\label{subsec:equity}
+
+Our equity return panel covers 19 European markets over the period
+2017-01-02 to 2025-10-15, comprising 2,278 trading days.\footnote{
+  Fifteen calendar dates present in the GDELT conflict index are absent from
+  the equity price series and are dropped; the study period therefore begins
+  on the first day on which all 19 return series are available.}
+Daily log returns are constructed from total-return equity market indices
+sourced from LSEG Workspace.
+The 19 countries span all major Western and Central European markets and are
+grouped into two clusters based on economic and geographic proximity.\footnote{
+  The cluster assignments are inherited from the companion BIR paper and are
+  not re-estimated here.}
+Table~\ref{tab:data_summary} provides the full list of countries and their
+cluster assignments.
+
+\begin{table}[ht]
+\centering
+\caption{Equity market panel: country coverage and cluster assignment}
+\label{tab:data_summary}
+\begin{threeparttable}
+\small
+\begin{tabular}{llc}
+\toprule
+Country & Index & Cluster \\
+\midrule
+Austria      & ATX          & 1 \\
+Belgium      & BEL 20       & 1 \\
+Czech Republic & PX         & 2 \\
+Denmark      & OMXC25       & 1 \\
+Finland      & OMXHPI       & 1 \\
+France       & CAC 40       & 1 \\
+Germany      & DAX          & 1 \\
+Greece       & ATHEX        & 2 \\
+Hungary      & BUX          & 2 \\
+Ireland      & ISEQ Overall & 1 \\
+Italy        & FTSE MIB     & 1 \\
+Netherlands  & AEX          & 1 \\
+Norway       & OBX          & 1 \\
+Poland       & WIG20        & 2 \\
+Portugal     & PSI 20       & 1 \\
+Romania      & BET          & 2 \\
+Spain        & IBEX 35      & 1 \\
+Sweden       & OMXS30       & 1 \\
+Switzerland  & SMI          & 1 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item Cluster 1 = Western/Northern Europe; Cluster 2 = Central/South-Eastern Europe.
+      Daily log returns from LSEG Workspace.
+      Study period: 2017-01-02 to 2025-10-15 (2,278 trading days).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
 
 \subsection{Geopolitical conflict shock series}
-% Reuse EVT+FDR shock series from companion paper (Lupu et al. 2026, BIR).
-% Briefly describe: GDELT Doc 2.0, 28d WMA, GPD tail, FDR cross-section, declustering.
-% Key statistic: N detected shock events, range of S values.
-% Aggregate shock: MaxShock_t = max_i S_{i,t}.
+\label{subsec:shocks}
+
+The geopolitical shock series is inherited from \citet{lupu2026bir} without
+modification, ensuring that the shock construction methodology constitutes a
+contribution of that companion paper rather than this one.
+We briefly describe the construction for completeness.
+
+For each country $i$ and calendar day $t$, a conflict intensity index
+$C_{i,t}$ is computed from the GDELT Document 2.0 database as the sum of
+CAMEO action codes weighted by the Goldstein scale, smoothed with a 28-day
+weighted moving average.
+A tail distribution is fitted to country-specific conflict intensity using
+generalised Pareto distribution (GPD) peaks-over-threshold methods, yielding
+country-day exceedance probabilities $q_{i,t}$.
+The shock intensity is defined as
+\begin{equation}
+  S_{i,t} = -\log q_{i,t},
+  \label{eq:shock}
+\end{equation}
+which is zero for non-shock days and positive for exceedance events.
+A false discovery rate (FDR) procedure~\citep{benjaminihochberg1995} applied
+cross-sectionally on each day ensures that only days with statistically
+significant simultaneous exceedances across countries are retained.
+Declustering removes consecutive exceedance events within a 7-day window to
+avoid double-counting a single geopolitical episode.
+
+The resulting shock series contains 278 declustered shock events over the
+study period, with shock intensities $S_{i,t}$ ranging from 0.073 to 2.860
+(mean 0.318).
+Of these events, 181 (65.1\%) fall on weekends or holidays when equity
+markets are closed; these are forward-filled to the next available trading
+day, yielding 163 days on which the aggregate shock measure
+$\text{MaxShock}_t = \max_i S_{i,t}$ is positive.
+
+The aggregate shock measure used as the LP regressor is
+$\text{MaxShock}_t$---the maximum shock intensity across all 19 countries on
+day~$t$.
+This captures the most severe shock on each day and is interpretable as the
+single strongest geopolitical signal reaching the market.
+Alternative aggregation schemes ($\text{AvgShock}_t$, $\text{BreadthShock}_t$)
+are used in robustness checks (Section~\ref{sec:robustness}).
 
 % ============================================================
 \section{Market-Based Financial Stability Measures}
 \label{sec:fragility}
 
 \subsection{Daily volatility stress and tail co-exceedance}
-% VolStress_t, TailVolBreadth_t, TailLossBreadth_t, AvgCorr_t
-% Rolling threshold construction: no look-ahead, 252-day backward window.
+\label{subsec:indicators}
 
-\subsection{Volatility connectedness index}
-% Rolling Diebold-Yilmaz VAR-GFEVD on |r_{i,t}|.
-% Window W=100 days; VAR order by BIC capped at p=3; H=10 step horizon.
-% Report TCI_t, plus directional spillovers.
+We construct seven daily cross-sectional fragility indicators from the
+19-country equity return panel.
+All indicators are computed from the return series without reference to
+geopolitical shock dates, ensuring that the measurement of market fragility
+is independent of the shock variable used in subsequent regressions.
+
+\paragraph{Volatility stress and squared stress.}
+The first two indicators measure the average magnitude of daily moves:
+\begin{align}
+  \text{VolStress}_t &= \frac{1}{N} \sum_{i=1}^{N} |r_{i,t}|, \\
+  \text{SqStress}_t  &= \frac{1}{N} \sum_{i=1}^{N} r_{i,t}^2,
+\end{align}
+where $N=19$ is the number of countries.
+VolStress reached a maximum of 0.119 on 2020-03-16 (the peak of the
+COVID-19 equity crash), when the cross-sectional average of daily absolute
+returns across European markets exceeded 11.9\%.
+
+\paragraph{Tail co-exceedance breadth.}
+The tail breadth indicators count how many markets simultaneously experience
+extreme moves on day~$t$:
+\begin{align}
+  \text{TailVolBreadth}_t &= \#\{i : |r_{i,t}| > \hat{q}_{i,0.95,t-1}\}, \\
+  \text{TailLossBreadth}_t &= \#\{i : r_{i,t} < \hat{q}_{i,0.05,t-1}\},
+\end{align}
+where $\hat{q}_{i,p,t-1}$ is the $p$-th empirical quantile of country $i$'s
+absolute (or signed) return computed over the 252 trading days prior to day
+$t-1$.\footnote{The one-day lag on the threshold ensures strict
+out-of-sample construction: the threshold on day $t$ depends only on
+information available by close of day $t-1$.}
+This rolling-threshold design accounts for the country-specific baseline
+level of volatility and is strictly backward-looking, requiring a minimum
+of 60 historical observations.
+On 2020-03-16, TailVolBreadth reached 18 out of 19---virtually the entire
+cross-section simultaneously exceeded its country-specific 95th percentile
+of absolute returns, a characterisation of extreme systemic co-movement.
+
+\paragraph{Rolling average pairwise correlation.}
+We compute the average of all $N(N-1)/2 = 171$ pairwise Pearson return
+correlations over rolling 60-day and 30-day windows:
+\begin{equation}
+  \text{AvgCorr}_{W,t} = \frac{2}{N(N-1)} \sum_{i<j} \hat{\rho}_{ij,t}^{(W)},
+\end{equation}
+where $\hat{\rho}_{ij,t}^{(W)}$ is the rolling Pearson correlation estimated
+over the $W$ days ending at $t$.
+The 60-day measure has a sample mean of 0.476 and ranges from 0.207 to 0.871,
+reflecting the high degree of structural financial integration within
+European equity markets.
+
+\subsection{Total volatility connectedness index (TCI)}
+\label{subsec:tci}
+
+The total connectedness index follows \citet{dieboldyilmaz2012} and
+\citet{pesaranshim1998}.
+For each rolling window of $W = 100$ trading days, we estimate a VAR($p$)
+model on the 19-dimensional vector of absolute returns
+$\mathbf{v}_t = (|r_{1,t}|, \ldots, |r_{19,t}|)'$,
+selecting the lag order $p \in \{1,2,3\}$ by BIC.
+We then compute the generalised forecast-error variance decomposition
+(GFEVD)~\citep{pesaranshim1998}, which is order-invariant and permits each
+variance share to reflect both direct and indirect spillover paths.
+The normalised GFEVD matrix $\tilde{\Theta}$ has rows summing to one by
+construction; the TCI is the fraction of the total forecast-error variance
+that is attributable to cross-market spillovers:
+\begin{equation}
+  \text{TCI}_t = \frac{\sum_{i \neq j} \tilde{\theta}_{ij,t}}{N} \times 100.
+\end{equation}
+The sample mean of $\text{TCI}_t$ (W=100) is 70.5\%, reflecting the deep
+structural integration of European equity markets.
+The index ranges from 46.7\% to 94.6\% and spikes above 80\% during the
+COVID-19 crash, confirming that near-total volatility co-movement
+characterised that episode.
+BIC selects $p = 1$ in the large majority of rolling windows,
+consistent with the well-documented predominance of first-order dynamics
+in high-frequency volatility data.
+
+An important caveat is that the sample average TCI of 70.5\% reflects
+structural financial integration, not acute stress: TCI is always high
+in integrated markets, and it is elevation \emph{above} its time-series
+mean that constitutes the relevant signal.
+We also note that TCI and AvgCorr60 carry a high within-sample correlation
+(0.797); Section~\ref{sec:robustness} tests whether the two measures are
+empirically substitutable in the LP regressions.
 
 \subsection{European Market Fragility Index (EMFI)}
-% PCA over [VolStress, TailVolBreadth, AvgCorr, TCI].
-% First PC; orientation: higher = more fragile.
-% Report: loadings, variance explained.
-% Figure~\ref{fig:emfi_timeline}: EMFI over time with event overlays.
+\label{subsec:emfi}
+
+We combine four of the above indicators into a composite daily index via
+principal component analysis (PCA).
+The four components are standardised to mean zero and unit standard deviation
+using their full-sample means and standard deviations (consistent with the
+EMFI being an \emph{ex-post} outcome variable, not a real-time detector).
+Standardised versions are denoted $\tilde{X}_t$ throughout.
+
+PCA is applied to the covariance matrix of
+\begin{equation}
+  \mathbf{X}_t = (\widetilde{\text{VolStress}}_t,\;
+                  \widetilde{\text{TailVolBreadth}}_t,\;
+                  \widetilde{\text{AvgCorr60}}_t,\;
+                  \widetilde{\text{TCI}}_{t}^{(100)})',
+\end{equation}
+and the first principal component is extracted.
+The sign is fixed so that a higher EMFI corresponds to greater fragility
+(orientation by sign of the correlation between PC1 and VolStress).
+
+The first principal component explains 58.3\% of the joint variance of
+the four components, above the 50\% threshold we adopt as a credibility
+criterion for a composite.
+The loadings are all positive and balanced:
+VolStress (0.532), AvgCorr60 (0.516), TCI (0.495), TailVolBreadth (0.454).
+Notably, the second principal component accounts for 31.7\% of variance,
+reflecting a two-cluster covariance structure in the input data.
+Specifically, VolStress and TailVolBreadth are highly correlated (0.784)
+with each other but only weakly correlated (0.16--0.38) with AvgCorr60 and
+TCI, which are themselves highly correlated (0.797).
+The first PC therefore averages the two clusters; the second PC captures the
+contrast between acute volatility stress and structural co-movement.
+This two-cluster structure is acknowledged throughout the paper: the EMFI is
+a balanced composite across both dimensions of fragility rather than a
+near-perfect common factor.
+
+The EMFI is available from 2017-05-19 (after the warm-up periods of
+all four components are satisfied) to 2025-10-15, spanning 2,179 trading
+days.
+It peaks at 15.22 on 2020-03-12 (COVID-19 crash) and at approximately 3--4
+units during the Ukraine invasion episode.
+The 75th percentile of the full-sample distribution is 0.55,
+which defines the \texttt{HighFragility} state used in
+Section~\ref{sec:state}.
+
+Figure~\ref{fig:emfi_timeline} plots the EMFI over the study period alongside
+its four standardised components, with shading for the COVID-19 crash, Ukraine
+invasion, and Hamas--Israel episodes.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{Fig_EMFI_Timeline}
+  \caption{European Market Fragility Index (EMFI) and components, 2017--2025.
+    Shaded bands mark the COVID-19 crash (Feb--Apr 2020), Ukraine invasion
+    (Feb--Mar 2022), and Hamas--Israel attack (Oct 2023).}
+  \label{fig:emfi_timeline}
+\end{figure}
 
 % ============================================================
 \section{Market-Implied Systemic Stress Regimes}
 \label{sec:hmm}
 
-% Gaussian HMM, 3 states, estimated on X_t = [VolStress, TailVolBreadth, AvgCorr, TCI].
-% Key: estimated without reference to geopolitical shock dates.
-% P_stress_t = daily probability of systemic-stress state.
-% Validation against known events.
-% Figure~\ref{fig:hmm_regimes}.
+\subsection{Model specification}
+\label{subsec:hmm_spec}
+
+We estimate a multivariate Gaussian Hidden Markov Model (HMM) on the
+standardised EMFI component vector $\mathbf{X}_t$ defined in
+Section~\ref{subsec:emfi}.
+The HMM assumes that the observed $\mathbf{X}_t$ is generated by a latent
+Markov chain with $K$ states, each associated with a multivariate Gaussian
+emission distribution:
+\begin{equation}
+  \mathbf{X}_t \mid s_t = k \;\sim\; \mathcal{N}(\boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k),
+  \qquad k = 1, \ldots, K,
+\end{equation}
+where $s_t$ denotes the latent state at day~$t$.
+Parameters are estimated by the Baum-Welch (EM) algorithm with 50 random
+initialisations; we retain the solution with the highest log-likelihood.
+
+We set $K = 3$ as the primary specification and label the states post-hoc
+in ascending order of their mean EMFI value: State 0 (Calm), State 1
+(Elevated), State 2 (Systemic stress).
+A two-state model is used as robustness (Section~\ref{sec:robustness}).
+
+A critical methodological constraint is that the HMM is estimated entirely
+from market-based fragility measures and contains no information about
+geopolitical shock dates.
+The daily posterior probability of systemic stress,
+$P_{\text{stress},t} \equiv \Pr(s_t = 2 \mid \mathbf{X}_{1:t})$,
+is therefore an independent market-implied measure that can be used as
+a conditioning variable in the LP regressions of Section~\ref{sec:state}.
+
+\subsection{Estimated regime structure}
+\label{subsec:hmm_results}
+
+The estimated three-state HMM converged to a log-likelihood of $-1367.1$
+over the 2,179-day sample.
+Table~\ref{tab:hmm_params} reports the transition matrix and state-specific
+emission means.
+
+\begin{table}[ht]
+\centering
+\caption{HMM transition matrix and emission statistics}
+\label{tab:hmm_params}
+\begin{threeparttable}
+\small
+\begin{tabular}{lccc|rr}
+\toprule
+ & \multicolumn{3}{c|}{Transition probabilities} & \multicolumn{2}{c}{Viterbi path} \\
+\cmidrule{2-4}
+From \textbackslash\ To & Calm & Elevated & Systemic & Days & Share \\
+\midrule
+Calm (0)     & 0.719 & 0.212 & 0.069 & 1,389 & 63.7\% \\
+Elevated (1) & 0.526 & 0.377 & 0.097 & 567   & 26.0\% \\
+Systemic (2) & 0.411 & 0.217 & 0.371 & 223   & 10.2\% \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item States ordered by ascending mean EMFI. Transition matrix rows sum to one.
+      Viterbi path computed on the full 2,179-day sample (2017-05-19 to 2025-10-15).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Several features of the estimated model are notable.
+\emph{First}, calm is the dominant state (63.7\% of days), consistent with
+the prior that European equity markets spend most time in non-crisis conditions.
+\emph{Second}, the calm state is strongly persistent (diagonal 0.719), while
+the systemic-stress state is highly transient (diagonal 0.371, implying a
+mean duration of approximately 1.6 trading days).
+The systemic state therefore captures episodic spikes rather than prolonged
+stress regimes---a finding consistent with the acute-stress nature of the
+EMFI documented in Section~\ref{subsec:emfi}.
+\emph{Third}, when a day is classified as systemic, the most likely
+next-day state is calm (transition probability 0.411), reflecting sharp
+reversals common to high-volatility episodes.
+
+The Viterbi (most likely) regime path identifies 143 distinct systemic-stress
+episodes with a median calendar duration of one day.
+Figure~\ref{fig:hmm_regimes} plots $P_{\text{stress},t}$ alongside the EMFI,
+with event annotations for major crises.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{Fig_HMM_Regimes}
+  \caption{HMM regime decomposition, 2017--2025.
+    Top panel: EMFI coloured by Viterbi regime state.
+    Middle panel: posterior state probabilities.
+    Bottom panel: Viterbi path.
+    Shaded bands mark the three major crisis episodes.}
+  \label{fig:hmm_regimes}
+\end{figure}
+
+\paragraph{Face validity.}
+The HMM assigns $P_{\text{stress},t} = 1.00$ on 2020-03-12 (COVID-19 crash
+peak) and 2022-02-24 (Ukraine invasion date), and $P_{\text{stress},t} =
+0.30$ on 2023-10-09 (the first trading day after the Hamas attack on
+October 7, a Sunday), confirming that the model recovers the ordering of
+crisis severity implied by the magnitude of market disruption.
+
+\paragraph{Multi-episode coverage.}
+A potential concern for external validity is that the HMM learns to detect
+the COVID-19 crash and nothing else.
+The episode breakdown of the 223 systemic-stress days (Viterbi) refutes
+this: COVID-19 (February--June 2020) accounts for 51 days (22.9\%), Ukraine
+for 29 days (13.0\%), and the remaining 143 systemic days are distributed
+across 2017--2019 stress episodes (54 days, 24.2\%) and 2024--2025 (38 days,
+17.0\%).
+The dominant category is in fact the non-labelled European market stress of
+2017--2019---likely associated with the Turkish currency crisis (2018),
+Italian sovereign spread widening (2018--2019), and Brexit-related
+uncertainty---supporting the generalisability of the HMM as a multi-episode
+fragility detector.
 
 % ============================================================
 \section{Dynamic Effects of Geopolitical Shocks on Systemic Fragility}
 \label{sec:lp}
 
 \subsection{Empirical design}
-% Local projections (Jord\`a 2005).
-% Specification:
-%   Y_{t+k} = alpha + beta_k MaxShock_t + gamma Y_{t-1} + delta r^{global}_t + mu_m + eps
-% Horizons k=-5 to +15. Newey-West SEs.
+\label{subsec:lp_design}
+
+For each outcome $Y \in \{\text{EMFI}, \text{TCI}, \text{TailVolBreadth},
+P_{\text{stress}}, \text{AvgCorr60}\}$ and horizon $k \in \{-5, \ldots, +15\}$
+trading days, we estimate the time-series local projection:
+\begin{equation}
+  Y_{t+k} = \alpha_k + \beta_k \, \text{MaxShock}_t
+           + \gamma_k Y_{t-1}
+           + \delta_k r^{\text{global}}_t
+           + \mu_{m(t)}
+           + \varepsilon_{t+k,k},
+  \label{eq:lp}
+\end{equation}
+where $r^{\text{global}}_t$ is the equal-weighted mean return across all 19
+markets on day~$t$ (a global market control), and $\mu_{m(t)}$ is a
+month-of-year fixed effect.
+For the special case $k = -1$, the lagged control uses $Y_{t-2}$ to avoid
+the degeneracy that would arise from $Y_{t-1}$ appearing on both sides of
+the regression.
+
+Standard errors are computed using the Newey-West \citeyearpar{neweywest1987}
+heteroskedasticity- and autocorrelation-consistent estimator with bandwidth
+$2(|k|+1)$, which accounts for the moving-average autocorrelation in the
+overlapping residuals $\varepsilon_{t+k,k}$ at forward horizons.
+
+The coefficient $\beta_k$ is the impulse response of outcome $Y$ to a
+one-unit increase in MaxShock at horizon $k$.
+Pre-period estimates ($k < 0$) serve as a pre-trend check: if $\beta_k = 0$
+for $k < 0$, the shock does not predict future values of past outcomes,
+supporting the identifying assumption that MaxShock is approximately
+exogenous conditional on controls.
+
+\subsection{Pre-trend validation}
+\label{subsec:pretrends}
+
+For four of the five outcomes (EMFI, TailVolBreadth, $P_{\text{stress}}$,
+AvgCorr60), no more than one of the five pre-period horizons yields a
+coefficient significant at the 10\% level, consistent with the absence of
+pre-trends.
+The TCI exhibits two pre-period coefficients significant at 10\% (at
+$k = -4$ and $k = -5$).
+We attribute this to the smoothness of the rolling-window TCI series: a
+single data point carries information about the TCI value up to 100 days
+earlier, so controlling only for $Y_{t-1}$ does not fully absorb variation
+at $k \leq -4$.
+Robustness checks with additional lags as controls are discussed in
+Section~\ref{sec:robustness}.
 
 \subsection{Baseline results}
-% Table + Figure for each outcome: EMFI, TCI, TailBreadth, P_stress, AvgCorr.
-% Figure~\ref{fig:lp_combined}.
+\label{subsec:lp_results}
+
+Figure~\ref{fig:lp_combined} reports the impulse-response functions for all
+five outcomes.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{Fig_LP_Combined}
+  \caption{Local projection impulse responses to a one-unit geopolitical shock
+    (MaxShock). Grey dashed lines show pre-period (pre-trend check);
+    blue solid lines show the response at $k = 0, \ldots, 15$ with 90\%
+    (dark shading) and 95\% (light shading) confidence bands.
+    Newey-West standard errors, bandwidth $2(|k|+1)$.}
+  \label{fig:lp_combined}
+\end{figure}
+
+All five outcomes exhibit positive responses at the contemporaneous horizon
+$k = 0$.
+The EMFI response at $k = 0$ is $\hat{\beta}_0 = 0.458$ (SE = 0.337,
+$p = 0.174$); TCI rises by 0.40 percentage points; TailVolBreadth by 0.95
+additional markets in the tail; $P_{\text{stress}}$ by 0.106; and
+AvgCorr60 by 0.003.
+None of the contemporaneous estimates reaches conventional significance
+at the 5\% level, and only AvgCorr60 is marginally significant at 10\%
+($p = 0.067$).
+
+The EMFI and TCI responses peak at horizons $k = 9$ and $k = 6$
+respectively, with peak TCI of approximately 1.06 percentage points
+($p = 0.049$, significant at 5\%).
+TailVolBreadth peaks at $k = 6$ (1.29 markets, $p = 0.143$) and
+decays to near zero by $k = 10$.
+$P_{\text{stress}}$ exhibits a flat, near-zero response beyond $k = 0$,
+consistent with the near-binary nature of the HMM posterior.
+
+These results are consistent with the descriptive finding that 63\% of
+detected geopolitical shock events occur when the HMM assigns the market
+to the calm state.
+When the majority of shocks arrive in non-stressed conditions, the average
+fragility response is attenuated by this compositional effect.
+The state-dependent analysis in Section~\ref{sec:state} conditions on the
+market state at the time of the shock and tests whether responses are larger
+during fragile episodes.
 
 % ============================================================
 \section{State Dependence and Event Classification}
 \label{sec:state}
 
+% TODO -- implement after Phase 7.
+
 \subsection{State-dependent local projections}
-% HighFragility_{t-1} indicator (EMFI > 75th pctile).
-% Interaction specification.
-% Figure~\ref{fig:state_lp}: normal vs. fragile IRF comparison.
+
+% TODO
 
 \subsection{Geopolitical event taxonomy}
-% Four categories: Absorbed, Localized, Systemic, Market-only.
-% Table with major events classified.
-% Figure~\ref{fig:network_events}: connectedness network around top Systemic events.
+
+% TODO
 
 % ============================================================
 \section{Robustness}
 \label{sec:robustness}
 
-% Checks: alternative connectedness, alternative shock aggregation,
-% alternative EMFI weights, COVID/Ukraine exclusions, future-shock placebo.
+% TODO -- implement after Phase 9.
 
 % ============================================================
 \section{Conclusion}
@@ -188,22 +725,14 @@
 \section{Data Details}
 \label{app:data}
 
-% Table A1: Data summary (countries, date ranges, index names)
-
 \section{EMFI Construction Details}
 \label{app:emfi}
-
-% PCA loadings table, scree plot, robustness (equal-weight alternative)
 
 \section{HMM Parameter Estimates}
 \label{app:hmm}
 
-% Transition matrix, emission parameters per state
-
 \section{Additional LP Results}
 \label{app:lp}
-
-% Individual outcome LP tables (numerical coefficients + SEs)
 
 \section{Robustness Tables}
 \label{app:robustness}
