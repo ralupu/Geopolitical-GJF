@@ -1,0 +1,64 @@
+{
+  "generated_at": "2026-05-18T07:46:25.119183+00:00",
+  "script": "subprojects/07_state_dependent_lp/run_state_lp.py",
+  "n_obs": 2179,
+  "date_range": {
+    "start": "2017-05-19",
+    "end": "2025-10-15"
+  },
+  "hf_threshold_emfi": 0.5483,
+  "hf_pctile": 0.75,
+  "n_shock_days": 154,
+  "n_shock_hf": 36,
+  "n_shock_normal": 118,
+  "p_eval_points": [
+    0.0,
+    0.5,
+    0.9
+  ],
+  "outcomes": [
+    "EMFI",
+    "tci_w100",
+    "TailVolBreadth",
+    "P_stress",
+    "AvgCorr60"
+  ],
+  "covid_excl": "2020-03-01 to 2020-12-31",
+  "summary": [
+    {
+      "outcome": "EMFI",
+      "theta_k0_smooth": 1.85386883730805,
+      "theta_k1_smooth": 1.8506547539209584,
+      "theta_k0_binary": 1.2167719932089693,
+      "theta_k1_binary": 0.5821097962811712
+    },
+    {
+      "outcome": "tci_w100",
+      "theta_k0_smooth": 2.4997464884458913,
+      "theta_k1_smooth": 8.692485130614566,
+      "theta_k0_binary": 0.8395492131262432,
+      "theta_k1_binary": 0.08993708222863589
+    },
+    {
+      "outcome": "TailVolBreadth",
+      "theta_k0_smooth": 2.6422254714670648,
+      "theta_k1_smooth": 2.7786391211748294,
+      "theta_k0_binary": 2.421675473662532,
+      "theta_k1_binary": 1.4754196769183847
+    },
+    {
+      "outcome": "P_stress",
+      "theta_k0_smooth": 0.5371128302653446,
+      "theta_k1_smooth": -0.010223559945108682,
+      "theta_k0_binary": 0.30613671356793815,
+      "theta_k1_binary": 0.05145632065888289
+    },
+    {
+      "outcome": "AvgCorr60",
+      "theta_k0_smooth": -0.01130877085600354,
+      "theta_k1_smooth": 0.015683715850346724,
+      "theta_k0_binary": 0.0025964891040376236,
+      "theta_k1_binary": 0.0022915336074374503
+    }
+  ]
+}
