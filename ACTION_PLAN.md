@@ -5,8 +5,8 @@
 **Target journal:** Global Finance Journal (GFJ)
 
 **Created:** 2026-05-17  
-**Last updated:** 2026-05-18 (Phase 9 complete; paper Section 7 drafted)  
-**Overall status:** Phase 9 — Robustness ✅ Complete; paper Sections 1–7 drafted
+**Last updated:** 2026-05-18 (Phase 10 complete; full paper draft 23 pages)  
+**Overall status:** Phase 10 — Paper Writing ✅ Complete; full draft ready for co-author review
 
 ---
 
@@ -42,7 +42,7 @@ The paper is built around three conceptual layers:
 | 7 | State-dependent local projections | ✅ Complete |
 | 8 | Event classification | ✅ Complete |
 | 9 | Robustness | ✅ Complete |
-| 10 | Paper writing (LaTeX) | ⬜ Pending (parallel with 6–9) |
+| 10 | Paper writing (LaTeX) | ✅ Complete |
 
 ---
 
@@ -635,4 +635,4 @@ Key: 2022 (Ukraine year) has the second-highest HF concentration (52.4%), confir
 |-------|------|-------|-------|---------|
 | R00 | Baseline | 0.458 | 2178 | — |
 | R01 | COVID exclusion | 0.370 | 1960 | ✅ Survives (same sign, 81% of baseline) |
-| R02 | Ukraine exclusion | 0.083 | 2070 | ⚠️ Red
+| R02 | Ukraine exclusion | 0.083 | 2070 | ⚠️ Reduced 
