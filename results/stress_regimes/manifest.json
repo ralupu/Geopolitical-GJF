@@ -1,0 +1,39 @@
+{
+  "generated_at": "2026-05-17T21:27:18.083189+00:00",
+  "script": "subprojects/05_stress_regimes/build_hmm_regimes.py",
+  "n_dates": 2179,
+  "date_range": {
+    "start": "2017-05-19",
+    "end": "2025-10-15"
+  },
+  "n_states": 3,
+  "n_restarts": 50,
+  "component_cols": [
+    "VolStress_std",
+    "TailVolBreadth_std",
+    "AvgCorr60_std",
+    "tci_w100_std"
+  ],
+  "state_counts": {
+    "calm": 1389,
+    "elevated": 567,
+    "stress": 223
+  },
+  "covid_share_of_stress_days": 0.2287,
+  "state_persistence": {
+    "calm": 0.7192,
+    "elevated": 0.3772,
+    "stress": 0.3711
+  },
+  "event_pstress": {
+    "covid_peak": 1.0,
+    "ukraine": 1.0,
+    "hamas": null
+  },
+  "outputs": {
+    "hmm_daily": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/results/stress_regimes/hmm_daily.csv",
+    "hmm_params": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/results/stress_regimes/hmm_params.json",
+    "fig_regimes": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/results/stress_regimes/Fig_HMM_Regimes.png",
+    "fig_validation": "/sessions/gracious-gallant-turing/mnt/GeopoliticalRisk/Paper_GFJ/results/stress_regimes/Fig_HMM_Validation.png"
+  }
+}
