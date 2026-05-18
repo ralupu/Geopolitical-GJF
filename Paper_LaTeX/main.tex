@@ -898,7 +898,73 @@ set of robustness checks is presented in Section~\ref{sec:robustness}.
 \subsection{Geopolitical event taxonomy}
 \label{sec:taxonomy}
 
-% TODO -- implement after Phase 8 (event classification).
+We classify each of the 154 declustered geopolitical shock events according to the joint behavior of the EMFI and the HMM-implied systemic stress probability in a five-day post-event window $[t, t+5]$.
+An event is classified as \textbf{Systemic} if both conditions hold: the EMFI attains its 75th percentile ($\text{EMFI}_{Q_{75}} = 0.548$) within the post-event window, and the model-implied stress probability peaks above $0.50$.
+An event that raises the EMFI above its pre-event level but does not breach the stress-probability threshold is classified as \textbf{Localized}.
+All remaining events---where the EMFI fails to rise or declines---are classified as \textbf{Absorbed}.
+We additionally identify \textbf{market-only stress} episodes: trading days with $P_{\text{stress},t} > 0.50$ that do not coincide with any identified shock within a $\pm 3$ trading-day window; these capture endogenous systemic stress that is not triggered by geopolitical news.
+
+Table~\ref{tab:taxonomy_summary} reports the category distribution across all 154 events. The majority of shocks (50.6\%) are absorbed without measurable fragility response, confirming the LP baseline finding that geopolitical news routinely fails to disturb market-based systemic risk indicators in calm regimes. A further 22.1\% are localized---EMFI rises but systemic stress probability remains subdued.
+The remaining 27.3\% (42 events) qualify as Systemic; these are concentrated in two clusters: the COVID-19 panic of 2020 and the Ukraine conflict onset and associated European energy crisis of 2022.
+
+\begin{table}[htbp]
+\centering
+\caption{Geopolitical event taxonomy: distribution across categories}
+\label{tab:taxonomy_summary}
+\begin{tabular}{lrrrrr}
+\hline\hline
+Category & N & Share (\%) & Mean $\bar{P}_{\text{stress}}^{\text{peak}}$ & Mean $\Delta\overline{\text{EMFI}}$ & Mean TCI$^{\text{post}}$ \\
+\hline
+Systemic  & 42 & 27.3 & 0.990 & $+$0.643 & 77.6 \\
+Localized & 34 & 22.1 & 0.162 & $+$0.213 & 67.4 \\
+Absorbed  & 78 & 50.6 & 0.046 & $-$0.347 & 68.6 \\
+\hline
+Total     & 154 & 100.0 & & & \\
+\hline\hline
+\end{tabular}
+\begin{minipage}{\linewidth}
+\smallskip\footnotesize
+\textit{Notes:} $\bar{P}_{\text{stress}}^{\text{peak}}$ is the mean across events of the maximum HMM stress probability in the $[t, t+5]$ window.
+$\Delta\overline{\text{EMFI}}$ is the mean EMFI change (post-event mean minus pre-event mean over a 5-day symmetric window).
+TCI$^{\text{post}}$ is the mean peak total connectedness index in the post-event window.
+Classification thresholds: EMFI$_{Q_{75}} = 0.548$; $P_{\text{stress}} \geq 0.50$.
+\end{minipage}
+\end{table}
+
+The clean separation in stress-probability characteristics across categories confirms the internal consistency of the classification scheme.
+Systemic events exhibit near-unity mean peak stress probability (0.990), contrasting with 0.162 for Localized and 0.046 for Absorbed events.
+The EMFI delta is positive for Systemic ($+$0.643) and Localized ($+$0.213) events, and negative for Absorbed events ($-$0.347), consistent with the interpretation that the latter category represents geopolitical news that does not materially alter the fragility landscape.
+
+The three most severe Systemic events, ranked by post-event EMFI, are the COVID-19 market panic of March 2020 (emfi$_{\text{post}}^{\max} = 12.46$), the early Ukraine cluster of 2--3 March 2022 (7.54), and the Ukraine invasion onset of 24 February 2022 (7.32).
+The Hamas attack of 7 October 2023, which falls on a Sunday, maps to the nearest trading day of 9 October 2023. Although the stress probability on the shock day itself is 0.296 (below the 0.5 threshold), it peaks at 1.0 on the following trading day, placing the event in the Systemic category. This one-day delayed crystallisation of systemic stress illustrates the importance of evaluating the full post-event window rather than the contemporaneous response.
+
+Alongside identified shocks, we find 138 market-stress days ($P_{\text{stress},t} > 0.50$) with no geopolitical shock within a $\pm 3$ trading-day window.
+These market-only stress episodes---predominantly concentrated in the COVID-19 period and the 2022 European energy crisis---demonstrate that systemic fragility can arise endogenously without a proximate identified geopolitical trigger.
+This finding reinforces the asymmetric causal structure documented in the LP analysis: while high-fragility regimes amplify the transmission of geopolitical shocks, stress states themselves often originate from sources beyond the geopolitical shock series.
+
+Figure~\ref{fig:event_timeline} displays the full shock event timeline with category labels overlaid on the EMFI series.
+Figure~\ref{fig:network_systemic} shows the equity return correlation network before and after the top five Systemic events, sorted by post-event EMFI; the network densification following these events confirms the systemic interpretation.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{Fig_EventTimeline}
+\caption{Geopolitical shock events classified by category, overlaid on the EMFI series.
+Red markers indicate Systemic events ($N = 42$), blue Localized ($N = 34$), and grey Absorbed ($N = 78$).
+Systemic events are concentrated in the COVID-19 panic of 2020 and the Ukraine conflict cluster of 2022.
+The shaded HMM stress probability series ($P_{\text{stress},t}$) is plotted on the right axis.}
+\label{fig:event_timeline}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{Fig_NetworkCorr_Systemic}
+\caption{Equity return correlation network around the top five Systemic events (ranked by post-event EMFI).
+Left panels: mean pairwise return correlation in the 20-day pre-event window.
+Right panels: mean pairwise return correlation in the 20-day post-event window.
+Node labels are country ISO codes; edge thickness is proportional to correlation strength (threshold $\geq 0.50$).
+The network densifies markedly following each Systemic event, confirming heightened co-movement and reduced diversification potential during the post-shock window.}
+\label{fig:network_systemic}
+\end{figure}
 
 % ============================================================
 \section{Robustness}
@@ -913,25 +979,31 @@ set of robustness checks is presented in Section~\ref{sec:robustness}.
 % TODO
 
 % ============================================================
-\bibliographystyle{plainnat}
-\bibliography{references}
-
-% ============================================================
 \appendix
 
 \section{Data Details}
 \label{app:data}
 
+% TODO
+
 \section{EMFI Construction Details}
 \label{app:emfi}
+
+% TODO
 
 \section{HMM Parameter Estimates}
 \label{app:hmm}
 
+% TODO
+
 \section{Additional LP Results}
 \label{app:lp}
 
+% TODO
+
 \section{Robustness Tables}
 \label{app:robustness}
+
+% TODO
 
 \end{document}

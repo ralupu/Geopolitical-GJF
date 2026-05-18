@@ -1,0 +1,83 @@
+{
+  "generated_at": "2026-05-18T08:22:38.283314+00:00",
+  "script": "subprojects/08_event_classification/classify_events.py",
+  "n_shock_days": 154,
+  "emfi_q75": 0.548,
+  "p_stress_threshold": 0.5,
+  "category_counts": {
+    "Absorbed": 78,
+    "Systemic": 42,
+    "Localized": 34
+  },
+  "market_only_stress_days": 138,
+  "top_systemic_events": [
+    {
+      "date": "2020-03-03",
+      "p_stress_peak": 1.0,
+      "emfi_post_max": 12.4634,
+      "countries": "Bulgaria"
+    },
+    {
+      "date": "2022-03-02",
+      "p_stress_peak": 1.0,
+      "emfi_post_max": 7.5383,
+      "countries": "Netherlands"
+    },
+    {
+      "date": "2022-02-24",
+      "p_stress_peak": 1.0,
+      "emfi_post_max": 7.3235,
+      "countries": "Austria; Belgium; Bulgaria; Croatia; Finland; France; Germany; Greece; Hungary; Italy; Norway; Poland; Romania; Spain; Sweden"
+    },
+    {
+      "date": "2022-02-21",
+      "p_stress_peak": 1.0,
+      "emfi_post_max": 7.3235,
+      "countries": "Portugal"
+    },
+    {
+      "date": "2020-02-21",
+      "p_stress_peak": 1.0,
+      "emfi_post_max": 6.8119,
+      "countries": "Romania"
+    },
+    {
+      "date": "2020-02-24",
+      "p_stress_peak": 1.0,
+      "emfi_post_max": 6.8119,
+      "countries": "United Kingdom"
+    },
+    {
+      "date": "2020-04-03",
+      "p_stress_peak": 1.0,
+      "emfi_post_max": 6.7303,
+      "countries": "Romania"
+    },
+    {
+      "date": "2020-11-03",
+      "p_stress_peak": 1.0,
+      "emfi_post_max": 6.5003,
+      "countries": "Austria; Hungary"
+    },
+    {
+      "date": "2020-11-09",
+      "p_stress_peak": 1.0,
+      "emfi_post_max": 6.5003,
+      "countries": "Ireland; Romania"
+    },
+    {
+      "date": "2022-03-14",
+      "p_stress_peak": 1.0,
+      "emfi_post_max": 5.3859,
+      "countries": "Hungary; Ireland"
+    }
+  ],
+  "outputs": [
+    "Fig_EventTimeline.png",
+    "Fig_NetworkCorr_Systemic.png",
+    "event_taxonomy.csv",
+    "manifest.json",
+    "market_stress_episodes.csv",
+    "summary_by_category.csv"
+  ]
+}
