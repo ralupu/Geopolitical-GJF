@@ -70,8 +70,9 @@ State-dependent projections show evidence of amplification when shocks
 occur during already-fragile market conditions, though identification is
 concentrated in a small number of shock--stress overlap events.
 Our event taxonomy classifies the COVID-19 crash and the 2022 Ukraine
-invasion as systemic, while the 2023 Hamas--Israel shock is absorbed without
-regime transition.
+invasion as the most severe Systemic events; the 2023 Hamas--Israel shock
+triggers a one-day delayed systemic stress episode, with the market-implied
+stress probability reaching unity on the trading day following the attack.
 The results highlight that geopolitical shock transmission depends critically
 on pre-existing market fragility, and that most geopolitical events---however
 large---do not trigger systemic fragility in integrated European markets.
@@ -110,11 +111,10 @@ the contribution of this paper.
 
 We approach the question through three analytical layers.
 The first is a \emph{trigger}: we reuse the validated high-frequency
-geopolitical conflict shock series from a companion paper
-\citep[Lupu et al.\ 2026,][]{lupu2026bir}, which constructs daily shock
-intensities $S_{i,t} = -\log q_{i,t}$ from extreme value theory and
-false-discovery-rate multiple testing applied to the GDELT conflict index
-for 19 European countries.
+geopolitical conflict shock series developed by \citet{lupu2026bir},
+which constructs daily shock intensities $S_{i,t} = -\log q_{i,t}$
+from extreme value theory and false-discovery-rate multiple testing
+applied to GDELT Document 2.0 conflict coverage for 19 European countries.
 The second layer is a suite of \emph{market-based systemic fragility
 measures} constructed from the daily equity return panel: volatility stress,
 tail co-exceedance breadth, rolling average pairwise correlation, a total
@@ -153,9 +153,12 @@ effects are amplified in fragile market conditions, though the identification
 is necessarily concentrated in the minority of shock events that arrive during
 elevated or systemic market states.
 \emph{Fourth}, the event taxonomy reveals that the COVID-19 crash and the
-Ukraine invasion are the two clearly systemic events in our sample; the
-Hamas--Israel attack of October 2023 produced elevated ($P_{\text{stress}} =
-0.30$) but not systemic market conditions.
+Ukraine invasion are the two most severe Systemic events in our sample. The
+Hamas--Israel attack of October 2023 exhibits a one-day delayed stress
+response: the impact-day market-implied stress probability is 0.296, but
+it peaks at 1.0 on the following trading day, placing the event in the
+Systemic category. This delayed crystallisation illustrates that the
+post-event evaluation window is essential for accurate classification.
 \emph{Fifth}, the HMM classifies 223 trading days (10.2\% of the sample) as
 systemic, of which only 22.9\% fall in the COVID-19 window---the remaining
 systemic days are distributed across multiple stress episodes in 2017--2019 and
@@ -241,7 +244,7 @@ Daily log returns are constructed from total-return equity market indices
 sourced from LSEG Workspace.
 The 19 countries span all major Western and Central European markets and are
 grouped into two clusters based on economic and geographic proximity.\footnote{
-  The cluster assignments are inherited from the companion BIR paper and are
+  The cluster assignments follow \citet{lupu2026bir} and are
   not re-estimated here.}
 Table~\ref{tab:data_summary} provides the full list of countries and their
 cluster assignments.
@@ -258,8 +261,8 @@ Country & Index & Cluster \\
 \midrule
 Austria      & ATX          & 1 \\
 Belgium      & BEL 20       & 1 \\
-Czech Republic & PX         & 2 \\
-Denmark      & OMXC25       & 1 \\
+Bulgaria       & SOFIX        & 2 \\
+Croatia      & CROBEX       & 2 \\
 Finland      & OMXHPI       & 1 \\
 France       & CAC 40       & 1 \\
 Germany      & DAX          & 1 \\
@@ -274,12 +277,12 @@ Portugal     & PSI 20       & 1 \\
 Romania      & BET          & 2 \\
 Spain        & IBEX 35      & 1 \\
 Sweden       & OMXS30       & 1 \\
-Switzerland  & SMI          & 1 \\
+United Kingdom & FTSE 100   & 1 \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
 \small
-\item Cluster 1 = Western/Northern Europe; Cluster 2 = Central/South-Eastern Europe.
+\item Cluster 1 = Western/Northern Europe; Cluster 2 = Central/Eastern and South-Eastern Europe.
       Daily log returns from LSEG Workspace.
       Study period: 2017-01-02 to 2025-10-15 (2,278 trading days).
 \end{tablenotes}
@@ -289,29 +292,29 @@ Switzerland  & SMI          & 1 \\
 \subsection{Geopolitical conflict shock series}
 \label{subsec:shocks}
 
-The geopolitical shock series is inherited from \citet{lupu2026bir} without
-modification, ensuring that the shock construction methodology constitutes a
-contribution of that companion paper rather than this one.
-We briefly describe the construction for completeness.
+We use the validated geopolitical conflict shock series of \citet{lupu2026bir}
+without modification.\footnote{The present paper takes the shock series as a
+given input; shock construction methodology is a contribution of \citet{lupu2026bir}
+and is not repeated here.} We briefly summarise the series properties relevant
+to the present application.
 
-For each country $i$ and calendar day $t$, a conflict intensity index
-$C_{i,t}$ is computed from the GDELT Document 2.0 database as the sum of
-CAMEO action codes weighted by the Goldstein scale, smoothed with a 28-day
-weighted moving average.
-A tail distribution is fitted to country-specific conflict intensity using
-generalised Pareto distribution (GPD) peaks-over-threshold methods, yielding
-country-day exceedance probabilities $q_{i,t}$.
-The shock intensity is defined as
+The shock series is derived from country-level conflict-related news
+coverage in the GDELT Document 2.0 database, transformed into daily
+tail-based shock intensities via generalised Pareto distribution (GPD)
+peaks-over-threshold methods and Benjamini--Hochberg false discovery rate
+(FDR) corrections~\citep{benjaminihochberg1995}.
+For each country $i$ and calendar day $t$, the shock intensity is
 \begin{equation}
   S_{i,t} = -\log q_{i,t},
   \label{eq:shock}
 \end{equation}
-which is zero for non-shock days and positive for exceedance events.
-A false discovery rate (FDR) procedure~\citep{benjaminihochberg1995} applied
-cross-sectionally on each day ensures that only days with statistically
-significant simultaneous exceedances across countries are retained.
-Declustering removes consecutive exceedance events within a 7-day window to
-avoid double-counting a single geopolitical episode.
+where $q_{i,t}$ is the BH-FDR adjusted tail exceedance probability;
+days with raw tail probability $p_{i,t} < 0.005$ are classified as
+binary shock events, while the continuous $S_{i,t}$ serves as the
+LP regressor.
+Consecutive exceedance events within a 7-day window are declustered
+to avoid double-counting a single geopolitical episode.
+Full methodological details are provided in \citet{lupu2026bir}.
 
 The resulting shock series contains 278 declustered shock events over the
 study period, with shock intensities $S_{i,t}$ ranging from 0.073 to 2.860
@@ -319,7 +322,16 @@ study period, with shock intensities $S_{i,t}$ ranging from 0.073 to 2.860
 Of these events, 181 (65.1\%) fall on weekends or holidays when equity
 markets are closed; these are forward-filled to the next available trading
 day, yielding 163 days on which the aggregate shock measure
-$\text{MaxShock}_t = \max_i S_{i,t}$ is positive.
+$\text{MaxShock}_t = \max_i S_{i,t}$ is positive.\footnote{
+  The local projections and event taxonomy use 154 of these
+  163 shock-day observations. Nine shock days fall before
+  2017-05-19, the start of the EMFI/HMM estimation window
+  (which requires a warm-up period for the rolling TCI and
+  tail-breadth calculations); these nine observations are
+  excluded from the LP sample but remain in the full-sample
+  market panel. The three counts therefore refer to: 278 raw
+  shock events on calendar days; 163 forward-filled trading-day
+  shock observations; and 154 LP/taxonomy shock observations.}
 
 The aggregate shock measure used as the LP regressor is
 $\text{MaxShock}_t$---the maximum shock intensity across all 19 countries on
@@ -1159,9 +1171,12 @@ distinct systemic-stress regime without reference to geopolitical event dates.
 We draw five main conclusions.
 
 \textbf{Geopolitical shocks do generate fragility responses, but most of the
-time markets absorb them.} The baseline panel local projection yields a positive
-and statistically significant impact coefficient on EMFI at $k=0$ ($\hat\beta =
-0.458$), and the response persists at horizons up to one week. However, 50.6\%
+time markets absorb them.} The baseline panel local projection yields a positive but statistically
+imprecise impact coefficient on EMFI at $k=0$ ($\hat\beta = 0.458$,
+$p = 0.174$), with the response remaining positive through horizons up to
+one week. This imprecision is itself informative: it reflects the large share
+of shocks that arrive in calm market conditions and produce negligible
+fragility responses, pulling the unconditional average toward zero. However, 50.6\%
 of the 154 identified shock events are classified as Absorbed---the fragility
 indices show no measurable deterioration---consistent with the descriptive
 finding that 63\% of shocks arrive during the HMM calm regime.
@@ -1267,5 +1282,8 @@ distinguish the average effect of a shock from its state-conditioned amplificati
 \label{app:robustness}
 
 % TODO
+
+\bibliographystyle{plainnat}
+\bibliography{references}
 
 \end{document}
