@@ -317,7 +317,12 @@ Estimate a Hidden Markov Model on the systemic fragility indicators to classify 
 - **Stressed states are transient (persistence ~0.37):** the stress state has a transition probability back to itself of only 0.371, implying an average duration of roughly 1/(1-0.371) ≈ 1.6 days in continuous sequence. The calm state is much stickier (0.719, ≈3.6 days). This means the HMM captures sharp, episodic spikes rather than prolonged stress periods — consistent with the EMFI's acute-stress nature observed in Phase 4. The regime path therefore captures the same information as the EMFI spike, not a slow-moving fragility buildup.
 - **P_stress = 1.00 on COVID and Ukraine peak days:** the HMM assigns full posterior probability to the systemic state on the peak crisis days. This validates the model's face validity but also means P_stress_t is a sharp indicator with near-binary behavior during extreme events. In the LP, this will look similar to using an extreme-EMFI dummy. A smooth-transition LP using the continuous P_stress_t (rather than a threshold-based HighFragility dummy) may therefore add more information.
 - **Hamas attack (2023-10-07, Sunday) → P_stress=0.296 on 2023-10-09:** the first trading day after the Hamas attack shows elevated (but sub-0.5) P_stress. The market partially absorbed the shock without transitioning into the systemic regime. This is a useful characterization for the event taxonomy in Phase 8 — a "Localized" rather than "Systemic" event by the HMM classification.
-- **P_stress and EMFI are complements, not substitutes:** EMFI is a continuous level (large COVID spike at 15.2), while P_stress_t is a bounded probability (1.0 during COVID). For LP regressions, both should be tried: EMFI captures magnitude, P_stress captures regime certainty. The correlation between them should be computed and reported (expected ~0.75–0.85). If correlation is very high (>0.90), using both in the same regression would cause multicollinearity; use separately.
+- **P_stress and EMFI are complements, not substitutes:** Corr(P_stress, EMFI) = 0.647 — moderate, not collinear. EMFI captures the severity/magnitude of fragility (continuous, large COVID spike); P_stress captures the certainty of being in the systemic regime (bounded [0,1]). They can be used as separate LP outcomes without multicollinearity concerns.
+- **P_stress is near-bimodal, not smoothly continuous:** median P_stress = 0.0001, but 95th pctile = 1.00. It is essentially 0 for ~90% of days and then spikes to 1.0 during crises. This means linear LP on P_stress will behave similarly to a binary indicator LP. Note in the paper.
+- **Critical: only 16 shock events land in the HMM systemic-stress regime** (10.4% of 154 shock days in the HMM sample). This is below the ~20-observation threshold for reliable interaction-term identification. **Implication: the binary state-dependent LP conditioned on HMM regime = systemic is underpowered and cannot be the primary specification.** The smooth-transition LP using P_stress_{t-1} as a continuous conditioning variable must be promoted to the primary specification in Phase 7. The HighFragility dummy (EMFI-based, 38 shock events) remains as the binary secondary specification.
+- **63% of shocks hit calm markets (regime=0), 27% hit elevated markets (regime=1), 10% hit systemic:** this empirically validates the state-dependence hypothesis — most geopolitical shocks strike when markets are not yet in crisis. The amplification question (θ_k in Phase 7) is about the 37% of shocks that hit non-calm markets.
+- **"Other 2017–2019" is the largest stress-day category (54 days, 24.2%)**, ahead of COVID (51 days, 22.9%). The HMM is detecting genuine European market stress beyond COVID and Ukraine — likely the Turkey currency crisis (2018), Italian sovereign bond spread widening (2018–2019), and pre-Brexit uncertainty. This multi-episode coverage strengthens the generalizability argument.
+- **143 distinct stress episodes, median duration = 1 calendar day:** the HMM functions as a spike detector rather than a regime identifier. The smooth-transition specification using P_stress_{t-1} is more appropriate than a regime dummy precisely because the stressed regime is so transient.
 
 ---
 
@@ -372,6 +377,7 @@ where:
 - **EMFI pre-level check on shock dates:** before running the LP, inspect the distribution of EMFI_{t-1} on shock dates versus non-shock dates. If EMFI is already elevated when shocks arrive (i.e., shocks cluster in already-stressed periods), the LP coefficient β_k is identified from periods when markets are both stressed and shocked simultaneously — a confound. This check informs whether a simultaneous-equation concern needs to be addressed.
 - **AvgCorr60 as LP outcome (added to list):** separate from the main five outcomes, run the LP with AvgCorr60 as the dependent variable. Given the two-cluster structure (AvgCorr60 and TCI are near-substitutes), if TCI responds significantly but AvgCorr60 does not (or vice versa), it tells us something about the mechanism — VAR-based connectedness vs. simple correlation co-movement. This is a mechanism-identification exercise, not just robustness.
 - **Shock intensity bins:** report median, 75th, and 90th percentiles of MaxShock_t on shock days (S > threshold). In the LP, distinguish between moderate and large shocks by interacting S_t with an indicator for S_t > 90th pctile of shock days. This is secondary but useful for the event classification narrative.
+- **P_stress as LP outcome — near-binary caveat:** Corr(P_stress, EMFI) = 0.647 (Phase 5 computation). P_stress median is 0.0001 and its 95th pctile is 1.00 — it is near-binary, not a smooth probability. Linear LP on P_stress is still valid (LPM interpretation) but the IRF will essentially show: "does a geopolitical shock raise the probability of being in the systemic-stress regime?" Note the bounded nature in the paper and report the fraction of days where P_stress > 0.5 (226 days, 10.4% of the sample) as context.
 
 ---
 
@@ -384,32 +390,42 @@ where:
 ### Objectives
 Test whether geopolitical shocks are more destabilizing when they occur in already-fragile markets. This is the paper's **most novel empirical contribution**.
 
-### Specification
+### Specification — PRIMARY: Smooth-Transition LP
+
+Given that only 16 shock events land in the HMM systemic-stress regime (below the power threshold), the primary specification uses P_stress_{t-1} as a **continuous** conditioning variable:
+
+    Y_{t+k} = α + β_k S_t + θ_k (S_t × P_stress_{t-1}) + φ P_stress_{t-1} + controls + ε_{t+k}
+
+where:
+- `P_stress_{t-1}` = lagged posterior probability of systemic-stress state from HMM (continuous, [0,1])
+- β_k = effect of shock when P_stress_{t-1} = 0 (calm baseline)
+- β_k + θ_k × p = total effect when P_stress_{t-1} = p
+- Evaluate at p ∈ {0.0, 0.5, 0.9} for three IRF lines in the figure
+
+### Specification — SECONDARY: Binary HighFragility LP
 
     Y_{t+k} = α + β_k S_t + θ_k (S_t × HighFragility_{t-1}) + φ HighFragility_{t-1} + controls + ε_{t+k}
 
 where:
-- `HighFragility_{t-1}` = 1 if EMFI_{t-1} > 75th percentile of EMFI (full-sample threshold)
-- `HighConnectedness_{t-1}` = 1 if TCI_{t-1} > 75th percentile of TCI (robustness)
-- β_k = effect of shock in normal markets
-- θ_k = additional (incremental) effect when pre-shock market is fragile
-- Total effect in fragile markets: β_k + θ_k
+- `HighFragility_{t-1}` = 1 if EMFI_{t-1} > 75th percentile (38 shock events, workable but marginal)
+- `HighConnectedness_{t-1}` = 1 if TCI_{t-1} > 75th percentile (robustness)
+- Note: 38 shock events in HighFragility periods is the full LP identification set for θ_k. Confidence intervals will be wide — interpret with care and report the sample composition explicitly.
 
 ### Key figures
-- **Figure 3 (paper):** Two IRF lines — normal state (β_k) vs. fragile pre-state (β_k + θ_k) — with confidence bands for each.
+- **Figure 3 (paper):** Three IRF lines from smooth-transition LP — P_stress=0 (calm), P_stress=0.5 (elevated), P_stress=0.9 (near-systemic) — with confidence bands for each.
 
 ### Deliverables
 - `results/state_lp/state_lp_results.csv`
 - `results/state_lp/Fig_StateLPFragility.png` — normal vs. fragile IRF (primary figure)
 - `results/state_lp/Fig_StateLPConnected.png` — normal vs. high-connectedness IRF (robustness)
 
-### Additional checks to implement (motivated by Phase 4 observations)
+### Additional checks to implement
 
-- **HighFragility dummy composition report (mandatory):** before running the regressions, compute and report in the paper: (a) total HighFragility days and their year-by-year breakdown; (b) number of shock events (S_t > 0) landing in HighFragility vs. normal periods; (c) top 5 calendar episodes driving the HighFragility classification. If COVID 2020 accounts for the large majority of HighFragility shock events, the state-dependent result is essentially a "COVID amplification" finding, which is still valid but must be framed accordingly.
-- **Statistical power check:** if fewer than 20 shock events land in HighFragility periods, the interaction term θ_k will have very wide confidence intervals. In that case, consider using P_stress_t as a continuous conditioning variable (Smooth-Transition LP: Y_{t+k} = α + β_k S_t + θ_k (S_t × P_stress_{t-1}) + ...) rather than a binary dummy. This is more statistically efficient and avoids the threshold choice problem.
-- **P_stress_t as alternative conditioning variable:** implement the smooth-transition version using P_stress_{t-1} as the interaction term. Compare IRFs at P_stress = 0.2 (calm), 0.5 (elevated), 0.8 (systemic). This is both a robustness check and a richer characterization.
-- **COVID exclusion from state-dependent LP (mandatory robustness):** drop 2020-03-01 to 2020-12-31 from the sample when computing both the regression and the HighFragility threshold. Re-estimate and report whether θ_k remains significant. If it collapses, the result is identified from a single episode.
-- **Separate episodes reporting:** in the event that the state-dependent result is statistically significant, report separately: which specific shock events drive the θ_k identification (i.e., which events land in HighFragility and have the largest individual contributions to the interaction term coefficient). This is an informal influence analysis but critical for transparency.
+- **[RESOLVED] Statistical power check — smooth-transition LP is primary:** Phase 5 analysis shows only 16 shock events in the HMM systemic-stress regime. The smooth-transition LP using P_stress_{t-1} has been promoted to primary specification. The binary HighFragility (EMFI-based) has 38 shock events — marginal but workable as secondary. No further power check needed; this decision is already built into the specification above.
+- **HighFragility dummy composition report (mandatory before running binary LP):** report in paper: (a) 38 shock events in HighFragility; (b) year-by-year breakdown of HighFragility days; (c) which episodes dominate. EMFI HighFragility (75th pctile=0.55) captures a broader set of days than HMM systemic stress (223 vs. ~545 days) — compare their overlap.
+- **Shock-regime distribution disclosure (mandatory):** report that 63% of geopolitical shocks strike calm markets, 27% elevated, 10% systemic. This is both a data description and the motivation for the state-dependent design — it establishes that state dependence is empirically relevant (shocks fall unevenly across regimes).
+- **COVID exclusion from state-dependent LP (mandatory robustness):** drop 2020-03-01 to 2020-12-31. Re-compute both P_stress_{t-1} interaction and HighFragility dummy. With COVID excluded, the smooth-transition LP identification shifts to Ukraine, 2017–2019 stress episodes, and 2024–2025. Report whether θ_k survives.
+- **Separate episodes reporting:** identify which specific shock events land in HighFragility or high-P_stress periods and contribute most to θ_k. With only 38 binary and continuous identification from sparse stress periods, individual influential observations need to be disclosed.
 
 ---
 
@@ -432,10 +448,17 @@ Produce a 4-category taxonomy of geopolitical shock episodes, combining the news
 | **Market-only stress** | P_stress_t > 0.5, no shock detected within ±3 days |
 
 ### Implementation
-- Iterate over all declustered shock event dates.
+- Iterate over all declustered shock event dates (154 events in the HMM sample).
 - For each event: compute EMFI change (mean of t+1 to t+5 minus mean of t-5 to t-1), and max P_stress in window [t, t+5].
 - Assign category using the definitions above.
 - For each category: compute average volatility response, average TCI response, average duration of elevated stress.
+
+### Empirical anchors from Phase 5 (to verify in Phase 8)
+- **COVID peak (2020-03-12):** P_stress=1.00, EMFI=15.2 → expected classification: Systemic
+- **Ukraine invasion (2022-02-24):** P_stress=1.00 → expected: Systemic
+- **Hamas attack (2023-10-09, nearest trading day):** P_stress=0.296 → expected: Localized
+- **Base rate:** 63% of shock events hit calm markets (P_stress≈0) → expected majority of events to be "Absorbed" or "Localized"
+- **Overall distribution expected:** few Systemic events (likely 5–20), majority Absorbed/Localized
 
 ### Key outputs
 - **Table (paper):** Event listing with category, date, country, shock intensity, EMFI response, TCI response, P_stress peak, classification. This is **Figure 5 / Table** in the idea document.
@@ -525,6 +548,16 @@ Produce a 4-category taxonomy of geopolitical shock episodes, combining the news
 - **TCI vs. AvgCorr60 discussion**: note that TCI (VAR-FEVD) and AvgCorr60 (simple rolling correlation) correlate at 0.797. The theoretical superiority of TCI (order-invariance, captures indirect spillover paths) is argued, but the empirical overlap is explicitly acknowledged and the TCI-substitution robustness check is referenced.
 - **EMFI nature**: be explicit that EMFI is a contemporaneous/lagging acute-stress indicator. It does not build up gradually before crises — it spikes during them. Contrast with VIX-type implied volatility measures if space allows. This framing matters for interpreting the state-dependent LP: HighFragility captures *ongoing* stress episodes, not *pre-fragility*.
 - **HighFragility composition disclosure**: in a table or footnote, report the breakdown of HighFragility days by year/episode. COVID 2020 will dominate the upper tail; this must be stated, not buried.
+
+**Section 4 — HMM Market-Implied Stress Regimes:**
+- Explicitly describe the HMM as a spike detector rather than a regime classifier: 143 distinct stress episodes, median duration = 1 calendar day. Contrast with traditional HMM applications where regimes persist for months — this is a fundamentally different use case.
+- Report the episode breakdown of systemic-stress days: COVID=22.9%, Ukraine=13.0%, "Other 2017–2019"=24.2%, "Other 2024–2025"=17.0%. The dominant category is actually non-labeled European stress events, which argues for generalizability beyond any single crisis.
+- Report shock-regime distribution (63% calm, 27% elevated, 10% systemic) as a core finding: most geopolitical shocks hit non-stressed markets, which motivates the state-dependence hypothesis.
+- Be explicit that P_stress and EMFI are designed to be used as separate outcome variables (Corr=0.647), not substitutes. Each captures a different dimension: severity vs. regime certainty.
+
+**Section 5 — State-Dependent LP:**
+- Explain the smooth-transition LP design choice: with only 16 shock events in the HMM systemic-stress regime, a binary conditioning variable would be underpowered. The smooth-transition LP using P_stress_{t-1} (continuous) as interaction is the primary design. The binary HighFragility (EMFI-based, 38 events) is secondary.
+- Report the shock-regime distribution as motivation: 63% of shocks in calm, 37% in stressed/elevated markets — the identification of θ_k (amplification) comes from this 37%.
 
 **Section 7 — Robustness:**
 - Lead with the COVID exclusion result — this is the robustness check readers will immediately demand. If the main result holds, state this prominently; if it weakens, acknowledge what fraction of the identification is coming from COVID.
