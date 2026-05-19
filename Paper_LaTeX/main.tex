@@ -1,5 +1,5 @@
 % ============================================================
-% Paper_GFJ ΓÇö When Geopolitical Shocks Become Systemic
+% Paper_GFJ --- When Geopolitical Shocks Become Systemic
 % Target: Global Finance Journal
 % ============================================================
 \documentclass[11pt]{article}
@@ -32,7 +32,7 @@
 
 \usepackage{amsmath,amssymb}
 
-% underscore package removed ΓÇö it activates catcode 95 which breaks hyperref
+% underscore package removed --- it activates catcode 95 which breaks hyperref
 % label resolution for underscore-containing labels. Use \_  or \textunderscore
 % in text mode where needed.
 
@@ -267,7 +267,7 @@ conflict risk) since 2022.
 VAR-based impulse responses: each horizon is estimated in a separate
 regression, which accommodates non-linearities and is robust to
 misspecification of the full dynamic system.
-\citet{romer2004new} and \citet{stock2018identification} discuss identification
+\citet{romer2004new} and \citet{stock2018} discuss identification
 strategies for causal LP inference.
 \citet{jordan2020state} and \citet{auerbach2012fiscal} develop state-dependent
 LP specifications.
@@ -1194,7 +1194,7 @@ power (Figure~\ref{fig:roc_predictive}).
 At the optimal Youden-$J$ threshold ($\hat\pi = 0.23$),
 the model achieves sensitivity of 67.6\% and specificity of 69.2\%,
 with an overall accuracy of 68.8\%.
-The Brier score (0.169) improves upon the na├»ve base-rate benchmark of 0.197
+The Brier score (0.169) improves upon the naïve base-rate benchmark of 0.197
 ($34/138 \times 104/138$).
 
 Applied to high-profile events, the model assigns a predicted systemic probability of
@@ -1237,7 +1237,7 @@ quasi-real-time information constraint.
 \caption{ROC curves for systemic event prediction. Primary LOO-CV AUC~$= 0.691$;
   stricter LOYO-CV AUC~$= 0.644$; quasi-real-time EMFI LOO-CV AUC~$= 0.701$.
   All three curves substantially exceed the random classifier.
-  See Section~\ref{sec:pred_class} for details.}
+  See Section~\ref{sec:predictive_class} for details.}
 \label{fig:roc_predictive}
 \end{figure}
 
@@ -1751,7 +1751,7 @@ The diagonal-covariance specification achieves near-perfect agreement ($\kappa =
 
 \subsection*{C.5 Filtered vs smoothed probabilities}
 
-The baseline $P_{\text{stress},t}$ uses smoothed posterior probabilities from the Baum--Welch forward-backward algorithm, which conditions on the full sample. For real-time or policy applications, filtered probabilities ΓÇö based on the forward algorithm only (conditioning on $x_1,\ldots,x_t$) ΓÇö are preferable. The correlation between filtered and smoothed $P_{\text{stress}}$ is 0.994, indicating near-identical series in practice.
+The baseline $P_{\text{stress},t}$ uses smoothed posterior probabilities from the Baum--Welch forward-backward algorithm, which conditions on the full sample. For real-time or policy applications, filtered probabilities --- based on the forward algorithm only (conditioning on $x_1,\ldots,x_t$) --- are preferable. The correlation between filtered and smoothed $P_{\text{stress}}$ is 0.994, indicating near-identical series in practice.
 
 The near-equivalence of filtered and smoothed probabilities is expected given the transition matrix structure: the systemic-stress state exits rapidly (diagonal 0.371), so conditioning on future data adds little information. This validates the use of EMFI and HMM as \emph{ex-post} outcome measures (for causal LP estimation) without concern that smoothing creates economically meaningful look-ahead bias.
 
@@ -1850,4 +1850,31 @@ the primary COVID-zeroed specification (Section~\ref{sec:lp}) yields $\hat\beta_
 \noindent\textbf{TCI window sensitivity (addressing overparameterisation).}
 Table~\ref{tab:tci_window_sensitivity} reports the full window-sensitivity analysis
 across $W \in \{60, 100, 150, 200, 250\}$.
-For e                                                       
+Foreach TCI window width, the on-impact LP coefficient $\hat\beta_0$ remains positive and broadly similar in magnitude to the primary specification ($W=100$, $\hat\beta_0 = 0.245$). The state-dependent amplification coefficient $\hat\theta_0$ is positive across all windows, ranging from 0.683 ($W=250$) to 0.962 ($W=60$), confirming that the TCI amplification finding is not sensitive to the rolling-window choice. Note that the values below are from the full-sample specification (COVID shock days included); the COVID-zeroed primary values for $W=60$ ($\hat\theta_0=1.556$) and $W=150$ ($\hat\theta_0=1.406$) are reported in Figure~\ref{fig:rob_theta}.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{TCI window sensitivity: on-impact LP coefficient ($\hat\beta_0$; Newey--West SE in parentheses)
+and state-dependent amplification ($\hat\theta_0$) across rolling-window widths $W \in \{60,100,150,200,250\}$.
+Full-sample specification (COVID shock days included). COVID-zeroed primary values are reported in Figure~\ref{fig:rob_theta}.}
+\label{tab:tci_window_sensitivity}
+\begin{tabular}{ccccc}
+\hline\hline
+Window $W$ & $\hat\beta_0$ & SE & $\hat\theta_0$ & Shock days \\
+\hline
+60  & 0.151 & (0.311) & 0.962 & 147 \\
+100 & 0.177 & (0.324) & 0.919 & 147 \\
+150 & 0.210 & (0.379) & 0.761 & 147 \\
+200 & 0.206 & (0.379) & 0.708 & 147 \\
+250 & 0.201 & (0.389) & 0.683 & 147 \\
+\hline\hline
+\multicolumn{5}{l}{\footnotesize Full-sample specification (COVID shock days included; $N_{\text{shock}}=147$).} \\
+\multicolumn{5}{l}{\footnotesize For the COVID-zeroed primary specification see Figure~\ref{fig:rob_theta}.}
+\end{tabular}
+\end{table}
+
+\bibliographystyle{apalike}
+\bibliography{references}
+
+\end{document}
