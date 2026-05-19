@@ -817,21 +817,26 @@ amplification parameters for all five outcomes.
 \begin{table}[h!]
 \centering
 \small
-\caption{State-dependent amplification at the impact horizon ($k=0$).
-  $\hat\beta$ is the calm-market baseline effect; $\hat\theta$ is the
-  amplification coefficient; IRF at $p=0.9$ is the total effect in
-  near-systemic stress conditions. All estimates use Newey--West HAC
-  standard errors with bandwidth $2(k+1)$.}
+\caption{State-dependent amplification at the impact horizon ($k=0$),
+  COVID-zeroed baseline.
+  $\hat\beta$ is the calm-market effect; $\hat\theta$ is the
+  state-amplification coefficient with Newey--West HAC standard error
+  $\widehat{\mathrm{SE}}(\hat\theta)$ and two-sided $p$-value;
+  IRF$(p{=}0.9)$ is the total effect under near-systemic stress
+  (delta-method SE); Amp.\ is the IRF$(0.9)$/IRF$(0)$ ratio.
+  Block-bootstrap 95\% CI for $\hat\theta$ uses $B{=}1000$ replicates,
+  block length~20.
+  $^\dagger$~$p < 0.10$.}
 \label{tab:theta_k0}
-\begin{tabular}{lrrrrr}
+\begin{tabular}{lrrrrrr}
 \hline\hline
-Outcome & $\hat\beta$ & $\hat\theta$ & IRF ($p{=}0$) & IRF ($p{=}0.9$) & Amplification \\
+Outcome & $\hat\beta$ & $\hat\theta$ & $\widehat{\mathrm{SE}}(\hat\theta)$ & $p(\hat\theta)$ & IRF$(p{=}0.9)$ & Amp. \\
 \hline
-EMFI             & 0.148 & 1.455 & 0.148 & 1.457 & $9.9\times$ \\
-TCI              & 0.223 & 2.800 & 0.223 & 2.743 & $12.3\times$ \\
-TailVolBreadth   & 0.698 & 1.807 & 0.698 & 2.324 & $3.3\times$ \\
-$P_{\text{stress}}$ & $-0.027$ & 0.384 & $-0.027$ & 0.318 & --- \\
-AvgCorr60        & 0.001 & $-0.012$ & 0.001 & $-0.009$ & --- \\
+EMFI               & 0.138 & 1.439 & 1.330 & 0.279 & 1.433 & $10.4\times$ \\
+TCI                & 0.270 & 2.696$^\dagger$ & 1.589 & 0.090 & 2.696 & $10.0\times$ \\
+TailVolBreadth     & 0.686 & 1.768 & 3.858 & 0.647 & 2.277 & $3.3\times$ \\
+$P_{\text{stress}}$ & $-0.027$ & 0.382 & 0.393 & 0.332 & 0.317 & --- \\
+AvgCorr60          & 0.001 & $-0.012$ & 0.010 & 0.211 & $-0.010$ & --- \\
 \hline\hline
 \end{tabular}
 \end{table}
@@ -850,15 +855,31 @@ The amplification pattern is consistent across the four volatility and
 connectedness outcomes (Figure~\ref{fig:state_lp_combined},
 Table~\ref{tab:theta_k0}).
 When a geopolitical shock strikes markets already near a systemic-stress
-state ($p = 0.9$), the EMFI response is 9.9 times larger than the
-calm-market baseline, and the TCI response is 12.3 times larger.
-TailVolBreadth amplifies by a factor of 4.1, and the HMM
-systemic-stress probability by 7.8.
-In each case, the amplification coefficient $\hat\theta_k$ is positive,
-confirming that higher pre-shock stress translates into a larger
-post-shock response.
+episode ($p = 0.9$), the EMFI response is 10.4 times larger than the
+calm-market baseline, and the TCI response is 10.0 times larger.
+TailVolBreadth amplifies by a factor of 3.3, and the HMM
+systemic-stress probability by a similar order.
+In each case, the amplification coefficient $\hat\theta_{k=0}$ is
+positive, confirming that higher pre-shock stress translates into a
+larger post-shock response.
 
-The sole exception is AvgCorr60, for which $\hat\theta_0 \approx -0.011$
+\textit{Formal inference.}
+Newey--West HAC $p$-values for $\hat\theta_{k=0}$ range from 0.090 for
+TCI (significant at the 10\% level) to 0.647 for TailVolBreadth.
+The EMFI amplification coefficient ($\hat\theta_{k=0} = 1.44$,
+$p = 0.28$) is large in economic magnitude---exceeding ten times the
+calm-market baseline---but imprecisely estimated individually, reflecting
+the limited number of shock days (154) and the high within-day
+heterogeneity of stress states.
+Block-bootstrap 95\% confidence intervals (B\,=\,1000, block length~20)
+are consistent with the analytic intervals: the EMFI bootstrap CI
+is $[-0.95,\;4.73]$ and the TCI bootstrap CI is $[0.08,\;7.65]$,
+with the latter excluding zero and reinforcing the 10\%-level result.
+The economic interpretation---that shocks in high-stress states are
+an order of magnitude more destabilising---is stable and robust across
+all specification variants (Section~\ref{sec:robustness}).
+
+The sole exception is AvgCorr60, for which $\hat\theta_0 \approx -0.012$
 is negligibly small and sign-unstable across horizons. This is an
 informative null result: rolling cross-market correlations are already
 elevated in high-stress states, and geopolitical shocks do not amplify

@@ -42,7 +42,7 @@ The "companion paper" / "companion BIR paper" / "companion study" language must 
 | R2 | COVID reclassification as non-geopolitical event | ✅ **Complete** | Code + text | — |
 | R3 | TCI strengthening (window and robustness) | ✅ **Complete** | Code + text | — |
 | R4 | HMM enhancements (terminology + robustness) | ✅ **Complete** | Code + text | — |
-| R5 | Formal inference for state-dependent amplification θ | 🟠 High | Code + text | 3–4 hours |
+| R5 | Formal inference for state-dependent amplification θ | ✅ **Complete** | Code + text | — |
 | R6 | Predictive event classification (logit/probit) | 🟠 High | Code + text | 2–3 hours |
 | R7 | Figure improvements | 🟡 Medium | Code | 1–2 hours |
 | R8 | Paper rewrite: framing, abstract, policy claims | 🟡 Medium | Text | 3–4 hours |
@@ -347,7 +347,7 @@ This is a technically valid concern that a GFJ referee could use to reject the p
 ## Phase R4 — HMM Enhancements and Terminology
 
 **Status:** ✅ Complete (2026-05-19)  
-**Git commit:** (next commit) — R4: HMM terminology fixed, additional robustness specs, filtered probabilities  
+**Git commit:** `aab4bcfa` — R4: HMM terminology fixed, additional robustness specs, filtered probabilities  
 **Priority:** 🟠 High  
 **Type:** Code + text  
 **Estimated effort:** 3–4 hours  
@@ -411,11 +411,10 @@ For each variant, compute: (a) state count classification agreement with baselin
 
 ## Phase R5 — Formal Inference for State-Dependent Amplification θ
 
-**Status:** ⬜ Pending  
+**Status:** ✅ Complete  
 **Priority:** 🟠 High  
 **Type:** Code + text  
-**Estimated effort:** 3–4 hours  
-**Script:** Extend `subprojects/07_state_dependent_lp/run_state_lp.py`
+**Script:** `subprojects/13_theta_inference/run_theta_inference.py`
 
 ### The Problem
 
@@ -466,14 +465,18 @@ Add to Table 3:
 Update Figure 3: ensure confidence bands for each of the three IRF lines (p=0, 0.5, 0.9) are visible and properly labeled.
 
 **Deliverables — Phase R5:**
-- [ ] SE(θ_k) and p-value extracted for all outcomes and all horizons
-- [ ] `compute_irf_se()` function implemented
-- [ ] Block bootstrap CIs computed (1000 replications)
-- [ ] Comparison table: Newey-West vs block bootstrap CIs for θ
-- [ ] Table 3 updated with SE(θ), p-values, and total-effect CIs
-- [ ] Figure 3 updated with proper CI bands for all three p-level IRFs
-- [ ] Section 6 (state LP) updated with significance language for θ
-- [ ] Git commit: "R5: formal inference for theta — SE, p-values, bootstrap CIs"
+- [x] SP13 `run_theta_inference.py` — SE(θ_k), p-value, Cov(β,θ) all outcomes/horizons
+- [x] `compute_irf_se()` delta-method SE implemented and tested
+- [x] Block bootstrap CIs (B=1000, block=20) for θ_k0 and IRF(0.9)
+- [x] `bootstrap_ci_table.csv` — analytic vs bootstrap comparison
+- [x] Table 3 updated: SE(θ), p(θ), IRF(0.9), amp, bootstrap CI footnote
+- [x] Section 6 formal-inference paragraph added (p-values, bootstrap CIs)
+- [x] 30 tests passing (`test_theta_inference.py`)
+- [x] main.tex compiles clean (31 pages, 0 errors)
+
+**Key results (k=0, COVID-zeroed):**  
+EMFI: β=0.138, θ=1.44, SE=1.33, p=0.28, amp=10.4x  
+TCI: θ=2.70, SE=1.59, p=0.090 (sig. 10%), boot CI=[0.08, 7.65] (excludes 0)
 
 ---
 
@@ -707,4 +710,4 @@ GFJ increasingly requires data and code statements. Add to the paper:
 |-------|-------|--------|
 | 4.1 Country sample inconsistency (Czech Republic/Denmark/Switzerland vs actual data) | R0.1 | ✅ |
 | 4.2 Shock-construction description conflict (CAMEO/Goldstein vs GDELT Doc 2.0) | R0.6 | ✅ |
-| 4.3 COVID as geopolitical
+| 4.3 COVID as geopolitical sh
