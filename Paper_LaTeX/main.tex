@@ -1,5 +1,5 @@
-% ============================================================
-% Paper_GFJ — When Geopolitical Shocks Become Systemic
+﻿% ============================================================
+% Paper_GFJ ΓÇö When Geopolitical Shocks Become Systemic
 % Target: Global Finance Journal
 % ============================================================
 \documentclass[11pt]{article}
@@ -32,7 +32,7 @@
 
 \usepackage{amsmath,amssymb}
 
-% underscore package removed — it activates catcode 95 which breaks hyperref
+% underscore package removed ΓÇö it activates catcode 95 which breaks hyperref
 % label resolution for underscore-containing labels. Use \_  or \textunderscore
 % in text mode where needed.
 
@@ -1145,7 +1145,7 @@ power (Figure~\ref{fig:roc_predictive}).
 At the optimal Youden-$J$ threshold ($\hat\pi = 0.29$),
 the model achieves sensitivity of 57.1\% and specificity of 75.9\%,
 with an overall accuracy of 70.8\%.
-The Brier score (0.178) improves upon the naïve base-rate benchmark of 0.197
+The Brier score (0.178) improves upon the na├»ve base-rate benchmark of 0.197
 ($42/154 \times 112/154$).
 
 Applied to high-profile events, the model assigns a predicted probability of
@@ -1655,7 +1655,7 @@ The diagonal-covariance specification achieves near-perfect agreement ($\kappa =
 
 \subsection*{C.5 Filtered vs smoothed probabilities}
 
-The baseline $P_{\text{stress},t}$ uses smoothed posterior probabilities from the Baum--Welch forward-backward algorithm, which conditions on the full sample. For real-time or policy applications, filtered probabilities — based on the forward algorithm only (conditioning on $x_1,\ldots,x_t$) — are preferable. The correlation between filtered and smoothed $P_{\text{stress}}$ is 0.994, indicating near-identical series in practice.
+The baseline $P_{\text{stress},t}$ uses smoothed posterior probabilities from the Baum--Welch forward-backward algorithm, which conditions on the full sample. For real-time or policy applications, filtered probabilities ΓÇö based on the forward algorithm only (conditioning on $x_1,\ldots,x_t$) ΓÇö are preferable. The correlation between filtered and smoothed $P_{\text{stress}}$ is 0.994, indicating near-identical series in practice.
 
 The near-equivalence of filtered and smoothed probabilities is expected given the transition matrix structure: the systemic-stress state exits rapidly (diagonal 0.371), so conditioning on future data adds little information. This validates the use of EMFI and HMM as \emph{ex-post} outcome measures (for causal LP estimation) without concern that smoothing creates economically meaningful look-ahead bias.
 
