@@ -40,7 +40,7 @@ The "companion paper" / "companion BIR paper" / "companion study" language must 
 | R0 | Text corrections and internal consistency fixes | ✅ **Complete** | Text only | — |
 | R1 | References, citations, and appendices | ✅ **Complete** | Text + bib | — |
 | R2 | COVID reclassification as non-geopolitical event | ✅ **Complete** | Code + text | — |
-| R3 | TCI strengthening (window and robustness) | 🟠 High | Code + text | 3–4 hours |
+| R3 | TCI strengthening (window and robustness) | ✅ **Complete** | Code + text | — |
 | R4 | HMM enhancements (terminology + robustness) | 🟠 High | Code + text | 3–4 hours |
 | R5 | Formal inference for state-dependent amplification θ | 🟠 High | Code + text | 3–4 hours |
 | R6 | Predictive event classification (logit/probit) | 🟠 High | Code + text | 2–3 hours |
@@ -219,7 +219,7 @@ Fill in co-authors and full title from the BIR paper's title page.
 ## Phase R2 — COVID Reclassification as Non-Geopolitical Event
 
 **Status:** ✅ Complete (2026-05-18)  
-**Git commit:** (next commit) — R2: COVID reclassified as non-geopolitical; new baseline LP  
+**Git commit:** `c9555f7` — R2: COVID reclassified as non-geopolitical; new baseline LP  
 **Priority:** 🔴 Critical  
 **Type:** Code + text  
 **Estimated effort:** 3–4 hours  
@@ -282,11 +282,12 @@ The Introduction must be revised: remove COVID as an opening example of a geopol
 
 ## Phase R3 — TCI Strengthening
 
-**Status:** ⬜ Pending  
+**Status:** ✅ Complete (2026-05-19)  
+**Git commit:** (next commit) — R3: TCI strengthened — W=250 alternative, simpler network metrics  
 **Priority:** 🟠 High  
 **Type:** Code + text  
 **Estimated effort:** 3–4 hours  
-**Script:** Extend `subprojects/03_connectedness/build_connectedness.py`
+**Script:** New `subprojects/11_tci_robustness/run_tci_robustness.py`
 
 ### The Problem
 
@@ -322,14 +323,24 @@ This is a technically valid concern that a GFJ referee could use to reject the p
 6. Update Section 3.2 (TCI description) to note that W=100 was chosen following standard practice (Diebold–Yilmaz 2012), and longer windows (W=250) give near-identical results (robustness reported in Appendix E)
 
 **Deliverables — Phase R3:**
-- [ ] `tci_w250.csv` computed and saved
-- [ ] EMFI recomputed with W=250 TCI saved as `emfi_w250.csv`
-- [ ] State LP rerun with W=250 EMFI — θ compared
-- [ ] Rolling eigenvalue and network density computed and saved
-- [ ] Robustness table: TCI window sensitivity (4 specs) for β and θ
-- [ ] Section 3.2 updated with window sensitivity discussion
-- [ ] Appendix E table updated
-- [ ] Git commit: "R3: TCI strengthened — W=250 alternative, simpler network metrics"
+- [x] `tci_w250.csv` computed and saved (`results/tci_robustness/tci_w250.csv`)
+- [x] EMFI recomputed for all windows W=60/100/150/200/250 (`results/tci_robustness/emfi_variants.csv`)
+- [x] State LP rerun for all window variants — θ positive across all (0.68–0.96)
+- [x] Rolling eigenvalue (λ₁/N) and network density computed (`results/tci_robustness/network_metrics.csv`)
+- [x] Sensitivity table W=60/100/150/200/250: β_k0=0.15–0.21, θ_k0=0.68–0.96, ratio 4.8–9.9× (all positive)
+- [x] `test_tci_robustness.py` test suite, 29/29 passing
+- [x] Section 3.2 updated: overparameterization response + W=250 result + network metrics
+- [x] Section 7 robustness paragraph updated: full W sensitivity range reported
+- [x] Appendix E: new `tab:tci_window_sensitivity` added with 5-window results
+- [x] LaTeX compiles cleanly: 29 pages, 0 errors, 0 undefined references
+- [x] Git commit: "R3: TCI strengthened — W=250 alternative, simpler network metrics"
+
+**Key results:**
+- W=250 TCI (VAR(1)): mean=71.1% vs W=100 mean=70.5% — nearly identical dynamics
+- β_k0 stable across windows (CV=14%): ranges 0.15 (W=60) to 0.21 (W=150)
+- θ_k0 positive and substantial across all windows: 0.68 (W=250) to 0.96 (W=60)
+- Amplification ratios: 4.8× to 9.9× — state dependence robust to window choice
+- Network metrics (λ₁, density) spike at COVID/Ukraine confirming VAR not over-fit
 
 ---
 
@@ -701,29 +712,4 @@ GFJ increasingly requires data and code statements. Add to the paper:
 |---------|-------|--------|
 | 8.1 Exclude COVID as treatment event | R2 | ⬜ |
 | 8.2 Block randomization inference | R5.3 | ⬜ |
-| 8.3 Formal p-values for θ_k | R5 | ⬜ |
-| 8.4 Simpler network metrics alongside TCI | R3 | ⬜ |
-| 8.5 Predictive event classification | R6 | ⬜ |
-
-### From Review1.pdf Section 9 (Internal inconsistencies):
-
-| Inconsistency | Phase | Status |
-|---------------|-------|--------|
-| Hamas classification: abstract vs Section 7 | R0.2 | ⬜ |
-| EMFI significance: Section 6 (p=0.174) vs Conclusion | R0.3 | ⬜ |
-| Shock count: 278 / 163 / 154 | R0.4 | ⬜ |
-| Country sample mismatch | R0.1 | ⬜ |
-| Shock construction description (CAMEO vs GDELT) | R0.6 | ⬜ |
-| References: replace all [?] | R1.1 | ⬜ |
-| Appendices: currently empty | R1.3 | ⬜ |
-| Figure 6: too dense | R7.1 | ⬜ |
-
-### From Review1.pdf Section 12 (Pre-submission requirements):
-
-| Requirement | Phase | Status |
-|-------------|-------|--------|
-| Fix country-sample consistency | R0.1 | ⬜ |
-| Remove COVID as geopolitical treatment event | R2 | ⬜ |
-| Resolve Hamas contradiction | R0.2 | ⬜ |
-| Correct significance overclaim | R0.3 | ⬜ |
-| Add formal inference for state-depend
+| 8.3 Formal p-values for θ_k |
