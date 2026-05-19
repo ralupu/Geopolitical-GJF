@@ -62,10 +62,12 @@ stress states without reference to geopolitical events.
 Local projections on 154 detected geopolitical shock days yield positive but
 statistically imprecise average responses: 63\% of shocks arrive when markets
 are calm and produce negligible fragility effects.
-State-dependent projections reveal that shocks striking already-fragile
-markets are an order of magnitude more destabilising---EMFI amplification
-$\hat\theta_{k=0} = 1.44$ (10.4$\times$ the calm-market baseline), TCI
-amplification $\hat\theta_{k=0} = 2.70$ ($10.0\times$).
+State-dependent projections reveal economically large amplification in
+already-fragile markets. TCI amplification is precisely estimated
+($\hat\theta_{k=0} = 2.70$, $p = 0.090$; total effect at
+$P_{\mathrm{stress}} = 0.9$ of 2.69 units vs.\ 0.09 in calm conditions);
+EMFI amplification is economically large but statistically imprecise
+($\hat\theta_{k=0} = 1.44$, $p = 0.279$; 1.43 units vs.\ 0.14 in calm states).
 A predictive logit model estimated on pre-shock market conditions achieves
 a leave-one-out AUC of 0.691: a one-standard-deviation rise in pre-shock
 EMFI increases the odds of a systemic shock outcome by a factor of 6.3.
@@ -127,9 +129,13 @@ transmission. Unconditional local projections yield positive but imprecise
 average responses---the expected result when 63\% of shocks strike calm
 markets that produce negligible fragility effects. Smooth-transition local
 projections, conditioning on the lagged HMM stress probability, reveal that
-shocks in already-fragile markets are an order of magnitude more
-destabilising: EMFI amplification 10.4$\times$, TCI amplification
-10.0$\times$ at $P_{\mathrm{stress},t-1} = 0.9$.
+shocks in already-fragile markets generate substantially larger fragility
+responses. Under near-systemic conditions ($P_{\mathrm{stress},t-1} = 0.9$),
+the TCI total effect is 2.69 percentage points vs.\ 0.09 in calm markets
+($\hat\theta_{k=0} = 2.70$, $p = 0.090$); the EMFI total effect is
+1.43 standard deviations vs.\ 0.14 ($\hat\theta_{k=0} = 1.44$, $p = 0.279$).
+Amplification ratios of approximately 10$\times$ obtain for both outcomes,
+though we caution that ratios are sensitive to the small calm-market baseline.
 
 \textbf{Third}, we develop a predictive taxonomy of geopolitical shock
 outcomes. A binary logit estimated purely on pre-shock market conditions
@@ -159,13 +165,17 @@ conditions: the large responses in fragile states are averaged with
 near-zero responses in the absorbed majority.
 
 \emph{Second}, state-dependent projections reveal that the shock-fragility
-relationship is highly nonlinear. When pre-shock stress probability is
-$P_{\mathrm{stress},t-1} = 0.9$, the EMFI response is 10.4 times the
-calm-market baseline ($\hat\theta_{k=0} = 1.44$); TCI amplification is
-10.0$\times$ ($\hat\theta_{k=0} = 2.70$). The TCI amplification coefficient
-is statistically significant at the 10\% level ($p = 0.090$), with a
-block-bootstrap 95\% CI that excludes zero. The amplification is robust
-across 12 alternative specifications.
+relationship is highly nonlinear. Under near-systemic pre-existing fragility
+($P_{\mathrm{stress},t-1} = 0.9$), a geopolitical shock raises TCI by
+2.69 percentage points (SE~=~1.59) compared with 0.09 in calm conditions
+($\hat\theta_{k=0} = 2.70$, $p = 0.090$; block-bootstrap 95\% CI excludes
+zero). For EMFI, the near-systemic effect is 1.43 standard deviations (SE~=~1.27)
+versus 0.14 in calm conditions ($\hat\theta_{k=0} = 1.44$, $p = 0.279$)---
+economically large but statistically imprecise. These level differences
+correspond to amplification ratios of approximately 10$\times$ for both
+outcomes; we caution that such ratios are sensitive to the small
+calm-market baseline. The TCI amplification is robust across 12 alternative
+specifications.
 
 \emph{Third}, the predictive taxonomy confirms that the systemic/absorbed
 distinction reflects pre-shock market conditions, not post-hoc
@@ -850,12 +860,15 @@ AvgCorr60          & 0.001 & $-0.012$ & 0.010 & 0.211 & $-0.010$ & --- \\
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{Fig_StateLPSmooth_Combined}
-  \caption{Smooth-transition local projection impulse responses for all five
-    outcomes (COVID-zeroed baseline). Each panel plots three IRF lines
-    evaluated at $P_{\mathrm{stress}} \in \{0,\,0.5,\,0.9\}$ with 95\%
+  \caption{Smooth-transition local projection impulse responses for three
+    primary outcomes (COVID-zeroed primary specification;
+    $N = 138$ geopolitical shock observations).
+    Each panel plots three IRF lines evaluated at
+    $P_{\mathrm{stress}} \in \{0,\,0.5,\,0.9\}$ with 95\%
     delta-method confidence bands (shaded).
-    Green: calm markets ($p{=}0$); orange: elevated stress ($p{=}0.5$);
+    Blue dashed: calm markets ($p{=}0.0$); orange: elevated stress ($p{=}0.5$);
     red: near-systemic stress ($p{=}0.9$).
+    $P_{\mathrm{stress}}$ and AvgCorr60 panels reported in Appendix~D.
     Newey--West HAC, bandwidth $2(k+1)$.}
   \label{fig:state_lp_combined}
 \end{figure}
@@ -864,8 +877,12 @@ The amplification pattern is consistent across the four volatility and
 connectedness outcomes (Figure~\ref{fig:state_lp_combined},
 Table~\ref{tab:theta_k0}).
 When a geopolitical shock strikes markets already near a systemic-stress
-episode ($p = 0.9$), the EMFI response is 10.4 times larger than the
-calm-market baseline, and the TCI response is 10.0 times larger.
+episode ($P_{\mathrm{stress}} = 0.9$), the EMFI total effect is 1.43
+standard deviations compared with 0.14 in calm conditions, and the TCI
+total effect is 2.69 percentage points compared with 0.09 in calm
+conditions. These level differences correspond to amplification ratios
+of approximately 10$\times$ for both outcomes, though we caution that
+ratios are sensitive to the small calm-market baseline.
 TailVolBreadth amplifies by a factor of 3.3, and the HMM
 systemic-stress probability by a similar order.
 In each case, the amplification coefficient $\hat\theta_{k=0}$ is
@@ -884,9 +901,9 @@ Block-bootstrap 95\% confidence intervals (B\,=\,1000, block length~20)
 are consistent with the analytic intervals: the EMFI bootstrap CI
 is $[-0.95,\;4.73]$ and the TCI bootstrap CI is $[0.08,\;7.65]$,
 with the latter excluding zero and reinforcing the 10\%-level result.
-The economic interpretation---that shocks in high-stress states are
-an order of magnitude more destabilising---is stable and robust across
-all specification variants (Section~\ref{sec:robustness}).
+The economic interpretation---that shocks in high-stress states generate
+substantially larger market fragility responses---is stable and robust
+across all specification variants (Section~\ref{sec:robustness}).
 
 The sole exception is AvgCorr60, for which $\hat\theta_0 \approx -0.012$
 is negligibly small and sign-unstable across horizons. This is an
@@ -1213,9 +1230,12 @@ of the transmission mechanism and is less sensitive to any single episode.
 We replace $S_t$ with the future shock $S_{t+30}$ (the shock realised 30 trading days
 after date $t$). A correctly identified LP should show no significant response of
 $Y_{t+k}$ to future shocks. The placebo LP yields $\hat\beta_{k=0} = -0.083$,
-which is negative and close to zero. This confirms that the positive baseline estimate
-reflects a genuine causal response, not spurious correlation driven by overlapping
-windows or persistent trends.
+which is negative and close to zero. This supports a temporal ordering interpretation: the market fragility
+response follows the shock rather than preceding it, reducing concerns
+about spurious correlation or persistent trends. We do not claim a clean
+causal identification; the shock series may be correlated with concurrent
+global factors (energy prices, monetary policy cycles, global risk
+sentiment) that also affect European market fragility.
 
 \subsection{Alternative shock aggregations}
 \label{sec:rob_shock}
@@ -1245,20 +1265,20 @@ amplification mechanism beyond what AvgCorr60 alone can capture, justifying TCI'
 inclusion in the composite.
 
 \textit{AcuteEMFI (vol only):} constructing the composite from VolStress and
-TailVolBreadth alone yields $\hat\beta_{k=0} = 0.535$ and $\hat\theta_{k=0} = 0.724$.
-The amplification coefficient is 61\% of the baseline, confirming that the co-movement
-cluster (AvgCorr60 and TCI) accounts for a substantive portion of the state-dependence.
-Both volatility and connectedness channels are necessary to capture the full amplification.
+TailVolBreadth alone yields $\hat\theta_{k=0} = 0.315$ (COVID-zeroed),
+22\% of the baseline amplification. This confirms that the co-movement
+cluster (AvgCorr60 and TCI) accounts for the majority of the state-dependence:
+both volatility and connectedness channels are necessary to capture the full amplification.
 
 \textit{Equal-weight composite:} replacing PCA with a simple mean of the four
-standardised indicators yields $\hat\beta_{k=0} = 0.232$ and $\hat\theta_{k=0} = 0.939$.
-Results remain qualitatively consistent with the baseline.
+standardised indicators yields $\hat\theta_{k=0} = 0.736$ (COVID-zeroed),
+51\% of the baseline amplification. Results remain qualitatively consistent with the baseline.
 
 \textit{Alternative TCI windows:} substituting TCI computed over rolling windows of
 $W \in \{60, 150, 200, 250\}$ trading days in place of the primary $W=100$
 specification yields panel LP $\hat\beta_{k=0}$ estimates ranging from 0.15 to 0.21
-and state LP $\hat\theta_{k=0}$ estimates ranging from 0.68 to 0.96 --- all positive
-and economically meaningful (see Appendix~\ref{app:robustness},
+and state LP $\hat\theta_{k=0}$ estimates of $1.56$ ($W=60$) and $1.41$ ($W=150$)
+under the COVID-zeroed primary specification --- both positive and economically meaningful (see Appendix~\ref{app:robustness},
 Table~\ref{tab:tci_window_sensitivity}).
 The wider-window specifications ($W=200$ and $W=250$) address the overparameterisation
 concern directly: at $W=250$ with $p=1$, the observation-to-parameter ratio improves
@@ -1272,9 +1292,10 @@ amplification coefficient $\hat\theta_{k=0}$ across all EMFI-construction varian
 \centering
 \includegraphics[width=0.85\linewidth]{Fig_Robustness_StateLPTheta}
 \caption{Amplification coefficient $\hat\theta_{k=0}$ (state-dependent LP) across
-alternative EMFI constructions. Baseline (4-component PCA) is shown in blue.
-All variants except the HF$_{p90}$ binary threshold yield positive and substantial
-amplification, confirming the robustness of the state-dependence finding.}
+alternative EMFI constructions, COVID-zeroed primary specification
+($N = 138$ geopolitical shock observations). Baseline (4-component PCA, $\hat\theta = 1.44$)
+shown in blue. All variants yield positive amplification, confirming the robustness
+of the state-dependence finding.}
 \label{fig:rob_theta}
 \end{figure}
 
@@ -1308,8 +1329,10 @@ sample periods. This is the more reliable finding: the mechanism by which geopol
 shocks interact with pre-existing fragility states is a structural feature of the data,
 not an artefact of a single episode.
 
-Third, the placebo test is clean, confirming that the LP estimates reflect a causal
-shock--response pattern and not a spurious correlation.
+Third, the placebo test is clean, supporting a temporal ordering
+interpretation: the market fragility response follows the shock rather
+than preceding it, consistent with the LP design but not implying a
+clean causal identification.
 
 \begin{table}[htbp]
 \centering
@@ -1388,13 +1411,15 @@ indices show no measurable deterioration---consistent with the descriptive
 finding that 63\% of shocks arrive during the HMM calm state.
 
 \textbf{State dependence is the central mechanism.} Shocks that strike
-already-fragile markets produce responses an order of magnitude larger than those
+already-fragile markets produce substantially larger responses than those
 that arrive in calm conditions. The smooth-transition local projection, using
 the lagged HMM stress probability as a continuous conditioning variable,
-estimates $\hat\theta_{k=0} = 1.44$ for EMFI (amplification 10.4$\times$) and
-$\hat\theta_{k=0} = 2.70$ for TCI (10.0$\times$) at $k=0$.
-The TCI amplification coefficient is statistically significant at the 10\% level
-($p = 0.090$), with a block-bootstrap 95\% CI that excludes zero.
+estimates TCI total effects of 2.69 percentage points vs.\ 0.09 in calm
+markets ($\hat\theta_{k=0} = 2.70$, $p = 0.090$; block-bootstrap 95\% CI
+excludes zero) and EMFI total effects of 1.43 vs.\ 0.14 standard
+deviations ($\hat\theta_{k=0} = 1.44$, $p = 0.279$; economically large
+but statistically imprecise). These level differences correspond to
+amplification ratios of approximately 10$\times$ for both outcomes.
 The amplification is robust across alternative EMFI constructions, alternative
 TCI bandwidths, and COVID exclusion. It survives because the identification draws
 on multiple stress episodes---2020 COVID, 2022 Ukraine conflict and European
@@ -1680,7 +1705,10 @@ Table~\ref{tab:app_lp_components} reports $\hat\beta_k$ for horizons $k = 0, 1, 
 \begin{table}[ht]
 \centering
 \small
-\caption{LP impulse responses by outcome ($\hat\beta_k$; Newey--West SEs in parentheses)}
+\caption{LP impulse responses by outcome, full-sample specification ($\hat\beta_k$; Newey--West SEs in parentheses).
+  These are full-sample estimates (COVID shock days included; $N = 2{,}179$).
+  The primary COVID-zeroed estimates are reported in the main text; see Table~\ref{tab:theta_k0}
+  for state-LP calm-market effects and Section~\ref{sec:lp} for unconditional EMFI LP ($\hat\beta_0 = 0.245$).}
 \label{tab:app_lp_components}
 \begin{tabular}{lccccc}
 \hline\hline
@@ -1699,7 +1727,7 @@ $k=10$ & 0.098 & 0.920 & 0.051 & 0.029 & 0.002 \\
 $k=15$ & 0.178 & 0.937 & $-0.020$ & $-0.051$* & 0.005 \\
        & (0.181) & (0.682) & (0.425) & (0.029) & (0.011) \\
 \hline\hline
-\multicolumn{6}{l}{\footnotesize $N = 2{,}179$. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.}
+\multicolumn{6}{l}{\footnotesize Full-sample ($N = 2{,}179$; COVID shock days included). * $p<0.10$, ** $p<0.05$, *** $p<0.01$.}
 \end{tabular}
 \end{table}
 
@@ -1717,13 +1745,15 @@ Table~\ref{tab:app_robustness} summarises on-impact ($k=0$) and short-run ($k=1$
 \begin{table}[ht]
 \centering
 \small
-\caption{Robustness summary: EMFI LP coefficients ($\hat\beta_k$; Newey--West SEs in parentheses)}
+\caption{Robustness summary: EMFI LP coefficients ($\hat\beta_k$; Newey--West SEs in parentheses).
+  R00 is the full-sample baseline (COVID shock days included); all other rows use
+  the COVID-zeroed shock series (primary specification, $\hat\beta_0 = 0.245$).}
 \label{tab:app_robustness}
 \begin{tabular}{llcccc}
 \hline\hline
 ID & Specification & $k=0$ & $k=1$ & $k=5$ & $k=10$ \\
 \hline
-R00 & Baseline
+R00 & Full-sample (COVID shock days incl.)
     & 0.458 (0.337) & 0.431 (0.326) & 0.156 (0.176) & 0.098 (0.101) \\
 R01 & COVID exclusion (Mar--Dec 2020)
     & 0.370 (0.489) & 0.536 (0.408) & 0.150 (0.262) & 0.112 (0.167) \\
@@ -1750,7 +1780,8 @@ R12 & TCI window $w=150$
 \end{tabular}
 \end{table}
 
-\noindent Across all specifications the on-impact coefficient is positive, ranging from $-0.083$ (placebo) to $0.535$ (R04, R12). The placebo check (R08) yields $\hat\beta_0 = -0.083$ ($p > 0.77$), confirming no reverse causality. The Ukraine exclusion (R02) attenuates the estimate to 0.083, confirming the Russia--Ukraine invasion as the primary driver of the largest measured EMFI responses; this reflects genuine heterogeneous treatment intensity rather than upward bias. All alternative EMFI constructions (R03--R05, R11--R12) yield positive on-impact estimates similar in magnitude to the primary specification (COVID-excluded baseline). The full-sample specification including COVID shock days (R00 above uses the COVID-excluded baseline; Table~\ref{tab:app_robustness} row R00 labelled ``Baseline'' refers to the primary COVID-excluded specification) yields $\hat\beta_0 = 0.458$ as a sensitivity comparison.
+\noindent Across all specifications the on-impact coefficient is positive, ranging from $-0.083$ (placebo) to $0.535$ (R04, R12). The placebo check (R08) yields $\hat\beta_0 = -0.083$ ($p > 0.77$), confirming no reverse causality. The Ukraine exclusion (R02) attenuates the estimate to 0.083, confirming the Russia--Ukraine invasion as the primary driver of the largest measured EMFI responses; this reflects genuine heterogeneous treatment intensity rather than upward bias. All alternative EMFI constructions (R03--R05, R11--R12) yield positive on-impact estimates similar in magnitude to the primary specification (COVID-excluded baseline). Row R00 (full-sample, COVID shock days included) yields $\hat\beta_0 = 0.458$;
+the primary COVID-zeroed specification (Section~\ref{sec:lp}) yields $\hat\beta_0 = 0.245$.
 
 \bigskip
 
