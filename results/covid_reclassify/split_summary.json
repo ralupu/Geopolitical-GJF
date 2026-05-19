@@ -1,0 +1,29 @@
+{
+  "run_utc": "2026-05-19T11:00:10.038500+00:00",
+  "total_events": 154,
+  "geopolitical": {
+    "n": 138,
+    "systemic": 34,
+    "localized": 32,
+    "absorbed": 72,
+    "date_range": [
+      "2017-05-23",
+      "2025-10-13"
+    ]
+  },
+  "covid_benchmark": {
+    "n": 16,
+    "systemic": 8,
+    "localized": 2,
+    "absorbed": 6,
+    "date_range": [
+      "2020-01-01",
+      "2020-11-18"
+    ]
+  },
+  "outputs": [
+    "event_taxonomy_geopolitical.csv",
+    "event_taxonomy_covid_benchmark.csv",
+    "event_taxonomy_nocovid.csv"
+  ]
+}

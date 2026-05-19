@@ -1,0 +1,52 @@
+{
+  "run_utc": "2026-05-19T07:29:25.791707+00:00",
+  "spec": "smooth_transition_lp_covid_zeroed",
+  "shock": "max_shock_nocovid",
+  "horizons": [
+    -5,
+    -4,
+    -3,
+    -2,
+    -1,
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "B_reps": 1000,
+  "block_len": 20,
+  "outcomes": [
+    "EMFI",
+    "tci_w100",
+    "TailVolBreadth",
+    "P_stress",
+    "AvgCorr60"
+  ],
+  "covid_excl": "2020-03-01 to 2020-12-31",
+  "emfi_k0": {
+    "beta": 0.13792931724908505,
+    "theta": 1.4392115081063306,
+    "theta_se": 1.3298621174779108,
+    "theta_pval": 0.2792728132271252,
+    "irf_p9": 1.4332196745447825,
+    "se_irf_p9": 1.4006877291696989,
+    "theta_boot_ci95lo": -0.9538243967424203,
+    "theta_boot_ci95hi": 4.731089303158796
+  },
+  "all_theta_positive": false,
+  "emfi_theta_sig05": false,
+  "n_sig05_outcomes": 0,
+  "n_sig10_outcomes": 1
+}

@@ -1,0 +1,44 @@
+{
+  "script": "SP12 run_hmm_robustness.py",
+  "run_at": "2026-05-19T06:40:39.010734+00:00",
+  "corr_filtered_smooth": 0.994,
+  "variants_run": [
+    "2-state",
+    "3-state-diag",
+    "covid-excl",
+    "pre-2020"
+  ],
+  "kappa_summary": {
+    "baseline-filtered": {
+      "n_states": 3,
+      "corr_P_stress": 0.994,
+      "kappa": null,
+      "pct_high_stress": 0.0991
+    },
+    "2-state": {
+      "n_states": 2,
+      "corr_P_stress": 0.7329,
+      "kappa": 0.6292,
+      "pct_high_stress": 0.1946
+    },
+    "3-state-diag": {
+      "n_states": 3,
+      "corr_P_stress": 0.9584,
+      "kappa": 0.9708,
+      "pct_high_stress": 0.1143
+    },
+    "covid-excl": {
+      "n_states": 3,
+      "corr_P_stress": 0.9,
+      "kappa": 0.9391,
+      "pct_high_stress": 0.1257
+    },
+    "pre-2020": {
+      "n_states": 3,
+      "corr_P_stress": 0.8089,
+      "kappa": 0.879,
+      "pct_high_stress": 0.1602
+    }
+  },
+  "elapsed_s": 6.8
+}

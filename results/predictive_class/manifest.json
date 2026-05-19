@@ -1,0 +1,44 @@
+{
+  "run_utc": "2026-05-19T11:00:32.106267+00:00",
+  "n_obs": 138,
+  "n_systemic": 34,
+  "n_non_systemic": 104,
+  "features": [
+    "EMFI_lag",
+    "TCI_lag",
+    "P_stress_lag",
+    "max_shock",
+    "n_countries"
+  ],
+  "loocv_auc_logit": 0.6906108597285068,
+  "loocv_auc_probit": 0.6903280542986426,
+  "brier_score": 0.16924350203063684,
+  "optimal_threshold": 0.23220731082045215,
+  "confusion_matrix": {
+    "threshold": 0.23220731082045215,
+    "sensitivity": 0.6764705882352942,
+    "specificity": 0.6923076923076923,
+    "precision": 0.41818181818181815,
+    "accuracy": 0.6884057971014492,
+    "youden_j": 0.36877828054298645,
+    "tp": 23,
+    "tn": 72,
+    "fp": 32,
+    "fn": 11
+  },
+  "logit_pstress_coef": -0.3801419641198413,
+  "logit_pstress_pval": 0.26566111540401194,
+  "logit_pseudo_r2": 0.1632134382435324,
+  "spotlight": {
+    "Ukraine invasion (2022-02-24)": {
+      "date": "2022-02-24",
+      "category": "Systemic",
+      "prob": 0.3586
+    },
+    "Hamas attack (2023-10-09)": {
+      "date": "2023-10-09",
+      "category": "Systemic",
+      "prob": 0.4931
+    }
+  }
+}

@@ -1,4 +1,4 @@
-﻿% ============================================================
+% ============================================================
 % Paper_GFJ ΓÇö When Geopolitical Shocks Become Systemic
 % Target: Global Finance Journal
 % ============================================================
@@ -67,10 +67,10 @@ markets are an order of magnitude more destabilising---EMFI amplification
 $\hat\theta_{k=0} = 1.44$ (10.4$\times$ the calm-market baseline), TCI
 amplification $\hat\theta_{k=0} = 2.70$ ($10.0\times$).
 A predictive logit model estimated on pre-shock market conditions achieves
-a leave-one-out AUC of 0.693: a one-standard-deviation rise in pre-shock
-EMFI increases the odds of a systemic shock outcome by a factor of 6.8.
-The event taxonomy classifies 42 of 154 shocks as Systemic (27.3\%),
-concentrated in the COVID-19 panic of 2020 and the 2022 Ukraine cluster.
+a leave-one-out AUC of 0.691: a one-standard-deviation rise in pre-shock
+EMFI increases the odds of a systemic shock outcome by a factor of 6.3.
+The event taxonomy classifies 34 of 138 geopolitical shocks as Systemic (24.6\%),
+concentrated in the Ukraine conflict cluster of 2022 and the European equity correction of August 2024.
 The central finding is that the financial consequences of geopolitical events
 depend not primarily on the shocks themselves but on the fragility of the
 markets they enter.
@@ -133,8 +133,8 @@ destabilising: EMFI amplification 10.4$\times$, TCI amplification
 
 \textbf{Third}, we develop a predictive taxonomy of geopolitical shock
 outcomes. A binary logit estimated purely on pre-shock market conditions
-achieves a leave-one-out AUC of 0.693, with pre-shock EMFI as the
-dominant predictor (odds ratio 6.8). This establishes that the
+achieves a leave-one-out AUC of 0.691, with pre-shock EMFI as the
+dominant predictor (odds ratio 6.3). This establishes that the
 systemic/absorbed distinction is not post-hoc labelling but reflects a
 genuine predictable difference in market states at the time of the shock.
 
@@ -143,7 +143,7 @@ projections (LPs) to trace the dynamic response of each fragility outcome to a
 geopolitical shock.
 We further test for state dependence: do shocks produce larger fragility
 responses when they strike already-fragile markets?
-Finally, we classify the 154 detected geopolitical shock events into an
+Finally, we classify the 138 geopolitical shock events into an
 \emph{absorbed / localised / systemic / market-only} taxonomy based on the
 joint behaviour of the EMFI and $P_{\text{stress},t}$ in the days following
 each event.
@@ -169,10 +169,10 @@ across 12 alternative specifications.
 
 \emph{Third}, the predictive taxonomy confirms that the systemic/absorbed
 distinction reflects pre-shock market conditions, not post-hoc
-classification. The logit model's leave-one-out AUC of 0.693 establishes
+classification. The logit model's leave-one-out AUC of 0.691 establishes
 that pre-shock fragility carries genuine out-of-sample predictive content:
 a one-SD rise in $\mathrm{EMFI}_{t-1}$ increases the odds of a systemic
-outcome by a factor of 6.8. The Hamas--Israel attack of October 2023 is
+outcome by a factor of 6.3. The Hamas--Israel attack of October 2023 is
 classified Systemic via a one-day delayed stress response (market-implied
 probability reaches 1.0 the trading day after the attack), illustrating that
 the post-event evaluation window matters for accurate classification.
@@ -255,49 +255,45 @@ Our equity return panel covers 19 European markets over the period
   on the first day on which all 19 return series are available.}
 Daily log returns are constructed from total-return equity market indices
 sourced from LSEG Workspace.
-The 19 countries span all major Western and Central European markets and are
-grouped into two clusters based on economic and geographic proximity.\footnote{
-  The cluster assignments follow \citet{lupu2026bir} and are
-  not re-estimated here.}
-Table~\ref{tab:data_summary} provides the full list of countries and their
-cluster assignments.
+The 19 countries span all major Western and Central European markets.
+Table~\ref{tab:data_summary} lists all countries and their benchmark equity indices.
 
 \begin{table}[ht]
 \centering
-\caption{Equity market panel: country coverage and cluster assignment}
+\caption{Equity market panel: country coverage}
 \label{tab:data_summary}
 \begin{threeparttable}
 \small
-\begin{tabular}{llc}
+\begin{tabular}{ll}
 \toprule
-Country & Index & Cluster \\
+Country & Benchmark index \\
 \midrule
-Austria      & ATX          & 1 \\
-Belgium      & BEL 20       & 1 \\
-Bulgaria       & SOFIX        & 2 \\
-Croatia      & CROBEX       & 2 \\
-Finland      & OMXHPI       & 1 \\
-France       & CAC 40       & 1 \\
-Germany      & DAX          & 1 \\
-Greece       & ATHEX        & 2 \\
-Hungary      & BUX          & 2 \\
-Ireland      & ISEQ Overall & 1 \\
-Italy        & FTSE MIB     & 1 \\
-Netherlands  & AEX          & 1 \\
-Norway       & OBX          & 1 \\
-Poland       & WIG20        & 2 \\
-Portugal     & PSI 20       & 1 \\
-Romania      & BET          & 2 \\
-Spain        & IBEX 35      & 1 \\
-Sweden       & OMXS30       & 1 \\
-United Kingdom & FTSE 100   & 1 \\
+Austria        & ATX               \\
+Belgium        & BEL 20            \\
+Bulgaria       & SOFIX             \\
+Croatia        & CROBEX            \\
+Finland        & OMX Helsinki      \\
+France         & CAC 40            \\
+Germany        & DAX               \\
+Greece         & ATHEX Composite   \\
+Hungary        & BUX               \\
+Ireland        & ISEQ Overall      \\
+Italy          & FTSE MIB          \\
+Netherlands    & AEX               \\
+Norway         & OBX               \\
+Poland         & WIG20             \\
+Portugal       & PSI 20            \\
+Romania        & BET               \\
+Spain          & IBEX 35           \\
+Sweden         & OMX Stockholm 30  \\
+United Kingdom & FTSE 100          \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
 \small
-\item Cluster 1 = Western/Northern Europe; Cluster 2 = Central/Eastern and South-Eastern Europe.
-      Daily log returns from LSEG Workspace.
+\item Daily log returns sourced from LSEG Workspace.
       Study period: 2017-01-02 to 2025-10-15 (2,278 trading days).
+      Cluster assignments (3-group geographic scheme) are reported in Appendix Table~\ref{tab:app_countries}.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -997,14 +993,14 @@ set of robustness checks is presented in Section~\ref{sec:robustness}.
 \subsection{Geopolitical event taxonomy}
 \label{sec:taxonomy}
 
-We classify each of the 154 declustered geopolitical shock events according to the joint behavior of the EMFI and the HMM-implied systemic stress probability in a five-day post-event window $[t, t+5]$.
+We classify each of the 138 geopolitical shock events according to the joint behavior of the EMFI and the HMM-implied systemic stress probability in a five-day post-event window $[t, t+5]$.
 An event is classified as \textbf{Systemic} if both conditions hold: the EMFI attains its 75th percentile ($\text{EMFI}_{Q_{75}} = 0.548$) within the post-event window, and the model-implied stress probability peaks above $0.50$.
 An event that raises the EMFI above its pre-event level but does not breach the stress-probability threshold is classified as \textbf{Localized}.
 All remaining events---where the EMFI fails to rise or declines---are classified as \textbf{Absorbed}.
 We additionally identify \textbf{market-only stress} episodes: trading days with $P_{\text{stress},t} > 0.50$ that do not coincide with any identified shock within a $\pm 3$ trading-day window; these capture endogenous systemic stress that is not triggered by geopolitical news.
 
-Table~\ref{tab:taxonomy_summary} reports the category distribution across all 154 events. The majority of shocks (50.6\%) are absorbed without measurable fragility response, confirming the LP baseline finding that geopolitical news routinely fails to disturb market-based systemic risk indicators in calm states. A further 22.1\% are localized---EMFI rises but systemic stress probability remains subdued.
-The remaining 27.3\% (42 events) qualify as Systemic; these are concentrated in two clusters: the COVID-19 panic of 2020 and the Ukraine conflict onset and associated European energy crisis of 2022.
+Table~\ref{tab:taxonomy_summary} reports the category distribution across the 138 geopolitical shock events. The majority of shocks (52.2\%) are absorbed without measurable fragility response, confirming the LP baseline finding that geopolitical news routinely fails to disturb market-based systemic risk indicators in calm states. A further 23.2\% are localized---EMFI rises but systemic stress probability remains subdued.
+The remaining 24.6\% (34 events) qualify as Systemic; these are concentrated in the Ukraine conflict cluster of 2022 and other European equity stress episodes spanning 2017--2025.
 
 \begin{table}[htbp]
 \centering
@@ -1014,11 +1010,11 @@ The remaining 27.3\% (42 events) qualify as Systemic; these are concentrated in 
 \hline\hline
 Category & N & Share (\%) & Mean $\bar{P}_{\text{stress}}^{\text{peak}}$ & Mean $\Delta\overline{\text{EMFI}}$ & Mean TCI$^{\text{post}}$ \\
 \hline
-Systemic  & 42 & 27.3 & 0.990 & $+$0.643 & 77.6 \\
-Localized & 34 & 22.1 & 0.162 & $+$0.213 & 67.4 \\
-Absorbed  & 78 & 50.6 & 0.046 & $-$0.347 & 68.6 \\
+Systemic  & 34 & 24.6 & 0.988 & $+$0.473 & 75.1 \\
+Localized & 32 & 23.2 & 0.168 & $+$0.213 & 67.0 \\
+Absorbed  & 72 & 52.2 & 0.049 & $-$0.340 & 67.7 \\
 \hline
-Total     & 154 & 100.0 & & & \\
+Total     & 138 & 100.0 & & & \\
 \hline\hline
 \end{tabular}
 \begin{minipage}{\linewidth}
@@ -1034,7 +1030,7 @@ The clean separation in stress-probability characteristics across categories con
 Systemic events exhibit near-unity mean peak stress probability (0.990), contrasting with 0.162 for Localized and 0.046 for Absorbed events.
 The EMFI delta is positive for Systemic ($+$0.643) and Localized ($+$0.213) events, and negative for Absorbed events ($-$0.347), consistent with the interpretation that the latter category represents geopolitical news that does not materially alter the fragility landscape.
 
-The three most severe Systemic events, ranked by post-event EMFI, are the COVID-19 market panic of March 2020 (emfi$_{\text{post}}^{\max} = 12.46$), the early Ukraine cluster of 2--3 March 2022 (7.54), and the Ukraine invasion onset of 24 February 2022 (7.32).
+The three most severe Systemic events in the geopolitical taxonomy, ranked by post-event EMFI, are the Ukraine conflict cluster of 2--3 March 2022 (emfi$_{\text{post}}^{\max} = 7.54$), the Ukraine invasion episode of 21--24 February 2022 (7.32), and the European equity correction of 5 August 2024 (4.48).
 The Hamas attack of 7 October 2023, which falls on a Sunday, maps to the nearest trading day of 9 October 2023. Although the stress probability on the shock day itself is 0.296 (below the 0.5 threshold), it peaks at 1.0 on the following trading day, placing the event in the Systemic category. This one-day delayed crystallisation of systemic stress illustrates the importance of evaluating the full post-event window rather than the contemporaneous response.
 
 Alongside identified shocks, we find 138 market-stress days ($P_{\text{stress},t} > 0.50$) with no geopolitical shock within a $\pm 3$ trading-day window.
@@ -1048,8 +1044,8 @@ Figure~\ref{fig:network_systemic} shows the equity return correlation network be
 \centering
 \includegraphics[width=\linewidth]{Fig_EventTimeline}
 \caption{Geopolitical shock events classified by category, overlaid on the EMFI series.
-Red markers indicate Systemic events ($N = 42$), blue Localized ($N = 34$), and grey Absorbed ($N = 78$).
-Systemic events are concentrated in the COVID-19 panic of 2020 and the Ukraine conflict cluster of 2022.
+Red markers indicate Systemic events ($N = 34$), blue Localized ($N = 32$), and grey Absorbed ($N = 72$).
+Systemic events are concentrated in the Ukraine conflict cluster of 2022 and other European equity stress episodes.
 The shaded HMM stress probability series ($P_{\text{stress},t}$) is plotted on the right axis.}
 \label{fig:event_timeline}
 \end{figure}
@@ -1079,9 +1075,9 @@ The shaded HMM stress probability series ($P_{\text{stress},t}$) is plotted on t
 Having shown that geopolitical shocks become systemic primarily when markets
 are already fragile, we now ask: can pre-shock market conditions \emph{predict}
 which shocks will become systemic?
-We estimate a binary logit model on the 154 shock-day observations, where the
-outcome is $\mathrm{Systemic}_i = 1$ (42 events) versus $\mathrm{Systemic}_i = 0$
-(112 Absorbed or Localized events):
+We estimate a binary logit model on the 138 geopolitical shock-day observations, where the
+outcome is $\mathrm{Systemic}_i = 1$ (34 events) versus $\mathrm{Systemic}_i = 0$
+(104 Absorbed or Localized events):
 \begin{equation}
 \Pr(\mathrm{Systemic}_i = 1) = \Lambda\!\left(\alpha
   + \beta_1\,\mathrm{EMFI}_{t-1}
@@ -1097,9 +1093,9 @@ any look-ahead bias. Coefficients are estimated on standardised predictors
 
 Table~\ref{tab:predictive_logit} reports the full-sample logit coefficients.
 The pre-shock composite fragility index $\mathrm{EMFI}_{t-1}$ is the only
-statistically significant predictor ($\hat\beta_1 = 1.92$, $p < 0.01$,
-$\mathrm{OR} = 6.82$): a one-standard-deviation increase in pre-shock EMFI
-is associated with a 6.8-fold increase in the odds of a systemic outcome.
+statistically significant predictor ($\hat\beta_1 = 1.85$, $p < 0.01$,
+$\mathrm{OR} = 6.33$): a one-standard-deviation increase in pre-shock EMFI
+is associated with a 6.3-fold increase in the odds of a systemic outcome.
 Shock intensity ($S_t$) and breadth are not individually significant after
 controlling for the fragility state, consistent with the LP finding that
 \emph{who} gets hit matters far more than \emph{how hard} the shock is.
@@ -1111,18 +1107,18 @@ controlling for the fragility state, consistent with the LP finding that
   Predictors are standardised (mean zero, unit variance);
   odds ratios (OR) are $e^{\hat\beta}$.
   Standard errors are maximum-likelihood asymptotic.
-  $N = 154$ shock events; McFadden pseudo-$R^2 = 0.164$.
+  $N = 138$ geopolitical shock events; McFadden pseudo-$R^2 = 0.163$.
   $^{***}$~$p < 0.01$.}
 \label{tab:predictive_logit}
 \begin{tabular}{lrrrr}
 \hline\hline
 Predictor & $\hat\beta$ & SE & $p$-value & OR \\
 \hline
-$\mathrm{EMFI}_{t-1}$           &  1.920$^{***}$ & 0.621 & 0.002 & 6.82 \\
-$\mathrm{TCI}_{t-1}$            & $-0.756$       & 0.487 & 0.120 & 0.47 \\
-$\hat{P}_{\mathrm{stress},t-1}$ & $-0.374$       & 0.297 & 0.207 & 0.69 \\
-$S_t$ (shock intensity)         & $-0.056$       & 0.241 & 0.815 & 0.95 \\
-Breadth ($N$ countries)         &  0.187         & 0.257 & 0.468 & 1.21 \\
+$\mathrm{EMFI}_{t-1}$           &  1.845$^{***}$ & 0.663 & 0.005 & 6.33 \\
+$\mathrm{TCI}_{t-1}$            & $-0.639$       & 0.503 & 0.204 & 0.53 \\
+$\hat{P}_{\mathrm{stress},t-1}$ & $-0.380$       & 0.342 & 0.266 & 0.68 \\
+$S_t$ (shock intensity)         & $-0.533$       & 0.383 & 0.164 & 0.59 \\
+Breadth ($N$ countries)         &  0.595         & 0.367 & 0.105 & 1.81 \\
 \hline\hline
 \end{tabular}
 \end{table}
@@ -1139,28 +1135,29 @@ aggregates all three components (correlation breadth, volatility tail risk,
 and connectedness) into one index.
 
 \textbf{Predictive performance.}
-Leave-one-out cross-validation (LOO-CV) yields an AUC of $0.693$ for the logit
-and $0.692$ for a probit robustness check, confirming stable moderate discriminating
+Leave-one-out cross-validation (LOO-CV) yields an AUC of $0.691$ for the logit
+and $0.690$ for a probit robustness check, confirming stable moderate discriminating
 power (Figure~\ref{fig:roc_predictive}).
-At the optimal Youden-$J$ threshold ($\hat\pi = 0.29$),
-the model achieves sensitivity of 57.1\% and specificity of 75.9\%,
-with an overall accuracy of 70.8\%.
-The Brier score (0.178) improves upon the na├»ve base-rate benchmark of 0.197
-($42/154 \times 112/154$).
+At the optimal Youden-$J$ threshold ($\hat\pi = 0.23$),
+the model achieves sensitivity of 67.6\% and specificity of 69.2\%,
+with an overall accuracy of 68.8\%.
+The Brier score (0.169) improves upon the na├»ve base-rate benchmark of 0.197
+($34/138 \times 104/138$).
 
-Applied to high-profile events, the model assigns a predicted probability of
-$0.68$ to the Ukraine invasion (24 February 2022; correctly classified Systemic),
-reflecting the elevated EMFI in February 2022.
-COVID-19 onset (24 February 2020) receives only $0.20$ despite being Systemic,
-because EMFI had not yet spiked on that date---the crash was still developing.
-This illustrates an important limitation: the model can only incorporate
-information that had already been impounded into market prices before the shock.
+Applied to high-profile events, the model assigns a predicted systemic probability of
+$0.36$ to the Ukraine invasion (24 February 2022; correctly classified Systemic),
+reflecting the elevated but not extreme EMFI in the weeks preceding the invasion.
+The Hamas--Israel attack (9 October 2023; correctly classified Systemic) receives a
+predicted probability of $0.49$, reflecting the elevated European equity fragility
+on that date. These in-sample probabilities are below 0.5, illustrating that the model
+correctly identifies the direction of risk elevation but is appropriately conservative
+given the inherent unpredictability of geopolitical events.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.65\linewidth]{Fig_ROC_Predictive}
 \caption{ROC curve for systemic event prediction (leave-one-out cross-validation).
-  Logit AUC $= 0.693$; probit AUC $= 0.692$.
+  Logit AUC $= 0.691$; probit AUC $= 0.690$.
   The dashed line is the random classifier.}
 \label{fig:roc_predictive}
 \end{figure}
@@ -1168,7 +1165,7 @@ information that had already been impounded into market prices before the shock.
 These results establish that the distinction between systemic and non-systemic
 geopolitical events is not arbitrary ex-post classification: pre-existing market
 fragility---measured before the shock lands---carries genuine predictive content.
-The finding that EMFI$_{t-1}$ has an odds ratio of 6.8 for systemic outcomes is
+The finding that EMFI$_{t-1}$ has an odds ratio of 6.3 for systemic outcomes is
 the predictive complement to the LP result that shocks in high-EMFI states have
 10-fold amplified effects.
 
@@ -1480,55 +1477,67 @@ distinguish the average effect of a shock from its state-conditioned amplificati
 
 \subsection*{A.1 Country sample and equity indices}
 
-Table~\ref{tab:app_countries} lists the 19 European equity markets included in the panel, together with their benchmark index, GFEVD-based cluster assignment, and the source of daily closing prices. All series were downloaded from Bloomberg and cross-validated against Refinitiv Eikon. Prices are total-return indices where available; otherwise price-return indices are used. Returns are computed as log differences of adjusted closing prices. The full panel spans 2 January 2017 to 15 October 2025, yielding 2{,}278 calendar days and 43{,}282 country--day observations after removing national holidays.
+Table~\ref{tab:app_countries} lists the 19 European equity markets included in the panel, together with their benchmark index and geographic cluster assignment. All daily closing price series are sourced from LSEG Workspace. Prices are total-return indices where available; otherwise price-return indices are used. Returns are computed as log differences of adjusted closing prices. The full panel spans 2 January 2017 to 15 October 2025, yielding 2{,}278 trading days and 43{,}282 country--day observations after removing 15 dates absent from the GDELT conflict index.
 
 \begin{table}[ht]
 \centering
 \small
-\caption{Country sample: equity indices and cluster assignments}
+\begin{threeparttable}
+\caption{Country sample: equity indices and geographic cluster assignments}
 \label{tab:app_countries}
-\begin{tabular}{llcc}
+\begin{tabular}{llc}
 \hline\hline
-Country & Benchmark index & Cluster & Source \\
+Country & Benchmark index & Cluster \\
 \hline
-Austria        & ATX               & 3 & Bloomberg \\
-Belgium        & BEL 20            & 1 & Bloomberg \\
-Bulgaria       & SOFIX             & 3 & Bloomberg \\
-Croatia        & CROBEX            & 3 & Bloomberg \\
-Finland        & OMX Helsinki      & 2 & Bloomberg \\
-France         & CAC 40            & 2 & Bloomberg \\
-Germany        & DAX               & 2 & Bloomberg \\
-Greece         & ATHEX Composite   & 3 & Bloomberg \\
-Hungary        & BUX               & 2 & Bloomberg \\
-Ireland        & ISEQ Overall      & 1 & Bloomberg \\
-Italy          & FTSE MIB          & 2 & Bloomberg \\
-Netherlands    & AEX               & 3 & Bloomberg \\
-Norway         & OBX               & 2 & Bloomberg \\
-Poland         & WIG20             & 2 & Bloomberg \\
-Portugal       & PSI 20            & 1 & Bloomberg \\
-Romania        & BET               & 1 & Bloomberg \\
-Spain          & IBEX 35           & 2 & Bloomberg \\
-Sweden         & OMX Stockholm 30  & 3 & Bloomberg \\
-United Kingdom & FTSE 100          & 2 & Bloomberg \\
+Austria        & ATX               & 3 \\
+Belgium        & BEL 20            & 1 \\
+Bulgaria       & SOFIX             & 3 \\
+Croatia        & CROBEX            & 3 \\
+Finland        & OMX Helsinki      & 2 \\
+France         & CAC 40            & 2 \\
+Germany        & DAX               & 2 \\
+Greece         & ATHEX Composite   & 3 \\
+Hungary        & BUX               & 2 \\
+Ireland        & ISEQ Overall      & 1 \\
+Italy          & FTSE MIB          & 2 \\
+Netherlands    & AEX               & 3 \\
+Norway         & OBX               & 2 \\
+Poland         & WIG20             & 2 \\
+Portugal       & PSI 20            & 1 \\
+Romania        & BET               & 1 \\
+Spain          & IBEX 35           & 2 \\
+Sweden         & OMX Stockholm 30  & 3 \\
+United Kingdom & FTSE 100          & 2 \\
 \hline\hline
 \end{tabular}
+\begin{tablenotes}
+\small
+\item All price series sourced from LSEG Workspace.
+      Cluster 1 = Western/Southern periphery (Belgium, Ireland, Portugal, Romania);
+      Cluster 2 = Large Western/Northern core (France, Germany, Italy, Norway, Finland,
+      Poland, Spain, United Kingdom, Hungary);
+      Cluster 3 = Central/Eastern/Nordic (Austria, Greece, Netherlands, Bulgaria, Croatia, Sweden).
+\end{tablenotes}
+\end{threeparttable}
 \end{table}
 
 \subsection*{A.2 Geopolitical shock series}
 
-Geopolitical shock events are identified from GDELT Document 2.0 using a keyword filter targeting armed conflict, military operations, sanctions, and interstate disputes. Raw event records are aggregated to a daily shock-intensity measure $S_t$ via a \textit{GoldsteinScale}--weighted and \textit{NumMentions}--weighted average, then scaled to the unit interval by a min--max transform over the full sample. The raw download yields 278 calendar-day shock events over the study window; 163 of these map to trading days after forward-filling weekend and holiday events to the next open trading day. Nine additional observations are dropped because they fall before the EMFI warm-up completion date (19 May 2017), leaving 154 shock-day observations used in the LP regressions. Shock intensity $S_t$ ranges from 0.073 to 2.860 with a sample mean of 0.318. Multiple hypothesis testing across event-day outcomes is controlled using the Benjamini--Hochberg false discovery rate procedure \citep{benjaminihochberg1995} at a 10\% FDR threshold.
+The geopolitical conflict shock series used in this paper is documented in full in \citet{lupu2026bir}. Briefly, for each country $i$ and calendar day $t$, the shock intensity is $S_{i,t} = -\log(q_{i,t})$, where $q_{i,t}$ is a Benjamini--Hochberg FDR-adjusted exceedance probability derived from fitting a generalised Pareto distribution to the upper tail of country-level conflict-coverage counts in GDELT Document~2.0. Days where the raw tail probability $p_{i,t} < 0.005$ are classified as shock events; consecutive events within a 10-day window are declustered by retaining the most intense event. The present paper uses this validated series as an external trigger input and contributes no new shock-construction methodology.
+
+The resulting series contains 278 declustered shock events on calendar days over the study window. Of these, 181 fall on weekends or national holidays and are forward-filled to the next available trading day; 163 distinct trading days carry a non-zero shock intensity after alignment. Nine trading days fall before the EMFI warm-up completion date (19 May 2017) and are excluded from the local projection regressions, leaving 154 shock-day observations in the estimation sample. After additionally excluding 16 shock days whose GDELT coverage is confounded by COVID-19 pandemic news (2020-01-01 to 2020-12-31), the \textbf{primary geopolitical treatment sample comprises 138 non-COVID conflict shock observations}.
 
 \subsection*{A.3 Fragility component construction}
 
 Each of the four EMFI components is constructed at the daily frequency:
 
-\textbf{VolStress}: Cross-sectional median of country-level GARCH(1,1) conditional volatility estimates, standardised by a trailing 252-day mean and standard deviation (minimum 60 observations).
+\textbf{VolStress}: Cross-sectional mean of absolute log returns across all $N=19$ countries on day~$t$: $\text{VolStress}_t = N^{-1}\sum_{i=1}^{N}|r_{i,t}|$. No rolling standardisation is applied; the raw cross-sectional mean is used directly as a fragility signal.
 
-\textbf{TailVolBreadth}: Fraction of countries whose conditional volatility on day $t$ exceeds the 95th percentile of the preceding 252 days. This breadth indicator captures the simultaneous incidence of extreme volatility across markets.
+\textbf{TailVolBreadth}: Count of countries whose absolute return $|r_{i,t}|$ on day~$t$ exceeds the country-specific 95th percentile of $|r_{i,\tau}|$ computed over the preceding 252 trading days (minimum 60 observations, threshold shifted one day to avoid look-ahead bias): $\text{TailVolBreadth}_t = \#\{i : |r_{i,t}| > \hat{q}_{i,0.95,t-1}\}$. This co-exceedance count captures the simultaneous incidence of extreme absolute moves across markets.
 
 \textbf{AvgCorr60}: Cross-sectional average of all pairwise Pearson return correlations over a trailing 60-day window (minimum 30 observations). Rising correlations signal contagion and simultaneous selling pressure.
 
-\textbf{TCI ($w=100$)}: Total connectedness index from a rolling 100-day DY variance decomposition \citep{dieboldyilmaz2012,pesaranshim1998} with VAR order selected by AIC (maximum lag 3). The TCI measures the share of forecast-error variance attributable to cross-market spillovers.
+\textbf{TCI ($w=100$)}: Total connectedness index from a rolling 100-day Diebold--Yilmaz generalized forecast-error variance decomposition \citep{dieboldyilmaz2012,pesaranshim1998}. The VAR order $p$ is selected by BIC over $p\in\{1,2,3\}$ for each rolling window (defaulting to $p=1$ on estimation failures); BIC selects $p=1$ in the large majority of windows. The TCI measures the share of $H=10$-step forecast-error variance attributable to cross-market spillovers, with rows normalized to sum to unity.
 
 \section{EMFI Construction Details}
 \label{app:emfi}
@@ -1748,40 +1757,4 @@ R12 & TCI window $w=150$
 \noindent\textbf{TCI window sensitivity (addressing overparameterisation).}
 Table~\ref{tab:tci_window_sensitivity} reports the full window-sensitivity analysis
 across $W \in \{60, 100, 150, 200, 250\}$.
-For each window, the TCI is recomputed, EMFI is rebuilt via PCA using the new TCI
-series, and the panel LP and smooth-transition state LP are re-estimated with
-COVID shock days excluded from treatment (Section~\ref{sec:covid_excl}).
-The $W=250$ specification uses a fixed $p=1$ VAR; other windows use BIC-selected $p$.
-
-\begin{table}[ht]
-\centering
-\small
-\caption{TCI window sensitivity: panel LP $\hat\beta_{k=0}$ and state LP $\hat\theta_{k=0}$ for EMFI}
-\label{tab:tci_window_sensitivity}
-\begin{tabular}{ccccc}
-\hline\hline
-Window $W$ & VAR lag & $\hat\beta_{k=0}$ & $\hat\theta_{k=0}$ & Amplification ratio \\
-\hline
- 60  & BIC & 0.151 & 0.962 & $9.9\times$ \\
-100  & BIC & 0.177 & 0.919 & $8.2\times$ \\
-150  & BIC & 0.210 & 0.761 & $5.3\times$ \\
-200  & BIC & 0.206 & 0.708 & $5.0\times$ \\
-250  &  1  & 0.201 & 0.683 & $4.8\times$ \\
-\hline\hline
-\multicolumn{5}{l}{\footnotesize Amplification ratio = IRF at $P_{\text{stress}} = 0.9$ divided by IRF at $P_{\text{stress}} = 0$.}\\
-\multicolumn{5}{l}{\footnotesize State LP: $Y_{t+k} = \alpha + \beta S_t + \theta(S_t \times P_{\text{stress},t-1}) + \text{controls}$,\ $k=0$.}
-\end{tabular}
-\end{table}
-
-\noindent Across all five window choices, $\hat\beta_{k=0}$ is positive (0.15--0.21)
-and $\hat\theta_{k=0}$ is positive (0.68--0.96), yielding amplification ratios of
-$4.8\times$ to $9.9\times$. The estimate is stable: the coefficient of variation
-of $\hat\beta_{k=0}$ across windows is 0.14 (14\%), well within sampling uncertainty.
-Wider windows attenuate $\hat\theta_{k=0}$ modestly, consistent with longer-window
-TCI being a smoother and less volatile stress signal; the amplification direction is
-preserved across all specifications.
-
-\bibliographystyle{plainnat}
-\bibliography{references}
-
-\end{document}
+For e                                                       

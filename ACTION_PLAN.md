@@ -635,4 +635,151 @@ Key: 2022 (Ukraine year) has the second-highest HF concentration (52.4%), confir
 |-------|------|-------|-------|---------|
 | R00 | Baseline | 0.458 | 2178 | — |
 | R01 | COVID exclusion | 0.370 | 1960 | ✅ Survives (same sign, 81% of baseline) |
-| R02 | Ukraine exclusion | 0.083 | 2070 | ⚠️ Reduced 
+| R02 | Ukraine exclusion | 0.083 | 2070 | ⚠️ Reduced (positive, but much smaller — Ukraine contributes significantly) |
+| R08 | Placebo S_{t+30} | −0.083 | 2178 | ✅ Correctly negative (no spurious fwd prediction) |
+| R09 | AvgShock | 0.478 | 2178 | ✅ Near-identical to baseline |
+| R10 | BreadthShock | 0.051 | 2178 | ✅ Positive (breadth-based shock attenuated, expected) |
+
+### Results — State LP θ_k0 amplification
+
+| Check | Name | θ_k0 | irf_p0 | irf_p9 | Verdict |
+|-------|------|-------|--------|--------|---------|
+| Baseline | Full EMFI (Phase 7) | 1.854 | 0.306 | 1.975 | — |
+| R03 | EMFI_3comp (no TCI) | 1.432 | 0.420 | 1.708 | ✅ Positive, 77% of baseline |
+| R04 | AcuteEMFI (vol only) | 0.724 | 0.490 | 1.141 | ✅ Positive (smaller — co-movement matters) |
+| R05 | EqualWeight EMFI | 0.939 | 0.155 | 1.000 | ✅ Positive |
+| R06 | HF p66 threshold | 1.232 | — | — | ✅ Positive (binary LP) |
+| R07 | HF p90 threshold | −0.112 | — | — | ⚠️ Negative (sparse — too few HF events at p90) |
+| R11 | TCI W=60 EMFI | 1.944 | 0.285 | 2.034 | ✅ Positive, near-baseline |
+| R12 | TCI W=150 EMFI | 1.554 | 0.392 | 1.790 | ✅ Positive |
+
+### Analytical observations for paper writing (Section 7)
+
+1. **Core result survives COVID exclusion**: β_k0 = 0.370 (vs 0.458 baseline). The 19% reduction shows COVID contributes to the baseline estimate but the signal is broader.
+2. **Ukraine matters for the unconditional LP**: β_k0 drops to 0.083 with Ukraine excluded. The 2022 energy crisis cluster is a primary driver of the baseline β. **This must be disclosed** — it means the LP baseline is not a general-equilibrium result but is heavily concentrated in two crisis episodes (COVID + Ukraine). The state-dependent amplification result (which focuses on θ) is a more reliable finding.
+3. **Placebo is clean**: β_{placebo,k0} = −0.083 — no spurious effect of future shocks. This validates the identification.
+4. **TCI is doing real work**: R03 (EMFI without TCI) gives θ_k0 = 1.432 vs baseline 1.854 — a 23% reduction. If TCI didn't matter, the results would be identical to baseline. The amplification is larger when connectedness is included. The paper can defend TCI's inclusion.
+5. **AcuteEMFI (vol only) gives θ = 0.724**: the co-movement cluster (AvgCorr60 + TCI) accounts for roughly 60% of the amplification signal. Both volatility and connectedness channels are necessary for the full story.
+6. **HF p90 threshold fails**: too sparse for binary LP identification — only ~22 events. This is a legitimate null; the 75th percentile is a better calibration point for the binary spec.
+7. **AvgShock gives near-identical results**: the max vs avg distinction in shock aggregation doesn't matter for EMFI outcomes. MaxShock is preferred for parsimony.
+
+### Deliverables (actual outputs)
+- `results/robustness/robustness_summary.csv` — 65 rows (11 checks × 5 horizons × ~1 outcome)
+- `results/robustness/state_lp_theta.csv` — 35 rows (EMFI-construction θ checks)
+- `results/robustness/Fig_Robustness_LP.png`
+- `results/robustness/Fig_Robustness_StateLPTheta.png`
+- `results/robustness/manifest.json`
+
+### Change log
+- 2026-05-18: `run_robustness.py` written and run (1s); 56/56 tests pass; Section 7 drafted in main.tex
+
+---
+
+## Phase 10 — Paper Writing
+
+**Status:** ⬜ Pending (begins in parallel with Phase 6)  
+**Location:** `Paper_LaTeX/`
+
+### Manuscript structure
+
+1. Introduction
+2. Data and geopolitical shock triggers
+3. Market-based financial stability measures (Phases 2–4)
+4. Market-implied systemic stress regimes (Phase 5)
+5. Dynamic effects of geopolitical shocks on systemic fragility (Phase 6)
+6. State dependence and event classification (Phases 7–8)
+7. Robustness (Phase 9)
+8. Conclusion
+
+### Key figures (for paper)
+- Figure 1: Timeline — EMFI + HMM shaded regimes + vertical shock lines
+- Figure 2: LP impulse responses (EMFI, TCI, TailBreadth, P_stress)
+- Figure 3: State-dependent LP (normal vs fragile pre-state)
+- Figure 4: Connectedness network — before/after major systemic events
+- Figure 5: Event taxonomy table
+
+### Writing milestones
+- [x] Data section draft (after Phase 1) — drafted 2026-05-18
+- [x] Sections 3–4 draft (after Phases 2–5) — drafted 2026-05-18
+- [x] Section 5 draft (HMM, after Phase 5) — drafted 2026-05-18
+- [x] Section 6 baseline LP prose (after Phase 6) — drafted 2026-05-18
+- [x] Section 6 state-dependent LP prose (after Phase 7) — drafted 2026-05-18
+- [x] Section 7 robustness prose (after Phase 9) — drafted 2026-05-18
+- [x] Introduction updated with final empirical numbers — 2026-05-18
+- [x] Section 8 Conclusion drafted — 2026-05-18
+- [x] **Full draft for co-author review** — ✅ 23 pages, compiles cleanly, 2026-05-18
+- [ ] GFJ submission package (references.bib cleanup, abstract polish, cover letter)
+
+### Writing notes from implementation (Phases 2–4 analytical observations)
+
+**Section 3 — Market-Based Financial Stability Measures:**
+- When describing the EMFI, explicitly discuss the **two-cluster structure**: VolStress+TailBreadth (cluster 1, within-corr=0.784) vs. AvgCorr60+TCI (cluster 2, within-corr=0.797), with cross-cluster correlations of only 0.16–0.38. Explain that PCA bridges these two dimensions: PC1 loads equally on all four components (0.45–0.53), while PC2 captures the contrast. Acknowledge that 58.3% explained variance reflects a genuine two-dimensional fragility space, not a near-perfect common factor.
+- **TCI vs. AvgCorr60 discussion**: note that TCI (VAR-FEVD) and AvgCorr60 (simple rolling correlation) correlate at 0.797. The theoretical superiority of TCI (order-invariance, captures indirect spillover paths) is argued, but the empirical overlap is explicitly acknowledged and the TCI-substitution robustness check is referenced.
+- **EMFI nature**: be explicit that EMFI is a contemporaneous/lagging acute-stress indicator. It does not build up gradually before crises — it spikes during them. Contrast with VIX-type implied volatility measures if space allows. This framing matters for interpreting the state-dependent LP: HighFragility captures *ongoing* stress episodes, not *pre-fragility*.
+- **HighFragility composition disclosure**: in a table or footnote, report the breakdown of HighFragility days by year/episode. COVID 2020 will dominate the upper tail; this must be stated, not buried.
+
+**Section 4 — HMM Market-Implied Stress Regimes:**
+- Explicitly describe the HMM as a spike detector rather than a regime classifier: 143 distinct stress episodes, median duration = 1 calendar day. Contrast with traditional HMM applications where regimes persist for months — this is a fundamentally different use case.
+- Report the episode breakdown of systemic-stress days: COVID=22.9%, Ukraine=13.0%, "Other 2017–2019"=24.2%, "Other 2024–2025"=17.0%. The dominant category is actually non-labeled European stress events, which argues for generalizability beyond any single crisis.
+- Report shock-regime distribution (63% calm, 27% elevated, 10% systemic) as a core finding: most geopolitical shocks hit non-stressed markets, which motivates the state-dependence hypothesis.
+- Be explicit that P_stress and EMFI are designed to be used as separate outcome variables (Corr=0.647), not substitutes. Each captures a different dimension: severity vs. regime certainty.
+
+**Section 6 — State-Dependent LP (post Phase 7 implementation):**
+- Explain the smooth-transition LP design choice: with only 16 shock events in the HMM systemic-stress regime, a binary conditioning variable would be underpowered. The smooth-transition LP using P_stress_{t-1} (continuous) as interaction is the primary design. The binary HighFragility (EMFI-based, 38 events) is secondary.
+- Report the shock-regime distribution as motivation: 63% of shocks in calm, 37% in stressed/elevated markets — the identification of θ_k (amplification) comes from this 37%.
+- **Lead with the main finding:** at p=0.9 (near-systemic pre-shock stress), EMFI response is 6.4× larger than at calm baseline (β=0.306 → IRF=1.975), and TCI is 10.3× larger. These are the headline numbers.
+- **AvgCorr60 exception:** θ_k ≈ 0 for AvgCorr60 — explicitly note this as an informative null. Cross-market correlation is already elevated in stressed markets; shocks do not amplify it further. The transmission mechanism works through volatility and connectedness channels.
+- **Binary LP interpretation:** in non-fragile markets, irf_normal is near-zero or slightly negative for most outcomes at k=0. The entire positive impulse is concentrated in HighFragility periods. Present this as evidence that the shock-fragility interaction is not a linear dampening but a genuine regime-specific mechanism.
+- **COVID exclusion nuance:** EMFI, TCI, TailVolBreadth all retain positive β at k=0 in the nocovid sample. P_stress baseline β flips to −0.029 — disclose that the unconditional P_stress impact is COVID-specific, while the amplification (θ) is not.
+- **Composition table (mandatory):** include Table or footnote with the year-by-year breakdown of 36 HF shock events. 2020=10 (COVID), 2022=11 (Ukraine), 2024=3, 2025=7. Multi-episode identification undermines the COVID-only critique.
+- **Pre-trend at p=0:** mixed signs, all small magnitude — cite this as evidence of conditional exogeneity at the calm-market baseline.
+- **P_eval points interpretation:** present three IRF lines (p=0, 0.5, 0.9) in Figure 3. Narrative: the p=0 line is the calm-market baseline LP from Section 5; the p=0.5 and p=0.9 lines show progressive amplification as the market approaches systemic stress.
+
+**Section 7 — Robustness:**
+- Lead with the COVID exclusion result — this is the robustness check readers will immediately demand. If the main result holds, state this prominently; if it weakens, acknowledge what fraction of the identification is coming from COVID.
+- Report the TCI → AvgCorr60 substitution and AcuteEMFI exercises. These tests also serve as a conceptual decomposition: they tell us whether the VAR-FEVD connectedness dimension or the simpler correlation/volatility dimension is driving the shock-transmission result.
+
+---
+
+## Key Design Decisions and Rationale
+
+| Decision | Choice | Rationale |
+|----------|--------|-----------|
+| Shock measure | Reuse EVT+FDR S_{i,t} from BIR paper | Validated, avoids double contribution; BIR = methodology, GFJ = application |
+| LP design | Time-series (aggregate outcomes) not panel | EMFI/TCI/P_stress are aggregate objects; country-panel LP less natural here |
+| Shock aggregation | MaxShock_t as primary | Captures the most severe country shock on each day; interpretable |
+| EMFI construction | PCA (not equal-weight) | Lets data determine loadings; variance-explained criterion validates the composite |
+| HMM | Gaussian emission, 3-state | Interpretable states; 2-state as robustness. Estimated on market features only |
+| Connectedness | Rolling DY (W=100) as primary | Established methodology; TVP-VAR as robustness |
+| Fragility state threshold | 75th percentile of EMFI | Standard in state-dependent LP literature; 66th and 90th as robustness |
+
+---
+
+## Dependencies Between Phases
+
+```
+Phase 1 (data)
+    ├── Phase 2 (fragility indicators)
+    │       └── Phase 4 (EMFI) ─────────────────── Phase 6 (LP) ─── Phase 7 (state LP)
+    └── Phase 3 (connectedness) ─── Phase 4 ─────── Phase 6 ─────── Phase 7
+                                                    Phase 5 (HMM) ── Phase 6 ── Phase 7
+                                                                        └── Phase 8 (classification)
+Phases 2–5 → Phase 9 (robustness)
+Phases 6–9 → Phase 10 (writing)
+```
+
+---
+
+## Change Log
+
+| Date | Phase | Change |
+|------|-------|--------|
+| 2026-05-17 | 0 | Initial action plan created. Repository scaffolded. Git repo initialized (`init_git.sh`). LaTeX skeleton created. |
+| 2026-05-17 | 1 | Data preparation complete. Key discovery: 181/278 shock events fall on weekends (conflict index runs on calendar days); implemented forward-fill to next trading day. Panel: 43,282 rows, 163 shock days, S in [0.07, 2.86]. 43/43 tests pass. |
+| 2026-05-17 | 2 | Fragility indicators complete. VolStress max=0.119 (COVID), TailVolBreadth=18/19 on 2020-03-16, AvgCorr60 mean=0.476. Rolling quantile thresholds shifted by 1 day (strictly out-of-sample). 39/39 tests pass. Note: on sandbox/NTFS, stale .pyc files require force-recompile via `py_compile.compile()` after editing test files. |
+| 2026-05-17 | 3 | Volatility connectedness complete. Pesaran-Shin GFEVD with row-sum normalization. TCI (W=100) mean=70.5%, COVID peak >80%, range=[46.7%, 94.6%]. All 4 window specs (W=60/100/150/200) computed. Runtime ~25s. 32/32 tests pass. |
+| 2026-05-18 | 4 | Composite EMFI complete. PCA on [VolStress, TailVolBreadth, AvgCorr60, TCI_w100]. PC1=58.3% variance, all loadings positive (0.45-0.53). EMFI max=15.2 on 2020-03-12. 75th pctile threshold=0.55. 28/28 tests pass. Also fixed SP02 script truncation (NTFS mount issue) and regenerated fragility_daily.csv with full 2278 rows. |
+| 2026-05-18 | 10 | Paper writing started. Sections 1 (Introduction), 2 (Literature), 3 (Data), 4 (Fragility measures), 5 (HMM), and 6 baseline LP results drafted in Paper_LaTeX/main.tex (740 lines). All analytical findings from Phases 1–6 incorporated. Sections 7–9 (state-dependent LP, robustness, conclusion) remain as TODO pending Phase 7+ implementation. |
+| 2026-05-18 | 6 | Panel LP complete. 5 outcomes × 21 horizons. All β_k0 > 0 (correct direction); peak TCI significant at 5% (k=6, β=1.064, p=0.049). Pre-trends clean for P_stress and AvgCorr60. TCI pre-trend at k=-5,-4 attributed to rolling-window smoothness. k=-1 degeneracy fixed. 40/40 tests pass. |
+| 2026-05-18 | 5 | HMM stress regimes complete. 3-state Gaussian HMM (50 restarts). State counts: Calm=1389 (63.7%), Elevated=567 (26.0%), Systemic=223 (10.2%). COVID share of stress days=22.9% (multi-episode detector, not COVID dummy). P_stress=1.0 on COVID peak and Ukraine. Calm persistence=0.719; stressed states transient (~1.6-day avg). Hamas (Sunday) → P_stress=0.296 on nearest trading day. 45/45 tests pass. |
+| 2026-05-18 | 7 | State-dependent LP complete. Smooth-transition LP (PRIMARY): β_k0>0 for all 5 outcomes; θ_k>0 (amplification) for EMFI, TCI, TailVolBreadth, P_stress at k=0 (EMFI: 6.4× amplification at p=0.9; TCI: 10.3×). AvgCorr60 exception: θ≈0 (informative null — correlation channel not amplified). Binary LP (SECONDARY): irf_fragile > irf_normal at k=0 for all outcomes; irf_normal≤0 in calm markets (effect concentrated in fragile regime). COVID exclusion: EMFI/TCI/TailVolBreadth β retained; P_stress β flips (−0.029), disclosable finding. Composition: 36 HF events (2020=10, 2022=11, 2024=3, 2025=7) — multi-episode identification. 42/42 tests pass. Section 6 (state-dependent LP) drafted in main.tex. |
