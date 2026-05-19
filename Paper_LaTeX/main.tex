@@ -211,11 +211,20 @@ and employment.
 with positive equity returns upon resolution, consistent with a risk-premium
 channel.
 \citet{liuzhang2021} demonstrate that geopolitical risk is priced in the
-cross-section of equity returns.
-More recent work using high-frequency intraday data~\citep{rigobon2003,
-caldara2022measuring} confirms immediate market reactions to geopolitical
-shocks but does not examine their systemic transmission or amplification in
-already-fragile conditions, which is the focus of the present paper.
+cross-section of equity returns, while \citet{pastorveronesi2013} show that
+political uncertainty generates time-varying risk premia even absent
+fundamental cash-flow shocks.
+\citet{smales2021} documents significant volatility spillovers from geopolitical
+risk to oil and equity markets, with transmission amplified during acute
+conflict episodes; \citet{antonakakis2017} find geopolitical risk is a
+structural driver of the oil--stock covariance over the long run.
+\citet{su2022} and \citet{jiang2024} extend this work to cross-market
+synchronisation and bilateral spillovers using news-based geopolitical risk proxies.
+\citet{caldara2022measuring} construct a monthly news-based Geopolitical
+Risk (GPR) index spanning 1900--2019 and document that elevated geopolitical
+risk raises macroeconomic uncertainty and depresses equity valuations, yet
+leave open the question of systemic transmission and fragility-conditioned
+amplification that motivates the present paper.
 
 \paragraph{Systemic risk and volatility connectedness.}
 Following the 2008 global financial crisis, a substantial literature has
@@ -226,9 +235,32 @@ which has become a standard tool for measuring the degree to which
 idiosyncratic shocks propagate across a system.
 \citet{acemoglu2015systemic} model how network structure determines whether
 local shocks cascade or are absorbed.
-\citet{acharya2017} develop CoVaR as a measure of systemic risk contribution.
-Our EMFI builds on this tradition by combining connectedness with
-co-exceedance tail breadth and correlation into a single composite index.
+\citet{acharya2017} measure systemic risk through marginal expected shortfall
+(MES), while \citet{adrian2016} develop CoVaR as a measure of each
+institution's systemic risk contribution.
+\citet{brownleesengle2017} extend the MES framework to SRISK, quantifying the
+capital shortfall of a financial institution conditional on a severe market decline.
+\citet{loducapeltonen2013} develop a macro-financial early-warning framework
+for predicting systemic events that is explicitly designed for European markets,
+using composite indicators that share conceptual ground with our EMFI.
+Our index builds on this tradition by combining connectedness with
+co-exceedance tail breadth and rolling correlation into a single composite.
+
+\paragraph{European equity market connectedness and international contagion.}
+A growing literature examines how financial stress propagates across European
+equity markets, which are highly integrated but heterogeneous in fragility.
+\citet{bekaert2014contagion} document significant contagion across 55 equity
+markets during the 2007--2009 global financial crisis, with European markets
+among the most susceptible to cross-border transmission.
+\citet{dieboldyilmaz2016} measure trans-Atlantic equity volatility connectedness
+between U.S.\ and European financial institutions over 2004--2014 and find
+that the direction of spillovers shifted from predominantly U.S.-to-Europe
+during 2007--2008 to bi-directional from 2008 onwards, reflecting the European
+sovereign debt crisis as a new shock origin.
+These findings motivate our focus on European equity markets as a test
+laboratory: markets that are deeply integrated yet exposed to distinct
+geopolitical shock origins (energy supply disruptions, Eastern-European
+conflict risk) since 2022.
 
 \paragraph{Local projections.}
 \citet{jorda2005} proposes local projections as a flexible alternative to
@@ -247,6 +279,10 @@ following the now-standard practice in applied macroeconometrics.
 regime changes in macroeconomic time series.
 \citet{guidolin2007asset} and \citet{ang2012regime} apply HMMs to asset
 allocation and risk management.
+\citet{angbekaert2002} demonstrate that international equity portfolios
+benefit from regime-switching specifications because bear-market correlations
+across countries are substantially higher than bull-market correlations---the
+asymmetry that motivates our HMM treatment of European market fragility states.
 We use a multivariate Gaussian HMM to classify market fragility states
 purely from market-based indicators, ensuring that the classification is
 independent of the geopolitical shock series used in the LP regressions.
