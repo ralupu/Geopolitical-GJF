@@ -845,8 +845,11 @@ AvgCorr60          & 0.001 & $-0.012$ & 0.010 & 0.211 & $-0.010$ & --- \\
   \centering
   \includegraphics[width=\textwidth]{Fig_StateLPSmooth_Combined}
   \caption{Smooth-transition local projection impulse responses for all five
-    outcomes. Each panel plots three IRF lines ($p{=}0$, $p{=}0.5$,
-    $p{=}0.9$) with 95\% delta-method confidence bands.
+    outcomes (COVID-zeroed baseline). Each panel plots three IRF lines
+    evaluated at $P_{\mathrm{stress}} \in \{0,\,0.5,\,0.9\}$ with 95\%
+    delta-method confidence bands (shaded).
+    Green: calm markets ($p{=}0$); orange: elevated stress ($p{=}0.5$);
+    red: near-systemic stress ($p{=}0.9$).
     Newey--West HAC, bandwidth $2(k+1)$.}
   \label{fig:state_lp_combined}
 \end{figure}
@@ -1044,11 +1047,18 @@ The shaded HMM stress probability series ($P_{\text{stress},t}$) is plotted on t
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{Fig_NetworkCorr_Systemic}
-\caption{Equity return correlation network around the top five Systemic events (ranked by post-event EMFI).
-Left panels: mean pairwise return correlation in the 20-day pre-event window.
-Right panels: mean pairwise return correlation in the 20-day post-event window.
-Node labels are country ISO codes; edge thickness is proportional to correlation strength (threshold $\geq 0.50$).
-The network densifies markedly following each Systemic event, confirming heightened co-movement and reduced diversification potential during the post-shock window.}
+\caption{Pairwise equity return correlations around the top-five Systemic events
+  (ranked by post-event EMFI).
+  Each row corresponds to one event (date shown on left $y$-axis).
+  \textit{Left column}: mean correlation matrix computed over the five trading
+  days before the shock ($t{-}5$ to $t{-}1$);
+  \textit{Right column}: correlation matrix over the five days from and
+  including the shock day ($t$ to $t{+}5$).
+  Colour scale runs from $-1$ (dark green) to $+1$ (dark red);
+  country labels are ISO 3166-1 alpha-2 codes.
+  Mean upper-triangle correlation $\bar\rho$ is shown in each panel title.
+  The sharp rise in $\bar\rho$ from pre- to post-shock confirms the
+  co-movement intensification that underlies the systemic classification.}
 \label{fig:network_systemic}
 \end{figure}
 

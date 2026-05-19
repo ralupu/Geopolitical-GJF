@@ -44,7 +44,7 @@ The "companion paper" / "companion BIR paper" / "companion study" language must 
 | R4 | HMM enhancements (terminology + robustness) | ✅ **Complete** | Code + text | — |
 | R5 | Formal inference for state-dependent amplification θ | ✅ **Complete** | Code + text | — |
 | R6 | Predictive event classification (logit/probit) | ✅ **Complete** | Code + text | — |
-| R7 | Figure improvements | 🟡 Medium | Code | 1–2 hours |
+| R7 | Figure improvements | ✅ **Complete** | Code | — |
 | R8 | Paper rewrite: framing, abstract, policy claims | 🟡 Medium | Text | 3–4 hours |
 | R9 | Submission package | 🟡 Medium | Text | 1–2 hours |
 
@@ -482,7 +482,7 @@ TCI: θ=2.70, SE=1.59, p=0.090 (sig. 10%), boot CI=[0.08, 7.65] (excludes 0)
 
 ## Phase R6 — Predictive Event Classification
 
-**Status:** ✅ Complete (git commit: _pending_)  
+**Status:** ✅ Complete (git commit: `91bb97f3`)  
 **Priority:** 🟠 High  
 **Type:** Code + text  
 **Script:** `subprojects/14_predictive_class/run_predictive_class.py`
@@ -541,10 +541,9 @@ Ukraine Pr(Systemic)=0.68; McFadden pseudo-R2=0.164
 
 ## Phase R7 — Figure Improvements
 
-**Status:** ⬜ Pending  
+**Status:** ✅ Complete (git commit: _pending_)  
 **Priority:** 🟡 Medium  
-**Type:** Code (figure generation)  
-**Estimated effort:** 1–2 hours
+**Type:** Code (figure generation)
 
 ### R7.1 — Fix Figure 6 (Network correlation — too dense)
 
@@ -572,10 +571,12 @@ Following Phase R5 updates, ensure Figure 3 clearly shows:
 Place the ROC curve figure from the predictive classification in the paper.
 
 **Deliverables — Phase R7:**
-- [ ] Figure 6 (network) redesigned: heatmap pre/post or filtered-edge network
-- [ ] Figure 3 (state LP) updated with clear CI bands and labels
-- [ ] All new figures verified ≥ 300 DPI, ≥ 20KB
-- [ ] Git commit: "R7: figure improvements — network, state LP CI bands"
+- [x] SP15 `run_figure_improvements.py` — regenerates both figures
+- [x] Fig_NetworkCorr_Systemic.png: replaced hairball with 5×2 correlation heatmap (277 KB)
+- [x] Fig_StateLPSmooth_Combined.png: improved colours, shaded CI bands, legend (148 KB)
+- [x] ROC figure already in paper from R6
+- [x] Both captions updated in main.tex
+- [x] main.tex compiles clean (33 pages)
 
 ---
 
