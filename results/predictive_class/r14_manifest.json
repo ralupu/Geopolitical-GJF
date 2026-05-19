@@ -1,0 +1,61 @@
+{
+  "run_utc": "2026-05-19T12:03:52.906019+00:00",
+  "n_obs": 138,
+  "n_systemic": 34,
+  "loocv_auc_baseline": 0.6906108597285068,
+  "loyo_auc_overall": 0.6442307692307692,
+  "loyo_per_year": [
+    {
+      "year": 2017,
+      "n_events": 13,
+      "n_systemic": 1,
+      "loyo_auc": 0.33333333333333337
+    },
+    {
+      "year": 2018,
+      "n_events": 14,
+      "n_systemic": 6,
+      "loyo_auc": 0.3958333333333333
+    },
+    {
+      "year": 2019,
+      "n_events": 10,
+      "n_systemic": 4,
+      "loyo_auc": 0.625
+    },
+    {
+      "year": 2021,
+      "n_events": 11,
+      "n_systemic": 2,
+      "loyo_auc": 0.8333333333333334
+    },
+    {
+      "year": 2022,
+      "n_events": 21,
+      "n_systemic": 13,
+      "loyo_auc": 0.5961538461538461
+    },
+    {
+      "year": 2023,
+      "n_events": 21,
+      "n_systemic": 2,
+      "loyo_auc": 0.6052631578947368
+    },
+    {
+      "year": 2024,
+      "n_events": 25,
+      "n_systemic": 1,
+      "loyo_auc": 1.0
+    },
+    {
+      "year": 2025,
+      "n_events": 23,
+      "n_systemic": 5,
+      "loyo_auc": 0.7222222222222223
+    }
+  ],
+  "qrt_loocv_auc": 0.7005090497737556,
+  "qrt_emfi_coef": 1.418903555287553,
+  "qrt_emfi_or": 4.132586802315786,
+  "qrt_emfi_pval": 0.004083080650392859
+}

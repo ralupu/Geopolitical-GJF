@@ -1170,12 +1170,38 @@ on that date. These in-sample probabilities are below 0.5, illustrating that the
 correctly identifies the direction of risk elevation but is appropriately conservative
 given the inherent unpredictability of geopolitical events.
 
+\textbf{Stricter cross-validation.}
+LOO-CV is potentially optimistic because geopolitical episodes (e.g., the
+Ukraine conflict) generate multiple shock days whose training and test
+observations overlap temporally. As a stricter check, we implement
+leave-one-year-out cross-validation (LOYO-CV): for each calendar year,
+the model trains on all events outside that year and predicts on the held-out
+year's events. The aggregate LOYO-CV AUC is $0.644$---below the LOO-CV AUC
+of $0.691$ as expected, but well above chance ($0.5$). The decline confirms
+that temporal clustering inflates LOO-CV modestly, and that the model's
+discriminating power is genuine rather than an artefact of within-episode
+information leakage.
+
+\textbf{Quasi-real-time EMFI robustness.}
+EMFI uses full-sample standardisation (mean and standard deviation computed
+over the entire 2017--2025 window), which is an ex-post operation. To test
+whether predictive content survives in a quasi-real-time setting, we replace
+$\mathrm{EMFI}_{t-1}$ with an expanding-window standardised version
+($\mathrm{EMFI}^{\mathrm{qrt}}_{t-1}$), where the normalisation uses only
+data available up to $t-1$. The logit re-estimated on
+$\mathrm{EMFI}^{\mathrm{qrt}}_{t-1}$ yields an odds ratio of $4.13$
+($p = 0.004$), and the LOO-CV AUC is $0.701$---slightly above the primary
+full-sample AUC. Predictive content is not an artefact of full-sample
+standardisation; the pre-shock market fragility signal is robust to the
+quasi-real-time information constraint.
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.65\linewidth]{Fig_ROC_Predictive}
-\caption{ROC curve for systemic event prediction (leave-one-out cross-validation).
-  Logit AUC $= 0.691$; probit AUC $= 0.690$.
-  The dashed line is the random classifier.}
+\caption{ROC curves for systemic event prediction. Primary LOO-CV AUC~$= 0.691$;
+  stricter LOYO-CV AUC~$= 0.644$; quasi-real-time EMFI LOO-CV AUC~$= 0.701$.
+  All three curves substantially exceed the random classifier.
+  See Section~\ref{sec:pred_class} for details.}
 \label{fig:roc_predictive}
 \end{figure}
 
