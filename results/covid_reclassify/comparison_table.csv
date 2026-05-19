@@ -1,0 +1,7 @@
+outcome,metric,baseline,nocovid,pct_change
+EMFI,LP_beta_k0,0.4582,0.2447,-46.6
+tci_w100,LP_beta_k0,0.3963,0.3911,-1.3
+TailVolBreadth,LP_beta_k0,0.9501,0.8099,-14.8
+P_stress,LP_beta_k0,0.106,-0.0027,-102.6
+AvgCorr60,LP_beta_k0,0.0029,0.0002,-91.7
+EMFI,StateLPsmooth_theta_k0,1.8539,1.4552,-21.5

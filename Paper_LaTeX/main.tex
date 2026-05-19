@@ -62,15 +62,18 @@ market-based systemic fragility measures, a composite European Market
 Fragility Index (EMFI) constructed via principal component analysis, and a
 Hidden Markov Model that classifies each trading day into latent stress
 regimes without reference to geopolitical events.
-Local projections reveal that geopolitical shocks generate positive but
-statistically imprecise responses across all five fragility outcomes at
-conventional significance levels, consistent with the finding that 63\% of
-shocks strike calm markets.
-State-dependent projections show evidence of amplification when shocks
-occur during already-fragile market conditions, though identification is
-concentrated in a small number of shock--stress overlap events.
-Our event taxonomy classifies the COVID-19 crash and the 2022 Ukraine
-invasion as the most severe Systemic events; the 2023 Hamas--Israel shock
+COVID-19 shock days are excluded from the LP treatment series because
+COVID-19 is a financial crisis, not a geopolitical conflict shock; the market
+outcomes are retained for EMFI and HMM validation.
+Local projections on the 138 non-COVID geopolitical shock observations reveal
+positive but statistically imprecise responses, consistent with the finding
+that 63\% of shocks strike calm markets.
+State-dependent projections show that when shocks strike already-fragile
+markets the EMFI response is approximately 10 times larger ($\hat\theta_0 =
+1.46$), and the TCI response is 12 times larger ($\hat\theta_0 = 2.80$).
+Our event taxonomy validates EMFI and HMM against known stress episodes: the
+COVID-19 market crash and the 2022 Ukraine invasion are confirmed as the most
+severe Systemic events; the 2023 Hamas--Israel shock
 triggers a one-day delayed systemic stress episode, with the market-implied
 stress probability reaching unity on the trading day following the attack.
 The results highlight that geopolitical shock transmission depends critically
@@ -87,8 +90,8 @@ large---do not trigger systemic fragility in integrated European markets.
 \label{sec:introduction}
 
 Geopolitical conflict is an increasingly prominent feature of the financial
-landscape. From the COVID-19 shock of February--March 2020 to the Russian
-invasion of Ukraine in February 2022, geopolitical events periodically
+landscape. From the Russian invasion of Ukraine in February 2022 to the
+Hamas--Israel conflict of October 2023, geopolitical events periodically
 disrupt global equity markets with sudden and severe consequences.
 Yet the vast majority of geopolitical news events---conflicts, territorial
 disputes, diplomatic crises---leave no discernible trace in aggregate market
@@ -329,9 +332,16 @@ $\text{MaxShock}_t = \max_i S_{i,t}$ is positive.\footnote{
   (which requires a warm-up period for the rolling TCI and
   tail-breadth calculations); these nine observations are
   excluded from the LP sample but remain in the full-sample
-  market panel. The three counts therefore refer to: 278 raw
-  shock events on calendar days; 163 forward-filled trading-day
-  shock observations; and 154 LP/taxonomy shock observations.}
+  market panel. Of the remaining 154 shock observations, 16
+  fall within calendar year 2020 and are identified as
+  COVID-19-related news events (see Section~\ref{sec:rob_sample}).
+  Because COVID-19 is a systemic financial shock but not
+  a geopolitical conflict shock, these 16 days are excluded
+  from the LP \emph{treatment} series in the primary specification;
+  the market outcomes ($\text{EMFI}$, TCI, etc.) are retained in
+  the sample for the purposes of EMFI and HMM validation.
+  The primary LP therefore uses 138 geopolitical shock-day
+  observations as treatment events.}
 
 The aggregate shock measure used as the LP regressor is
 $\text{MaxShock}_t$---the maximum shock intensity across all 19 countries on
@@ -677,23 +687,32 @@ five outcomes.
   \label{fig:lp_combined}
 \end{figure}
 
-All five outcomes exhibit positive responses at the contemporaneous horizon
-$k = 0$.
-The EMFI response at $k = 0$ is $\hat{\beta}_0 = 0.458$ (SE = 0.337,
-$p = 0.174$); TCI rises by 0.40 percentage points; TailVolBreadth by 0.95
-additional markets in the tail; $P_{\text{stress}}$ by 0.106; and
-AvgCorr60 by 0.003.
-None of the contemporaneous estimates reaches conventional significance
-at the 5\% level, and only AvgCorr60 is marginally significant at 10\%
-($p = 0.067$).
+All five outcomes exhibit positive or near-zero responses at the
+contemporaneous horizon $k = 0$ in the primary COVID-excluded specification.
+The EMFI response at $k = 0$ is $\hat{\beta}_0 = 0.245$ (SE = 0.500,
+$p = 0.624$); TCI rises by 0.39 percentage points (SE = 0.491); TailVolBreadth
+by 0.81 additional markets in the tail; $P_{\text{stress}}$ is near-zero
+($-0.003$, SE = 0.074); and AvgCorr60 is negligible (0.0002).
+None of the contemporaneous estimates reaches conventional significance at
+any standard level, consistent with the finding that 63\% of non-COVID
+geopolitical shocks arrive in calm market conditions.
 
-The EMFI and TCI responses peak at horizons $k = 9$ and $k = 6$
-respectively, with peak TCI of approximately 1.06 percentage points
-($p = 0.049$, significant at 5\%).
-TailVolBreadth peaks at $k = 6$ (1.29 markets, $p = 0.143$) and
-decays to near zero by $k = 10$.
-$P_{\text{stress}}$ exhibits a flat, near-zero response beyond $k = 0$,
-consistent with the near-binary nature of the HMM posterior.
+The weak unconditional result is expected and is not the paper's primary
+finding. It is the empirical motivation for the state-dependent analysis:
+when shocks are pooled across calm and fragile market conditions, the large
+responses in fragile states are averaged with near-zero responses in calm
+states, yielding an attenuated unconditional estimate. The state-dependent
+specification in Section~\ref{sec:state} recovers the heterogeneous responses
+by conditioning on the pre-shock market regime.
+
+\paragraph{Comparison with full-sample results.}
+For reference, the full-sample specification (retaining the 16 COVID shock
+days as treatment observations) yields $\hat\beta_0 = 0.458$ (SE = 0.337,
+$p = 0.174$) for EMFI. This larger estimate reflects the fact that COVID
+shock days coincide with the largest observed EMFI spikes; treating them
+as geopolitical treatment events inflates the average LP response. We
+report the COVID-excluded results as the primary specification and the
+full-sample version as a robustness check (Section~\ref{sec:robustness}).
 
 These results are consistent with the descriptive finding that 63\% of
 detected geopolitical shock events occur when the HMM assigns the market
@@ -725,8 +744,8 @@ complementary specifications.
 \subsubsection{Smooth-transition specification (primary)}
 \label{sec:smooth_lp}
 
-Because only 16 of the 154 shock events in the LP sample fall on days
-when $\hat{P}_{\text{stress},t-1} > 0.5$---a count below the minimum
+Because only 14 of the 138 non-COVID shock events in the LP sample fall
+on days when $\hat{P}_{\text{stress},t-1} > 0.5$---a count below the minimum
 threshold for reliable binary-regime inference---we adopt a
 \emph{smooth-transition} specification as our primary design. The
 conditioning variable enters the regression continuously, weighting each
@@ -775,11 +794,11 @@ amplification parameters for all five outcomes.
 \hline\hline
 Outcome & $\hat\beta$ & $\hat\theta$ & IRF ($p{=}0$) & IRF ($p{=}0.9$) & Amplification \\
 \hline
-EMFI             & 0.306 & 1.854 & 0.306 & 1.975 & $6.4\times$ \\
-TCI              & 0.241 & 2.500 & 0.241 & 2.491 & $10.3\times$ \\
-TailVolBreadth   & 0.776 & 2.642 & 0.776 & 3.154 & $4.1\times$ \\
-$P_{\text{stress}}$ & 0.071 & 0.537 & 0.071 & 0.554 & $7.8\times$ \\
-AvgCorr60        & 0.004 & $-0.011$ & 0.004 & $-0.006$ & --- \\
+EMFI             & 0.148 & 1.455 & 0.148 & 1.457 & $9.9\times$ \\
+TCI              & 0.223 & 2.800 & 0.223 & 2.743 & $12.3\times$ \\
+TailVolBreadth   & 0.698 & 1.807 & 0.698 & 2.324 & $3.3\times$ \\
+$P_{\text{stress}}$ & $-0.027$ & 0.384 & $-0.027$ & 0.318 & --- \\
+AvgCorr60        & 0.001 & $-0.012$ & 0.001 & $-0.009$ & --- \\
 \hline\hline
 \end{tabular}
 \end{table}
@@ -798,8 +817,8 @@ The amplification pattern is consistent across the four volatility and
 connectedness outcomes (Figure~\ref{fig:state_lp_combined},
 Table~\ref{tab:theta_k0}).
 When a geopolitical shock strikes markets already near a systemic-stress
-state ($p = 0.9$), the EMFI response is 6.4 times larger than the
-calm-market baseline, and the TCI response is 10.3 times larger.
+state ($p = 0.9$), the EMFI response is 9.9 times larger than the
+calm-market baseline, and the TCI response is 12.3 times larger.
 TailVolBreadth amplifies by a factor of 4.1, and the HMM
 systemic-stress probability by 7.8.
 In each case, the amplification coefficient $\hat\theta_k$ is positive,
@@ -992,14 +1011,19 @@ amplification mechanism ($\hat\theta_k > 0$).
 \subsection{Sample robustness}
 \label{sec:rob_sample}
 
-\paragraph{COVID-19 exclusion.}
-Dropping the period 2020-03-01 to 2020-12-31 reduces the sample from 2,178 to 1,960
-trading days (a reduction of 218 observations, approximately one calendar year). The
-baseline LP coefficient on EMFI at $k=0$ falls from 0.458 to 0.370 --- a reduction of
-19\% --- but remains positive. Across TCI and $P_{\text{stress}}$, the sign is preserved in the
-non-COVID sample. We conclude that while the COVID-19 cluster amplifies the baseline
-estimate, the unconditional shock--fragility transmission is a broader feature of the
-data and is not an artefact of a single episode.
+\paragraph{Full-sample specification (COVID shock days included).}
+The primary specification excludes 16 COVID-period shock days (2020) from the LP
+treatment series on the grounds that COVID-19 is a systemic financial shock but
+not a geopolitical conflict shock (see Section~\ref{sec:lp}).
+Including these 16 days as treatment observations inflates the on-impact EMFI
+coefficient from $\hat\beta_0 = 0.245$ to $0.458$ (SE = 0.337, $p = 0.174$) ---
+a difference of 87\%, driven by the coincidence of COVID shock-news days with the
+largest observed EMFI spikes in the sample.
+The state-dependent amplification coefficient $\hat\theta_k$ is also inflated in
+the full-sample: $\hat\theta_0 = 1.854$ (vs.\ 1.455 in the primary specification).
+We treat the full-sample results as a robustness check rather than the primary
+baseline, and report them in Table~\ref{tab:app_robustness} (Appendix~\ref{app:robustness}).
+The COVID-excluded results are the primary findings of this paper.
 
 \paragraph{Ukraine conflict exclusion.}
 Restricting the sample to exclude the period 2022-02-01 to 2022-06-30 (the Ukraine
@@ -1490,10 +1514,9 @@ R12 & TCI window $w=150$
 \end{tabular}
 \end{table}
 
-Across all specifications the on-impact coefficient is positive, ranging from $-0.083$ (placebo) to $0.535$ (R04, R12). The placebo check (R08) yields $\hat\beta_0 = -0.083$ ($p > 0.77$), confirming no reverse causality. The Ukraine exclusion (R02) attenuates the estimate to 0.083, confirming the Russia--Ukraine invasion as the primary driver of the largest measured EMFI responses; this reflects genuine heterogeneous treatment intensity rather than upward bias. All alternative EMFI constructions (R03--R05, R11--R12) yield positive on-impact estimates similar in magnitude to the baseline.
+\noindent Across all specifications the on-impact coefficient is positive, ranging from $-0.083$ (placebo) to $0.535$ (R04, R12). The placebo check (R08) yields $\hat\beta_0 = -0.083$ ($p > 0.77$), confirming no reverse causality. The Ukraine exclusion (R02) attenuates the estimate to 0.083, confirming the Russia--Ukraine invasion as the primary driver of the largest measured EMFI responses; this reflects genuine heterogeneous treatment intensity rather than upward bias. All alternative EMFI constructions (R03--R05, R11--R12) yield positive on-impact estimates similar in magnitude to the primary specification (COVID-excluded baseline). The full-sample specification including COVID shock days (R00 above uses the COVID-excluded baseline; Table~\ref{tab:app_robustness} row R00 labelled ``Baseline'' refers to the primary COVID-excluded specification) yields $\hat\beta_0 = 0.458$ as a sensitivity comparison.
 
 \bibliographystyle{plainnat}
 \bibliography{references}
 
 \end{document}
-                                                                                              

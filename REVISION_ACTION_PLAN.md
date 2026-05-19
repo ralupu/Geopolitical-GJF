@@ -3,7 +3,7 @@
 
 **Based on:** Review1.pdf (co-author/advisor pre-submission review, 14 pages)  
 **Created:** 2026-05-18  
-**Last updated:** 2026-05-18 (Phase R1 complete)  
+**Last updated:** 2026-05-18 (Phase R2 complete)  
 **Target journal:** Global Finance Journal (GFJ)  
 **Overall reviewer verdict:** "Promising paper, potentially suitable for GFJ after substantial revision, but not submission-ready in the current form."
 
@@ -39,7 +39,7 @@ The "companion paper" / "companion BIR paper" / "companion study" language must 
 |-------|-------|----------|------|-------------|
 | R0 | Text corrections and internal consistency fixes | ✅ **Complete** | Text only | — |
 | R1 | References, citations, and appendices | ✅ **Complete** | Text + bib | — |
-| R2 | COVID reclassification as non-geopolitical event | 🔴 Critical | Code + text | 3–4 hours |
+| R2 | COVID reclassification as non-geopolitical event | ✅ **Complete** | Code + text | — |
 | R3 | TCI strengthening (window and robustness) | 🟠 High | Code + text | 3–4 hours |
 | R4 | HMM enhancements (terminology + robustness) | 🟠 High | Code + text | 3–4 hours |
 | R5 | Formal inference for state-dependent amplification θ | 🟠 High | Code + text | 3–4 hours |
@@ -218,11 +218,12 @@ Fill in co-authors and full title from the BIR paper's title page.
 
 ## Phase R2 — COVID Reclassification as Non-Geopolitical Event
 
-**Status:** ⬜ Pending  
+**Status:** ✅ Complete (2026-05-18)  
+**Git commit:** (next commit) — R2: COVID reclassified as non-geopolitical; new baseline LP  
 **Priority:** 🔴 Critical  
 **Type:** Code + text  
 **Estimated effort:** 3–4 hours  
-**Script:** New `subprojects/10_covid_excl/run_covid_reclassify.py`
+**Script:** `subprojects/10_covid_reclassify/run_covid_reclassify.py`
 
 ### The Problem
 
@@ -262,13 +263,20 @@ From Phase 7 COVID-exclusion runs already completed: β_k0(EMFI) drops from 0.45
 The Introduction must be revised: remove COVID as an opening example of a geopolitical event. Instead: "From the Russian invasion of Ukraine in February 2022 to the Hamas–Israel conflict of October 2023, geopolitical events periodically disrupt global equity markets." COVID is mentioned separately in the EMFI validation context: "We validate EMFI and HMM against well-known stress episodes, including the COVID-19 market crash of March 2020..."
 
 **Deliverables — Phase R2:**
-- [ ] `subprojects/10_covid_reclassify/run_covid_reclassify.py` written and run
-- [ ] New primary LP results (COVID shock days excluded from treatment) saved to `results/panel_lp_nocovid/`
-- [ ] New primary state LP results saved to `results/state_lp_nocovid/`
-- [ ] Updated event taxonomy (COVID shock days flagged separately)
-- [ ] `test_covid_reclassify.py` test suite, all passing
-- [ ] Table comparing full-sample vs COVID-excl results (for paper Section 6 or robustness)
-- [ ] Git commit: "R2: COVID reclassified as non-geopolitical; new baseline LP"
+- [x] `subprojects/10_covid_reclassify/run_covid_reclassify.py` written and run
+- [x] New primary LP results (COVID shock days excluded from treatment) saved to `results/panel_lp_nocovid/`
+- [x] New primary state LP results saved to `results/state_lp_nocovid/`
+- [x] Updated event taxonomy (COVID shock days flagged separately, `covid_reclassify/event_taxonomy_nocovid.csv`)
+- [x] `test_covid_reclassify.py` test suite, 24/24 passing
+- [x] Table comparing full-sample vs COVID-excl results (`covid_reclassify/comparison_table.csv`)
+- [x] LaTeX updated: new baseline β_k0=0.245, COVID→Ukraine framing, robustness section swapped; compiles 29 pages, 0 errors
+- [x] Git commit: "R2: COVID reclassified as non-geopolitical; new baseline LP"
+
+**Key results:**
+- 16 COVID-period shock days zeroed in treatment (2020-01-01 – 2020-12-31); sample unchanged (2,179 obs)
+- Panel LP β_k0(EMFI) = 0.245 (was 0.458); outcomes remain in sample for EMFI/HMM validation
+- State LP: β=0.148, θ=1.455 for EMFI; amplification ratio 9.9× (fragile vs calm), up from 6.4× baseline
+- Full-sample version demoted to robustness check (Appendix E)
 
 ---
 
@@ -718,23 +726,4 @@ GFJ increasingly requires data and code statements. Add to the paper:
 | Remove COVID as geopolitical treatment event | R2 | ⬜ |
 | Resolve Hamas contradiction | R0.2 | ⬜ |
 | Correct significance overclaim | R0.3 | ⬜ |
-| Add formal inference for state-dependent amplification | R5 | ⬜ |
-| Strengthen TCI or add simpler robustness | R3 | ⬜ |
-| Make EMFI/HMM real-time or tone down monitoring claims | R4.3, R8.4 | ⬜ |
-| Add predictive event classification | R6 | ⬜ |
-| Replace all citation placeholders | R1.1 | ⬜ |
-| Complete appendices and figure/table documentation | R1.3, R7 | ⬜ |
-
-### Additional: User instruction
-
-| Instruction | Phase | Status |
-|-------------|-------|--------|
-| Replace "companion study/paper" with Lupu et al. (2026) everywhere | R0.5 | ✅ |
-
----
-
-## Change Log
-
-| Date | Phase | Change |
-|------|-------|--------|
-| 2026-05-18 | R0 | All 6 text-consistency fixes implemented: Table 1 countries (Bul
+| Add formal inference for state-depend

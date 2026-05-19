@@ -1,0 +1,43 @@
+{
+  "generated_at": "2026-05-19T06:16:30.979020+00:00",
+  "script": "subprojects/10_covid_reclassify/run_covid_reclassify.py",
+  "covid_exclusion_window": {
+    "start": "2020-01-01",
+    "end": "2020-12-31"
+  },
+  "hf_threshold_emfi": 0.5483,
+  "hf_pctile": 0.75,
+  "n_remaining_shock_days": 138,
+  "slp_summary": [
+    {
+      "outcome": "EMFI",
+      "theta_k0_smooth": 1.455243,
+      "theta_k1_smooth": 1.977787,
+      "theta_k0_binary": 1.681609
+    },
+    {
+      "outcome": "tci_w100",
+      "theta_k0_smooth": 2.799899,
+      "theta_k1_smooth": 9.532512,
+      "theta_k0_binary": 1.903135
+    },
+    {
+      "outcome": "TailVolBreadth",
+      "theta_k0_smooth": 1.806678,
+      "theta_k1_smooth": 3.552763,
+      "theta_k0_binary": 4.0539
+    },
+    {
+      "outcome": "P_stress",
+      "theta_k0_smooth": 0.383993,
+      "theta_k1_smooth": -0.026017,
+      "theta_k0_binary": 0.229892
+    },
+    {
+      "outcome": "AvgCorr60",
+      "theta_k0_smooth": -0.011579,
+      "theta_k1_smooth": 0.019358,
+      "theta_k0_binary": -0.000529
+    }
+  ]
+}
