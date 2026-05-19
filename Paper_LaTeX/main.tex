@@ -61,7 +61,7 @@ validated high-frequency geopolitical conflict shock series with a suite of
 market-based systemic fragility measures, a composite European Market
 Fragility Index (EMFI) constructed via principal component analysis, and a
 Hidden Markov Model that classifies each trading day into latent stress
-regimes without reference to geopolitical events.
+market stress states without reference to geopolitical events.
 COVID-19 shock days are excluded from the LP treatment series because
 COVID-19 is a financial crisis, not a geopolitical conflict shock; the market
 outcomes are retained for EMFI and HMM validation.
@@ -126,7 +126,7 @@ composite European Market Fragility Index (EMFI) derived from principal
 component analysis.
 The third layer is a \emph{Hidden Markov Model} (HMM) estimated on the
 fragility measures that, without reference to geopolitical events, assigns
-each trading day to one of three latent regimes---calm, elevated, and
+each trading day to one of three latent stress states---calm, elevated, and
 systemic stress---and produces a daily probability $P_{\text{stress},t}$ of
 being in the systemic state.
 
@@ -145,11 +145,11 @@ Our main findings are as follows.
 short-run responses in all five fragility outcomes, but the responses are
 statistically imprecise when estimated on the full sample.
 This is consistent with the descriptive finding that 63\% of detected shock
-events occur on days when the market is in the HMM calm regime---the shocks
+events occur on days when the market is in the HMM calm state---the shocks
 most commonly arrive in non-stressed conditions.
-\emph{Second}, the EMFI and HMM regime indicator are complementary
+\emph{Second}, the EMFI and HMM state indicator are complementary
 measures with moderate correlation (0.65): EMFI captures the level of acute
-stress, while $P_{\text{stress},t}$ captures the certainty of a regime
+stress, while $P_{\text{stress},t}$ captures the certainty of a stress state
 transition.
 \emph{Third}, state-dependent local projections provide evidence that shock
 effects are amplified in fragile market conditions, though the identification
@@ -171,7 +171,7 @@ The paper is structured as follows.
 Section~\ref{sec:literature} reviews the related literature.
 Section~\ref{sec:data} describes the data and shock series.
 Section~\ref{sec:fragility} constructs the fragility measures and EMFI.
-Section~\ref{sec:hmm} presents the HMM stress-regime model.
+Section~\ref{sec:hmm} presents the HMM stress-state model.
 Section~\ref{sec:lp} reports the baseline LP results.
 Section~\ref{sec:state} presents state-dependent LPs and the event taxonomy.
 Section~\ref{sec:robustness} discusses robustness checks.
@@ -227,7 +227,7 @@ following the now-standard practice in applied macroeconometrics.
 regime changes in macroeconomic time series.
 \citet{guidolin2007asset} and \citet{ang2012regime} apply HMMs to asset
 allocation and risk management.
-We use a multivariate Gaussian HMM to classify market fragility regimes
+We use a multivariate Gaussian HMM to classify market fragility states
 purely from market-based indicators, ensuring that the classification is
 independent of the geopolitical shock series used in the LP regressions.
 
@@ -524,7 +524,7 @@ invasion, and Hamas--Israel episodes.
 \end{figure}
 
 % ============================================================
-\section{Market-Implied Systemic Stress Regimes}
+\section{Market-Implied Systemic Stress States}
 \label{sec:hmm}
 
 \subsection{Model specification}
@@ -557,7 +557,7 @@ $P_{\text{stress},t} \equiv \Pr(s_t = 2 \mid \mathbf{X}_{1:t})$,
 is therefore an independent market-implied measure that can be used as
 a conditioning variable in the LP regressions of Section~\ref{sec:state}.
 
-\subsection{Estimated regime structure}
+\subsection{Estimated stress-state structure}
 \label{subsec:hmm_results}
 
 The estimated three-state HMM converged to a log-likelihood of $-1367.1$
@@ -597,22 +597,32 @@ the prior that European equity markets spend most time in non-crisis conditions.
 the systemic-stress state is highly transient (diagonal 0.371, implying a
 mean duration of approximately 1.6 trading days).
 The systemic state therefore captures episodic spikes rather than prolonged
-stress regimes---a finding consistent with the acute-stress nature of the
+stress episodes---a finding consistent with the acute-stress nature of the
 EMFI documented in Section~\ref{subsec:emfi}.
 \emph{Third}, when a day is classified as systemic, the most likely
 next-day state is calm (transition probability 0.411), reflecting sharp
 reversals common to high-volatility episodes.
 
-The Viterbi (most likely) regime path identifies 143 distinct systemic-stress
+The Viterbi (most likely) path identifies 143 distinct systemic-stress episodes:
 episodes with a median calendar duration of one day.
 Figure~\ref{fig:hmm_regimes} plots $P_{\text{stress},t}$ alongside the EMFI,
 with event annotations for major crises.
+We use smoothed posterior probabilities (Baum--Welch forward-backward) as our
+primary $P_{\text{stress}}$ series; filtered probabilities (forward algorithm
+only, conditioning solely on past data) achieve a correlation of 0.994 with
+the smoothed series, confirming that look-ahead bias from smoothing is
+economically negligible.\footnote{Filtered probabilities and a full comparison
+of four HMM specification variants are reported in Appendix~\ref{app:hmm},
+Sections C.4--C.5. Alternative specifications --- 2-state, diagonal covariance,
+COVID-excluded training, and pre-2020 out-of-sample --- achieve Cohen's
+$\kappa \geq 0.629$ and $\rho \geq 0.733$ with the baseline, with most
+3-state variants exceeding $\kappa = 0.87$.}
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{Fig_HMM_Regimes}
-  \caption{HMM regime decomposition, 2017--2025.
-    Top panel: EMFI coloured by Viterbi regime state.
+  \caption{HMM stress-state decomposition, 2017--2025.
+    Top panel: EMFI coloured by Viterbi stress state.
     Middle panel: posterior state probabilities.
     Bottom panel: Viterbi path.
     Shaded bands mark the three major crisis episodes.}
@@ -726,7 +736,7 @@ when shocks are pooled across calm and fragile market conditions, the large
 responses in fragile states are averaged with near-zero responses in calm
 states, yielding an attenuated unconditional estimate. The state-dependent
 specification in Section~\ref{sec:state} recovers the heterogeneous responses
-by conditioning on the pre-shock market regime.
+by conditioning on the pre-shock market state.
 
 \paragraph{Comparison with full-sample results.}
 For reference, the full-sample specification (retaining the 16 COVID shock
@@ -769,7 +779,7 @@ complementary specifications.
 
 Because only 14 of the 138 non-COVID shock events in the LP sample fall
 on days when $\hat{P}_{\text{stress},t-1} > 0.5$---a count below the minimum
-threshold for reliable binary-regime inference---we adopt a
+threshold for reliable binary stress-state inference---we adopt a
 \emph{smooth-transition} specification as our primary design. The
 conditioning variable enters the regression continuously, weighting each
 observation by its pre-shock systemic-stress probability:
@@ -851,7 +861,7 @@ post-shock response.
 The sole exception is AvgCorr60, for which $\hat\theta_0 \approx -0.011$
 is negligibly small and sign-unstable across horizons. This is an
 informative null result: rolling cross-market correlations are already
-elevated in high-stress regimes, and geopolitical shocks do not amplify
+elevated in high-stress states, and geopolitical shocks do not amplify
 them further above that elevated baseline. The amplification mechanism
 operates through volatility and connectedness channels, not through
 incremental correlation.
@@ -909,7 +919,7 @@ outcomes (Table~\ref{tab:binary_lp_k0}). Strikingly, the normal-market
 IRF is near-zero or slightly negative for several outcomes, indicating
 that when shocks strike calm markets on average they produce no
 detectable immediate stress response. The amplification is not a
-dampening of a universal positive effect but rather a regime-specific
+dampening of a universal positive effect but rather a state-specific
 mechanism: shocks are absorbed in normal markets and amplified in
 fragile ones.
 
@@ -959,7 +969,7 @@ An event that raises the EMFI above its pre-event level but does not breach the 
 All remaining events---where the EMFI fails to rise or declines---are classified as \textbf{Absorbed}.
 We additionally identify \textbf{market-only stress} episodes: trading days with $P_{\text{stress},t} > 0.50$ that do not coincide with any identified shock within a $\pm 3$ trading-day window; these capture endogenous systemic stress that is not triggered by geopolitical news.
 
-Table~\ref{tab:taxonomy_summary} reports the category distribution across all 154 events. The majority of shocks (50.6\%) are absorbed without measurable fragility response, confirming the LP baseline finding that geopolitical news routinely fails to disturb market-based systemic risk indicators in calm regimes. A further 22.1\% are localized---EMFI rises but systemic stress probability remains subdued.
+Table~\ref{tab:taxonomy_summary} reports the category distribution across all 154 events. The majority of shocks (50.6\%) are absorbed without measurable fragility response, confirming the LP baseline finding that geopolitical news routinely fails to disturb market-based systemic risk indicators in calm states. A further 22.1\% are localized---EMFI rises but systemic stress probability remains subdued.
 The remaining 27.3\% (42 events) qualify as Systemic; these are concentrated in two clusters: the COVID-19 panic of 2020 and the Ukraine conflict onset and associated European energy crisis of 2022.
 
 \begin{table}[htbp]
@@ -995,7 +1005,7 @@ The Hamas attack of 7 October 2023, which falls on a Sunday, maps to the nearest
 
 Alongside identified shocks, we find 138 market-stress days ($P_{\text{stress},t} > 0.50$) with no geopolitical shock within a $\pm 3$ trading-day window.
 These market-only stress episodes---predominantly concentrated in the COVID-19 period and the 2022 European energy crisis---demonstrate that systemic fragility can arise endogenously without a proximate identified geopolitical trigger.
-This finding reinforces the asymmetric causal structure documented in the LP analysis: while high-fragility regimes amplify the transmission of geopolitical shocks, stress states themselves often originate from sources beyond the geopolitical shock series.
+This finding reinforces the asymmetric causal structure documented in the LP analysis: while high-fragility states amplify the transmission of geopolitical shocks, stress states themselves often originate from sources beyond the geopolitical shock series.
 
 Figure~\ref{fig:event_timeline} displays the full shock event timeline with category labels overlaid on the EMFI series.
 Figure~\ref{fig:network_systemic} shows the equity return correlation network before and after the top five Systemic events, sorted by post-event EMFI; the network densification following these events confirms the systemic interpretation.
@@ -1219,7 +1229,7 @@ measures---volatility stress, tail co-exceedance breadth, rolling cross-market
 correlation, total volatility connectedness (TCI), and a composite European
 Market Fragility Index (EMFI) derived from principal component analysis---and
 a Hidden Markov Model that assigns each trading day a probability of being in a
-distinct systemic-stress regime without reference to geopolitical event dates.
+distinct systemic-stress episodes without reference to geopolitical event dates.
 
 We draw five main conclusions.
 
@@ -1232,7 +1242,7 @@ of shocks that arrive in calm market conditions and produce negligible
 fragility responses, pulling the unconditional average toward zero. However, 50.6\%
 of the 154 identified shock events are classified as Absorbed---the fragility
 indices show no measurable deterioration---consistent with the descriptive
-finding that 63\% of shocks arrive during the HMM calm regime.
+finding that 63\% of shocks arrive during the HMM calm state.
 
 \textbf{State dependence is the central mechanism.} Shocks that strike
 already-fragile markets produce responses 6.4 to 10.3 times larger than those
@@ -1405,7 +1415,7 @@ The near-equal loadings across all four components confirm that PC1 is a genuine
 
 \subsection*{B.3 EMFI summary statistics}
 
-The resulting EMFI series has sample mean 0.0 and standard deviation 1.53, with a minimum of $-2.74$ and a maximum of 15.22 (the peak occurs on the first trading day following the onset of the COVID-19 pandemic in March 2020). The high-fragility regime threshold is set at the 75th percentile, $\text{EMFI} \geq 0.548$, yielding 545 high-fragility days over the sample.
+The resulting EMFI series has sample mean 0.0 and standard deviation 1.53, with a minimum of $-2.74$ and a maximum of 15.22 (the peak occurs on the first trading day following the onset of the COVID-19 pandemic in March 2020). The high-fragility state threshold is set at the 75th percentile, $\text{EMFI} \geq 0.548$, yielding 545 high-fragility days over the sample.
 
 \section{HMM Parameter Estimates}
 \label{app:hmm}
@@ -1460,6 +1470,40 @@ Systemic stress  & $\phantom{-}1.858$ & $\phantom{-}2.119$ & $\phantom{-}0.809$ 
 \end{table}
 
 Systemic stress is characterised by substantially elevated VolStress and TailVolBreadth, confirming its role as a spike-detector. AvgCorr60 and TCI also rise in systemic stress but with smaller magnitudes, reflecting a lag between initial volatility spikes and correlation diffusion across markets.
+
+\subsection*{C.4 HMM robustness specifications}
+
+Table~\ref{tab:hmm_robustness} reports agreement statistics between the baseline 3-state Gaussian HMM and four alternative specifications: (a)~a 2-state HMM (collapsing elevated and systemic stress into a single stressed state); (b)~a 3-state HMM with diagonal rather than full covariance; (c)~a 3-state HMM trained on non-COVID data (2020 excluded from training) and applied to the full sample; and (d)~a 3-state HMM trained exclusively on pre-pandemic data (2017--2019) and applied out-of-sample to the full 2017--2025 period.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{HMM specification robustness: agreement with baseline 3-state Gaussian HMM}
+\label{tab:hmm_robustness}
+\begin{tabular}{lcccc}
+\hline\hline
+Specification & States & Cov. type & $\rho(P_{\text{stress}})$ & Cohen's $\kappa$ \\
+\hline
+Baseline (smoothed)         & 3 & Full     & 1.000 & 1.000 \\
+Baseline (filtered)         & 3 & Full     & 0.994 & --- \\
+2-state HMM                 & 2 & Full     & 0.733 & 0.629 \\
+3-state, diagonal cov.      & 3 & Diagonal & 0.958 & 0.971 \\
+COVID-excluded training     & 3 & Full     & 0.900 & 0.939 \\
+Pre-2020 training (OOS)     & 3 & Full     & 0.809 & 0.879 \\
+\hline\hline
+\multicolumn{5}{l}{\footnotesize $\rho$ = Pearson correlation of $P_{\text{stress}}$ series with baseline (smoothed).}\\
+\multicolumn{5}{l}{\footnotesize $\kappa$ for 2-state: computed on binary (stress vs non-stress) classification.}\\
+\multicolumn{5}{l}{\footnotesize OOS = out-of-sample (model never observed 2020--2025 during training).}
+\end{tabular}
+\end{table}
+
+The diagonal-covariance specification achieves near-perfect agreement ($\kappa = 0.971$, $\rho = 0.958$), indicating that the off-diagonal covariance structure provides minimal additional identification power. The COVID-excluded and pre-2020 out-of-sample specifications, while trained on substantially different data, still yield $\kappa \geq 0.879$ and $\rho \geq 0.809$, confirming that the stress-state classifications are not COVID-driven artefacts but reflect stable market structure across the sample.
+
+\subsection*{C.5 Filtered vs smoothed probabilities}
+
+The baseline $P_{\text{stress},t}$ uses smoothed posterior probabilities from the Baum--Welch forward-backward algorithm, which conditions on the full sample. For real-time or policy applications, filtered probabilities — based on the forward algorithm only (conditioning on $x_1,\ldots,x_t$) — are preferable. The correlation between filtered and smoothed $P_{\text{stress}}$ is 0.994, indicating near-identical series in practice.
+
+The near-equivalence of filtered and smoothed probabilities is expected given the transition matrix structure: the systemic-stress state exits rapidly (diagonal 0.371), so conditioning on future data adds little information. This validates the use of EMFI and HMM as \emph{ex-post} outcome measures (for causal LP estimation) without concern that smoothing creates economically meaningful look-ahead bias.
 
 \section{Additional LP Results}
 \label{app:lp}
@@ -1587,4 +1631,3 @@ preserved across all specifications.
 \bibliography{references}
 
 \end{document}
-                                                    
