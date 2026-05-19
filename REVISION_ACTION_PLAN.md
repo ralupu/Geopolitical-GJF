@@ -43,7 +43,7 @@ The "companion paper" / "companion BIR paper" / "companion study" language must 
 | R3 | TCI strengthening (window and robustness) | ✅ **Complete** | Code + text | — |
 | R4 | HMM enhancements (terminology + robustness) | ✅ **Complete** | Code + text | — |
 | R5 | Formal inference for state-dependent amplification θ | ✅ **Complete** | Code + text | — |
-| R6 | Predictive event classification (logit/probit) | 🟠 High | Code + text | 2–3 hours |
+| R6 | Predictive event classification (logit/probit) | ✅ **Complete** | Code + text | — |
 | R7 | Figure improvements | 🟡 Medium | Code | 1–2 hours |
 | R8 | Paper rewrite: framing, abstract, policy claims | 🟡 Medium | Text | 3–4 hours |
 | R9 | Submission package | 🟡 Medium | Text | 1–2 hours |
@@ -482,11 +482,10 @@ TCI: θ=2.70, SE=1.59, p=0.090 (sig. 10%), boot CI=[0.08, 7.65] (excludes 0)
 
 ## Phase R6 — Predictive Event Classification
 
-**Status:** ⬜ Pending  
+**Status:** ✅ Complete (git commit: _pending_)  
 **Priority:** 🟠 High  
-**Type:** Code + text (new subsection)  
-**Estimated effort:** 2–3 hours  
-**Script:** `subprojects/11_predictive_classification/run_predictive_class.py`
+**Type:** Code + text  
+**Script:** `subprojects/14_predictive_class/run_predictive_class.py`
 
 ### The Problem / Opportunity
 
@@ -528,14 +527,15 @@ Title: "6.3 Predicting Geopolitical Systemic Events"
 This section directly answers the paper's title question in a formal, predictive sense.
 
 **Deliverables — Phase R6:**
-- [ ] `subprojects/11_predictive_classification/run_predictive_class.py` written and run
-- [ ] `results/predictive_class/logit_results.csv` — coefficient table
-- [ ] `results/predictive_class/loocv_auc.csv` — LOO-CV AUC
-- [ ] `results/predictive_class/Fig_ROC_Predictive.png` — ROC curve
-- [ ] `results/predictive_class/Fig_Tree_Predictive.png` — classification tree (optional)
-- [ ] `test_predictive_class.py` test suite, all passing
-- [ ] New Section 6.3 in main.tex (~400 words + coefficient table + ROC figure)
-- [ ] Git commit: "R6: predictive event classification — logit, LOO-CV, new Section 6.3"
+- [x] SP14 `run_predictive_class.py` — logit + probit + LOO-CV + CART
+- [x] `logit_table.csv`, `probit_table.csv`, `loocv_results.csv`
+- [x] `Fig_ROC_Predictive.png`, `Fig_Tree_Predictive.png`
+- [x] 27 tests passing (`test_predictive_class.py`)
+- [x] Section 6.3 added to main.tex: logit table, ROC figure, 500-word discussion
+- [x] main.tex compiles clean (33 pages, 0 errors)
+
+**Key results:** LOO-CV AUC=0.693; EMFI dominant (p=0.002, OR=6.82);  
+Ukraine Pr(Systemic)=0.68; McFadden pseudo-R2=0.164
 
 ---
 

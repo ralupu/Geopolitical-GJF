@@ -1052,8 +1052,109 @@ The network densifies markedly following each Systemic event, confirming heighte
 \label{fig:network_systemic}
 \end{figure}
 
+
+\subsection{Predicting systemic geopolitical events}
+\label{sec:predictive_class}
+
+Having shown that geopolitical shocks become systemic primarily when markets
+are already fragile, we now ask: can pre-shock market conditions \emph{predict}
+which shocks will become systemic?
+We estimate a binary logit model on the 154 shock-day observations, where the
+outcome is $\mathrm{Systemic}_i = 1$ (42 events) versus $\mathrm{Systemic}_i = 0$
+(112 Absorbed or Localized events):
+\begin{equation}
+\Pr(\mathrm{Systemic}_i = 1) = \Lambda\!\left(\alpha
+  + \beta_1\,\mathrm{EMFI}_{t-1}
+  + \beta_2\,\mathrm{TCI}_{t-1}
+  + \beta_3\,\hat{P}_{\mathrm{stress},t-1}
+  + \beta_4\,S_t
+  + \beta_5\,\mathrm{breadth}_t\right)
+\label{eq:logit}
+\end{equation}
+where all fragility predictors are measured one day before the shock to avoid
+any look-ahead bias. Coefficients are estimated on standardised predictors
+(mean zero, unit variance) so that magnitudes are directly comparable.
+
+Table~\ref{tab:predictive_logit} reports the full-sample logit coefficients.
+The pre-shock composite fragility index $\mathrm{EMFI}_{t-1}$ is the only
+statistically significant predictor ($\hat\beta_1 = 1.92$, $p < 0.01$,
+$\mathrm{OR} = 6.82$): a one-standard-deviation increase in pre-shock EMFI
+is associated with a 6.8-fold increase in the odds of a systemic outcome.
+Shock intensity ($S_t$) and breadth are not individually significant after
+controlling for the fragility state, consistent with the LP finding that
+\emph{who} gets hit matters far more than \emph{how hard} the shock is.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Binary logit for systemic event classification.
+  Predictors are standardised (mean zero, unit variance);
+  odds ratios (OR) are $e^{\hat\beta}$.
+  Standard errors are maximum-likelihood asymptotic.
+  $N = 154$ shock events; McFadden pseudo-$R^2 = 0.164$.
+  $^{***}$~$p < 0.01$.}
+\label{tab:predictive_logit}
+\begin{tabular}{lrrrr}
+\hline\hline
+Predictor & $\hat\beta$ & SE & $p$-value & OR \\
+\hline
+$\mathrm{EMFI}_{t-1}$           &  1.920$^{***}$ & 0.621 & 0.002 & 6.82 \\
+$\mathrm{TCI}_{t-1}$            & $-0.756$       & 0.487 & 0.120 & 0.47 \\
+$\hat{P}_{\mathrm{stress},t-1}$ & $-0.374$       & 0.297 & 0.207 & 0.69 \\
+$S_t$ (shock intensity)         & $-0.056$       & 0.241 & 0.815 & 0.95 \\
+Breadth ($N$ countries)         &  0.187         & 0.257 & 0.468 & 1.21 \\
+\hline\hline
+\end{tabular}
+\end{table}
+
+The negative coefficient on $\hat{P}_{\mathrm{stress},t-1}$ in the joint
+specification reflects multicollinearity: $\mathrm{EMFI}_{t-1}$ and
+$\hat{P}_{\mathrm{stress},t-1}$ are correlated ($r = 0.60$) because both
+capture market fragility.
+In univariate regressions, all three fragility measures have positive associations
+with systemic classification ($r = 0.41$, $0.27$, and $0.24$ respectively for
+EMFI, TCI, and $P_{\mathrm{stress}}$).
+The joint model recovers EMFI as the dominant single predictor because it
+aggregates all three components (correlation breadth, volatility tail risk,
+and connectedness) into one index.
+
+\textbf{Predictive performance.}
+Leave-one-out cross-validation (LOO-CV) yields an AUC of $0.693$ for the logit
+and $0.692$ for a probit robustness check, confirming stable moderate discriminating
+power (Figure~\ref{fig:roc_predictive}).
+At the optimal Youden-$J$ threshold ($\hat\pi = 0.29$),
+the model achieves sensitivity of 57.1\% and specificity of 75.9\%,
+with an overall accuracy of 70.8\%.
+The Brier score (0.178) improves upon the naïve base-rate benchmark of 0.197
+($42/154 \times 112/154$).
+
+Applied to high-profile events, the model assigns a predicted probability of
+$0.68$ to the Ukraine invasion (24 February 2022; correctly classified Systemic),
+reflecting the elevated EMFI in February 2022.
+COVID-19 onset (24 February 2020) receives only $0.20$ despite being Systemic,
+because EMFI had not yet spiked on that date---the crash was still developing.
+This illustrates an important limitation: the model can only incorporate
+information that had already been impounded into market prices before the shock.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.65\linewidth]{Fig_ROC_Predictive}
+\caption{ROC curve for systemic event prediction (leave-one-out cross-validation).
+  Logit AUC $= 0.693$; probit AUC $= 0.692$.
+  The dashed line is the random classifier.}
+\label{fig:roc_predictive}
+\end{figure}
+
+These results establish that the distinction between systemic and non-systemic
+geopolitical events is not arbitrary ex-post classification: pre-existing market
+fragility---measured before the shock lands---carries genuine predictive content.
+The finding that EMFI$_{t-1}$ has an odds ratio of 6.8 for systemic outcomes is
+the predictive complement to the LP result that shocks in high-EMFI states have
+10-fold amplified effects.
+
 % ============================================================
 \section{Robustness}
+
 \label{sec:robustness}
 
 We subject the baseline findings to a battery of twelve robustness checks covering
