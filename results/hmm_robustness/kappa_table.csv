@@ -1,6 +1,0 @@
-variant,n_states,corr_P_stress,kappa,pct_high_stress
-baseline-filtered,3,0.994,,0.0991
-2-state,2,0.7329,0.6292,0.1946
-3-state-diag,3,0.9584,0.9708,0.1143
-covid-excl,3,0.9,0.9391,0.1257
-pre-2020,3,0.8089,0.879,0.1602

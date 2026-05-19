@@ -54,31 +54,26 @@
 
 % ---- Abstract -----------------------------------------------
 \begin{abstract}
-This paper investigates when geopolitical shocks translate into systemic
-financial stress in European equity markets.
-Using daily data for 19 equity markets over 2017--2025, we combine a
-validated high-frequency geopolitical conflict shock series with a suite of
-market-based systemic fragility measures, a composite European Market
-Fragility Index (EMFI) constructed via principal component analysis, and a
-Hidden Markov Model that classifies each trading day into latent stress
-market stress states without reference to geopolitical events.
-COVID-19 shock days are excluded from the LP treatment series because
-COVID-19 is a financial crisis, not a geopolitical conflict shock; the market
-outcomes are retained for EMFI and HMM validation.
-Local projections on the 138 non-COVID geopolitical shock observations reveal
-positive but statistically imprecise responses, consistent with the finding
-that 63\% of shocks strike calm markets.
-State-dependent projections show that when shocks strike already-fragile
-markets the EMFI response is approximately 10 times larger ($\hat\theta_0 =
-1.46$), and the TCI response is 12 times larger ($\hat\theta_0 = 2.80$).
-Our event taxonomy validates EMFI and HMM against known stress episodes: the
-COVID-19 market crash and the 2022 Ukraine invasion are confirmed as the most
-severe Systemic events; the 2023 Hamas--Israel shock
-triggers a one-day delayed systemic stress episode, with the market-implied
-stress probability reaching unity on the trading day following the attack.
-The results highlight that geopolitical shock transmission depends critically
-on pre-existing market fragility, and that most geopolitical events---however
-large---do not trigger systemic fragility in integrated European markets.
+We ask when geopolitical shocks become systemic financial stress events.
+Using a daily panel of 19 European equity markets over 2017--2025, we
+construct a European Market Fragility Index (EMFI) from principal component
+analysis and a Hidden Markov Model that assigns each trading day to latent
+stress states without reference to geopolitical events.
+Local projections on 154 detected geopolitical shock days yield positive but
+statistically imprecise average responses: 63\% of shocks arrive when markets
+are calm and produce negligible fragility effects.
+State-dependent projections reveal that shocks striking already-fragile
+markets are an order of magnitude more destabilising---EMFI amplification
+$\hat\theta_{k=0} = 1.44$ (10.4$\times$ the calm-market baseline), TCI
+amplification $\hat\theta_{k=0} = 2.70$ ($10.0\times$).
+A predictive logit model estimated on pre-shock market conditions achieves
+a leave-one-out AUC of 0.693: a one-standard-deviation rise in pre-shock
+EMFI increases the odds of a systemic shock outcome by a factor of 6.8.
+The event taxonomy classifies 42 of 154 shocks as Systemic (27.3\%),
+concentrated in the COVID-19 panic of 2020 and the 2022 Ukraine cluster.
+The central finding is that the financial consequences of geopolitical events
+depend not primarily on the shocks themselves but on the fragility of the
+markets they enter.
 \end{abstract}
 
 \newpage
@@ -112,23 +107,36 @@ markets into their return tails, elevates cross-market connectedness above
 unity. Explaining the difference between these two types of shock response is
 the contribution of this paper.
 
-We approach the question through three analytical layers.
-The first is a \emph{trigger}: we reuse the validated high-frequency
-geopolitical conflict shock series developed by \citet{lupu2026bir},
-which constructs daily shock intensities $S_{i,t} = -\log q_{i,t}$
-from extreme value theory and false-discovery-rate multiple testing
-applied to GDELT Document 2.0 conflict coverage for 19 European countries.
-The second layer is a suite of \emph{market-based systemic fragility
-measures} constructed from the daily equity return panel: volatility stress,
-tail co-exceedance breadth, rolling average pairwise correlation, a total
-volatility connectedness index following \citet{dieboldyilmaz2012}, and a
-composite European Market Fragility Index (EMFI) derived from principal
-component analysis.
-The third layer is a \emph{Hidden Markov Model} (HMM) estimated on the
-fragility measures that, without reference to geopolitical events, assigns
-each trading day to one of three latent stress states---calm, elevated, and
-systemic stress---and produces a daily probability $P_{\text{stress},t}$ of
-being in the systemic state.
+This paper makes three contributions.
+
+\textbf{First}, we construct a market-based systemic fragility framework
+that is explicitly independent of the geopolitical shock series.
+The framework combines a European Market Fragility Index (EMFI)---a
+principal-component composite of volatility stress, tail co-exceedance
+breadth, rolling correlation, and total volatility connectedness (TCI,
+\citealt{dieboldyilmaz2012})---with a Hidden Markov Model that assigns each
+trading day to one of three latent stress states (calm, elevated, systemic)
+without reference to geopolitical event dates.
+The geopolitical shock trigger is taken from the validated high-frequency
+series of \citet{lupu2026bir}, which applies extreme value theory and
+false-discovery-rate testing to GDELT Document 2.0 conflict coverage for
+19 European countries.
+
+\textbf{Second}, we provide evidence on state-dependent geopolitical shock
+transmission. Unconditional local projections yield positive but imprecise
+average responses---the expected result when 63\% of shocks strike calm
+markets that produce negligible fragility effects. Smooth-transition local
+projections, conditioning on the lagged HMM stress probability, reveal that
+shocks in already-fragile markets are an order of magnitude more
+destabilising: EMFI amplification 10.4$\times$, TCI amplification
+10.0$\times$ at $P_{\mathrm{stress},t-1} = 0.9$.
+
+\textbf{Third}, we develop a predictive taxonomy of geopolitical shock
+outcomes. A binary logit estimated purely on pre-shock market conditions
+achieves a leave-one-out AUC of 0.693, with pre-shock EMFI as the
+dominant predictor (odds ratio 6.8). This establishes that the
+systemic/absorbed distinction is not post-hoc labelling but reflects a
+genuine predictable difference in market states at the time of the shock.
 
 With this apparatus in hand, we estimate Jord\`a~\citeyearpar{jorda2005} local
 projections (LPs) to trace the dynamic response of each fragility outcome to a
@@ -140,32 +148,34 @@ Finally, we classify the 154 detected geopolitical shock events into an
 joint behaviour of the EMFI and $P_{\text{stress},t}$ in the days following
 each event.
 
-Our main findings are as follows.
-\emph{First}, geopolitical shocks generate positive contemporaneous and
-short-run responses in all five fragility outcomes, but the responses are
-statistically imprecise when estimated on the full sample.
-This is consistent with the descriptive finding that 63\% of detected shock
-events occur on days when the market is in the HMM calm state---the shocks
-most commonly arrive in non-stressed conditions.
-\emph{Second}, the EMFI and HMM state indicator are complementary
-measures with moderate correlation (0.65): EMFI captures the level of acute
-stress, while $P_{\text{stress},t}$ captures the certainty of a stress state
-transition.
-\emph{Third}, state-dependent local projections provide evidence that shock
-effects are amplified in fragile market conditions, though the identification
-is necessarily concentrated in the minority of shock events that arrive during
-elevated or systemic market states.
-\emph{Fourth}, the event taxonomy reveals that the COVID-19 crash and the
-Ukraine invasion are the two most severe Systemic events in our sample. The
-Hamas--Israel attack of October 2023 exhibits a one-day delayed stress
-response: the impact-day market-implied stress probability is 0.296, but
-it peaks at 1.0 on the following trading day, placing the event in the
-Systemic category. This delayed crystallisation illustrates that the
-post-event evaluation window is essential for accurate classification.
-\emph{Fifth}, the HMM classifies 223 trading days (10.2\% of the sample) as
-systemic, of which only 22.9\% fall in the COVID-19 window---the remaining
-systemic days are distributed across multiple stress episodes in 2017--2019 and
-2024--2025, arguing against a single-episode interpretation.
+The results are organised around three findings.
+
+\emph{First}, the unconditional geopolitical shock effect is positive but
+statistically imprecise---a motivated null rather than a limitation.
+The EMFI response at the impact horizon is $\hat\beta_0 = 0.245$
+(COVID-zeroed primary baseline), not significantly different from zero ($p = 0.624$).
+This is the expected outcome when 63\% of shocks arrive in calm market
+conditions: the large responses in fragile states are averaged with
+near-zero responses in the absorbed majority.
+
+\emph{Second}, state-dependent projections reveal that the shock-fragility
+relationship is highly nonlinear. When pre-shock stress probability is
+$P_{\mathrm{stress},t-1} = 0.9$, the EMFI response is 10.4 times the
+calm-market baseline ($\hat\theta_{k=0} = 1.44$); TCI amplification is
+10.0$\times$ ($\hat\theta_{k=0} = 2.70$). The TCI amplification coefficient
+is statistically significant at the 10\% level ($p = 0.090$), with a
+block-bootstrap 95\% CI that excludes zero. The amplification is robust
+across 12 alternative specifications.
+
+\emph{Third}, the predictive taxonomy confirms that the systemic/absorbed
+distinction reflects pre-shock market conditions, not post-hoc
+classification. The logit model's leave-one-out AUC of 0.693 establishes
+that pre-shock fragility carries genuine out-of-sample predictive content:
+a one-SD rise in $\mathrm{EMFI}_{t-1}$ increases the odds of a systemic
+outcome by a factor of 6.8. The Hamas--Israel attack of October 2023 is
+classified Systemic via a one-day delayed stress response (market-implied
+probability reaches 1.0 the trading day after the attack), illustrating that
+the post-event evaluation window matters for accurate classification.
 
 The paper is structured as follows.
 Section~\ref{sec:literature} reviews the related literature.
@@ -173,7 +183,7 @@ Section~\ref{sec:data} describes the data and shock series.
 Section~\ref{sec:fragility} constructs the fragility measures and EMFI.
 Section~\ref{sec:hmm} presents the HMM stress-state model.
 Section~\ref{sec:lp} reports the baseline LP results.
-Section~\ref{sec:state} presents state-dependent LPs and the event taxonomy.
+Section~\ref{sec:state} presents state-dependent LPs, the event taxonomy, and the predictive classification model.
 Section~\ref{sec:robustness} discusses robustness checks.
 Section~\ref{sec:conclusion} concludes.
 
@@ -1312,8 +1322,9 @@ shock--response pattern and not a spurious correlation.
 \hline\hline
 Check & Description & $\hat\beta_{k=0}$ & $\hat\theta_{k=0}$ & Verdict \\
 \hline
-R00 & Baseline & 0.458 & 1.854 & --- \\
-R01 & COVID excl.\ (Mar--Dec 2020) & 0.370 & --- & \checkmark\ same sign \\
+--- & \textbf{Primary (COVID-zeroed)} & \textbf{0.245} & \textbf{1.44} & \textbf{---} \\
+R00 & Full-sample (COVID shock days incl.) & 0.458 & 1.854 & $\uparrow$ inflated \\
+R01 & COVID excl.\ from sample (Mar--Dec 2020) & 0.370 & --- & \checkmark\ positive \\
 R02 & Ukraine excl.\ (Feb--Jun 2022) & 0.083 & --- & $\sim$ attenuated \\
 R08 & Placebo $S_{t+30}$ & $-$0.083 & --- & \checkmark\ correctly negative \\
 R09 & AvgShock & 0.478 & --- & \checkmark\ near-identical \\
@@ -1330,8 +1341,11 @@ R06 & HF threshold $p_{66}$ & --- & 1.232 & \checkmark\ positive \\
 \smallskip\footnotesize
 \textit{Notes:} $\hat\beta_{k=0}$ from panel LP; $\hat\theta_{k=0}$ from smooth-transition
 state LP (continuous $P_{\text{stress},t-1}$ interaction) or binary HF LP for R06.
-Baseline uses MaxShock and 4-component PCA EMFI. Verdict: \checkmark\ = result qualitatively
-confirmed; $\sim$\ = attenuated but positive.
+The \textbf{Primary} row is the COVID-zeroed specification (16 COVID-period shock days
+excluded from the treatment series; this is the paper's main specification).
+All robustness checks use MaxShock and 4-component PCA EMFI unless stated.
+Verdict: \checkmark\ = result qualitatively confirmed; $\sim$\ = attenuated but positive;
+$\uparrow$\ = inflated relative to primary.
 \end{minipage}
 \end{table}
 
@@ -1366,10 +1380,10 @@ distinct systemic-stress episodes without reference to geopolitical event dates.
 We draw five main conclusions.
 
 \textbf{Geopolitical shocks do generate fragility responses, but most of the
-time markets absorb them.} The baseline panel local projection yields a positive but statistically
-imprecise impact coefficient on EMFI at $k=0$ ($\hat\beta = 0.458$,
-$p = 0.174$), with the response remaining positive through horizons up to
-one week. This imprecision is itself informative: it reflects the large share
+time markets absorb them.} The primary (COVID-zeroed) panel local projection yields a positive but statistically
+imprecise impact coefficient on EMFI at $k=0$ ($\hat\beta = 0.245$,
+$p = 0.624$), with the response remaining positive through short horizons.
+This imprecision is itself informative: it reflects the large share
 of shocks that arrive in calm market conditions and produce negligible
 fragility responses, pulling the unconditional average toward zero. However, 50.6\%
 of the 154 identified shock events are classified as Absorbed---the fragility
@@ -1377,12 +1391,13 @@ indices show no measurable deterioration---consistent with the descriptive
 finding that 63\% of shocks arrive during the HMM calm state.
 
 \textbf{State dependence is the central mechanism.} Shocks that strike
-already-fragile markets produce responses 6.4 to 10.3 times larger than those
+already-fragile markets produce responses an order of magnitude larger than those
 that arrive in calm conditions. The smooth-transition local projection, using
 the lagged HMM stress probability as a continuous conditioning variable,
-estimates $\hat\theta_{k=0} = 1.854$ for EMFI and $\hat\theta_{k=0} = 2.500$
-for TCI at $k=0$: a unit shock in a market with $P_{\text{stress},t-1} = 0.9$
-raises EMFI by 2.0 units, compared with 0.3 units at the calm baseline.
+estimates $\hat\theta_{k=0} = 1.44$ for EMFI (amplification 10.4$\times$) and
+$\hat\theta_{k=0} = 2.70$ for TCI (10.0$\times$) at $k=0$.
+The TCI amplification coefficient is statistically significant at the 10\% level
+($p = 0.090$), with a block-bootstrap 95\% CI that excludes zero.
 The amplification is robust across alternative EMFI constructions, alternative
 TCI bandwidths, and COVID exclusion. It survives because the identification draws
 on multiple stress episodes---2020 COVID, 2022 Ukraine conflict and European
@@ -1409,24 +1424,31 @@ can arise endogenously and is not exclusively a consequence of identified shocks
 
 \textbf{The findings are robust, with one honest caveat.} The state-dependent
 amplification ($\hat\theta > 0$) is robust across 12 alternative specifications.
-The unconditional LP coefficient ($\hat\beta$) is sensitive to Ukraine exclusion
-($\hat\beta_{k=0}$ falls to 0.083 with the 2022 conflict cluster removed) but
-survives COVID exclusion ($\hat\beta_{k=0} = 0.370$). We interpret this
-asymmetry as follows: the baseline LP coefficient is a crisis-weighted average
-that overstates the unconditional shock effect on calm days. The state-dependent
-amplification estimate, by construction, conditions on pre-existing fragility and
-is thus the more policy-relevant quantity.
+The unconditional LP coefficient ($\hat\beta$) is sensitive to Ukraine exclusion:
+$\hat\beta_{k=0}$ falls to 0.083 when the 2022 conflict cluster is removed,
+and rises to 0.458 in the full-sample specification that includes COVID shock days
+as geopolitical treatment observations. The primary COVID-zeroed estimate of 0.245
+sits between these extremes. We interpret this variation as follows: the LP
+coefficient is a crisis-weighted average whose magnitude depends on how the two
+dominant episodes---COVID-19 and the Ukraine conflict---enter the treatment series.
+The state-dependent amplification estimate, by construction, conditions on
+pre-existing fragility and is less sensitive to any single episode; it is thus
+the more policy-relevant quantity.
 
 \paragraph{Policy implications.}
-The results carry a direct implication for financial stability monitoring. Whether
+The results carry a clear implication for financial stability analysis. Whether
 a geopolitical event constitutes a systemic financial risk depends not primarily on
 its own characteristics (severity, breadth, type of conflict) but on the pre-existing
-fragility of the financial system at the time the shock arrives. Monitoring the
-state of the financial system---through measures like EMFI and $P_{\text{stress}}$
----may be more informative for crisis prediction than monitoring the geopolitical
-news flow itself. The 138 market-only stress days reinforce this point: a large
-fraction of systemic stress episodes have no identifiable geopolitical trigger and
-must be attributed to endogenous financial dynamics.
+fragility of the financial system at the time the shock arrives.
+Our findings suggest that geopolitical risk monitoring should be combined with
+market-based measures of systemic fragility to better identify shock-stress
+interactions. The EMFI and HMM stress-state probability developed here are
+\emph{ex-post} outcome measures; their real-time counterparts, constructed
+using rolling standardisation and filtered (forward-algorithm) probabilities,
+remain a direction for future research.
+The 138 market-only stress days reinforce this point: a large fraction of
+systemic stress episodes have no identifiable geopolitical trigger and must be
+attributed to endogenous financial dynamics.
 
 \paragraph{Limitations and future work.}
 Several limitations should be noted. The EMFI is an acute-stress indicator, not
